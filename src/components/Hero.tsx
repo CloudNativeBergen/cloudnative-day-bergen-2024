@@ -16,7 +16,7 @@ export function Hero() {
               KubeCon Bergen is the premier local conference for all things cloud and Kubernetes. Join us to learn about the latest trends, best practices, and cutting-edge technologies in the cloud-native ecosystem.
             </p>
             <p>
-              Our expert speakers will share their insights and experiences, covering topics such as containerization, orchestration, microservices, and more. Whether you're a beginner or an experienced practitioner, there's something for everyone at KubeCon Bergen.
+              Our expert speakers will share their insights and experiences, covering topics such as containerization, orchestration, microservices, and more. Whether you&apos;re a beginner or an experienced practitioner, there&apos;s something for everyone at KubeCon Bergen.
             </p>
           </div>
           <Button href="#" className="mt-10 w-full sm:hidden">
