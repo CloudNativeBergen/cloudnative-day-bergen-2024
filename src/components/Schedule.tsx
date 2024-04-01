@@ -21,10 +21,10 @@ interface Day {
 
 const schedule: Array<Day> = [
   {
-    date: 'April 4',
-    dateTime: '2022-04-04',
+    date: 'Track 1',
+    dateTime: '2024-10-23',
     summary:
-      'The first day of the conference is focused on dark patterns for ecommerce.',
+      'Platform engineering with Kubernetes and cloud-native technologies.',
     timeSlots: [
       {
         name: 'Steven McHail',
@@ -71,10 +71,10 @@ const schedule: Array<Day> = [
     ],
   },
   {
-    date: 'April 5',
-    dateTime: '2022-04-05',
+    date: 'Track 2',
+    dateTime: '2024-10-23',
     summary:
-      'Next we spend the day talking about deceiving people with technology.',
+      'Cloud Native Security: secure your cloud-native applications and infrastructure.',
     timeSlots: [
       {
         name: 'Damaris Kimura',
@@ -121,10 +121,10 @@ const schedule: Array<Day> = [
     ],
   },
   {
-    date: 'April 6',
-    dateTime: '2022-04-06',
+    date: 'Track 3',
+    dateTime: '2024-10-23',
     summary:
-      'We close out the event previewing new techniques that are still in development.',
+      'Observability: monitoring, logging, and tracing your cloud-native applications.',
     timeSlots: [
       {
         name: 'Andrew Greene',

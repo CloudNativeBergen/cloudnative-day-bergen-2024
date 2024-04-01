@@ -28,9 +28,9 @@ import waylonHydenImage from '@/images/avatars/waylon-hyden.jpg'
 
 const days = [
   {
-    name: 'Opening Day',
-    date: 'April 4',
-    dateTime: '2022-04-04',
+    name: 'Platform Engineering',
+    date: 'Track 1',
+    dateTime: '2024-10-23',
     speakers: [
       {
         name: 'Luke Skywalker',
@@ -65,9 +65,9 @@ const days = [
     ],
   },
   {
-    name: 'Speakers & Workshops',
-    date: 'April 5',
-    dateTime: '2022-04-05',
+    name: 'Cloud Native Security',
+    date: 'Track 2',
+    dateTime: '2024-10-23',
     speakers: [
       {
         name: 'Anakin Skywalker',
@@ -102,9 +102,9 @@ const days = [
     ],
   },
   {
-    name: 'Interviews',
-    date: 'April 6',
-    dateTime: '2022-04-06',
+    name: 'Observability',
+    date: 'Track 3',
+    dateTime: '2024-10-23',
     speakers: [
       {
         name: 'Chewbacca',
