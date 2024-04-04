@@ -6,173 +6,9 @@ import clsx from 'clsx'
 
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
+import { Track as TrackType } from '@/lib/schedule'
 
-interface Day {
-  date: React.ReactNode
-  dateTime: string
-  summary: string
-  timeSlots: Array<{
-    name: string
-    description: string | null
-    start: string
-    end: string
-  }>
-}
-
-const schedule: Array<Day> = [
-  {
-    date: 'Track 1',
-    dateTime: '2024-10-23',
-    summary:
-      'Platform engineering with Kubernetes and cloud-native technologies.',
-    timeSlots: [
-      {
-        name: 'Steven McHail',
-        description: 'Not so one-time payments',
-        start: '9:00AM',
-        end: '10:00AM',
-      },
-      {
-        name: 'Jaquelin Isch',
-        description: 'The finer print',
-        start: '10:00AM',
-        end: '11:00AM',
-      },
-      {
-        name: 'Dianne Guilianelli',
-        description: 'Post-purchase blackmail',
-        start: '11:00AM',
-        end: '12:00PM',
-      },
-      {
-        name: 'Lunch',
-        description: null,
-        start: '12:00PM',
-        end: '1:00PM',
-      },
-      {
-        name: 'Ronni Cantadore',
-        description: 'Buy or die',
-        start: '1:00PM',
-        end: '2:00PM',
-      },
-      {
-        name: 'Erhart Cockrin',
-        description: 'In-person cancellation',
-        start: '2:00PM',
-        end: '3:00PM',
-      },
-      {
-        name: 'Parker Johnson',
-        description: 'The pay/cancel switcheroo',
-        start: '3:00PM',
-        end: '4:00PM',
-      },
-    ],
-  },
-  {
-    date: 'Track 2',
-    dateTime: '2024-10-23',
-    summary:
-      'Cloud Native Security: secure your cloud-native applications and infrastructure.',
-    timeSlots: [
-      {
-        name: 'Damaris Kimura',
-        description: 'The invisible card reader',
-        start: '9:00AM',
-        end: '10:00AM',
-      },
-      {
-        name: 'Ibrahim Frasch',
-        description: 'Stealing fingerprints',
-        start: '10:00AM',
-        end: '11:00AM',
-      },
-      {
-        name: 'Cathlene Burrage',
-        description: 'Voting machines',
-        start: '11:00AM',
-        end: '12:00PM',
-      },
-      {
-        name: 'Lunch',
-        description: null,
-        start: '12:00PM',
-        end: '1:00PM',
-      },
-      {
-        name: 'Rinaldo Beynon',
-        description: 'Blackhat SEO that works',
-        start: '1:00PM',
-        end: '2:00PM',
-      },
-      {
-        name: 'Waylon Hyden',
-        description: 'Turning your audience into a botnet',
-        start: '2:00PM',
-        end: '3:00PM',
-      },
-      {
-        name: 'Giordano Sagucio',
-        description: 'Fly phishing',
-        start: '3:00PM',
-        end: '4:00PM',
-      },
-    ],
-  },
-  {
-    date: 'Track 3',
-    dateTime: '2024-10-23',
-    summary:
-      'Observability: monitoring, logging, and tracing your cloud-native applications.',
-    timeSlots: [
-      {
-        name: 'Andrew Greene',
-        description: 'Neuralink dark patterns',
-        start: '9:00AM',
-        end: '10:00AM',
-      },
-      {
-        name: 'Heather Terry',
-        description: 'DALL-E for passports',
-        start: '10:00AM',
-        end: '11:00AM',
-      },
-      {
-        name: 'Piers Wilkins',
-        description: 'Quantum password cracking',
-        start: '11:00AM',
-        end: '12:00PM',
-      },
-      {
-        name: 'Lunch',
-        description: null,
-        start: '12:00PM',
-        end: '1:00PM',
-      },
-      {
-        name: 'Gordon Sanderson',
-        description: 'SkyNet is coming',
-        start: '1:00PM',
-        end: '2:00PM',
-      },
-      {
-        name: 'Kimberly Parsons',
-        description: 'Dark patterns for the metaverse',
-        start: '2:00PM',
-        end: '3:00PM',
-      },
-      {
-        name: 'Richard Astley',
-        description: 'Knowing the game and playing it',
-        start: '3:00PM',
-        end: '4:00PM',
-      },
-    ],
-  },
-]
-
-function ScheduleTabbed() {
+function ScheduleTabbed({ tracks }: { tracks: TrackType[] }) {
   let [tabOrientation, setTabOrientation] = useState('horizontal')
 
   useEffect(() => {
@@ -199,21 +35,21 @@ function ScheduleTabbed() {
       <Tab.List className="-mx-4 flex gap-x-4 gap-y-10 overflow-x-auto pb-4 pl-4 sm:mx-0 sm:flex-col sm:pb-0 sm:pl-0 sm:pr-8">
         {({ selectedIndex }) => (
           <>
-            {schedule.map((day, dayIndex) => (
+            {tracks.map((track, trackIndex) => (
               <div
-                key={day.dateTime}
+                key={track.number}
                 className={clsx(
                   'relative w-3/4 flex-none pr-4 sm:w-auto sm:pr-0',
-                  dayIndex !== selectedIndex && 'opacity-70',
+                  trackIndex !== selectedIndex && 'opacity-70',
                 )}
               >
-                <DaySummary
-                  day={{
-                    ...day,
-                    date: (
+                <TrackSummary
+                  track={{
+                    ...track,
+                    name: (
                       <Tab className="ui-not-focus-visible:outline-none">
                         <span className="absolute inset-0" />
-                        {day.date}
+                        {track.name}
                       </Tab>
                     ),
                   }}
@@ -224,12 +60,12 @@ function ScheduleTabbed() {
         )}
       </Tab.List>
       <Tab.Panels>
-        {schedule.map((day) => (
+        {tracks.map((track) => (
           <Tab.Panel
-            key={day.dateTime}
+            key={track.number}
             className="ui-not-focus-visible:outline-none"
           >
-            <TimeSlots day={day} />
+            <TimeSlots track={track} />
           </Tab.Panel>
         ))}
       </Tab.Panels>
@@ -237,20 +73,20 @@ function ScheduleTabbed() {
   )
 }
 
-function DaySummary({ day }: { day: Day }) {
+function TrackSummary({ track }: { track: TrackType }) {
   return (
     <>
       <h3 className="text-2xl font-semibold tracking-tight text-blue-900">
-        <time dateTime={day.dateTime}>{day.date}</time>
+        <time dateTime={track.date}>{track.name}</time>
       </h3>
       <p className="mt-1.5 text-base tracking-tight text-blue-900">
-        {day.summary}
+        {track.title}: {track.description}
       </p>
     </>
   )
 }
 
-function TimeSlots({ day, className }: { day: Day; className?: string }) {
+function TimeSlots({ track, className }: { track: TrackType; className?: string }) {
   return (
     <ol
       role="list"
@@ -259,31 +95,30 @@ function TimeSlots({ day, className }: { day: Day; className?: string }) {
         'space-y-8 bg-white/60 px-10 py-14 text-center shadow-xl shadow-blue-900/5 backdrop-blur',
       )}
     >
-      {day.timeSlots.map((timeSlot, timeSlotIndex) => (
+      {track.talks.map((talk, talkIndex) => (
         <li
-          key={timeSlot.start}
-          aria-label={`${timeSlot.name} talking about ${timeSlot.description} at ${timeSlot.start} - ${timeSlot.end} PST`}
+          key={`${track.number}-${talk.start}`}
+          aria-label={`${talk.title} talking about ${talk.description} at ${talk.start} - ${talk.end}`}
         >
-          {timeSlotIndex > 0 && (
+          {talkIndex > 0 && (
             <div className="mx-auto mb-8 h-px w-48 bg-indigo-500/10" />
           )}
           <h4 className="text-lg font-semibold tracking-tight text-blue-900">
-            {timeSlot.name}
+            {talk.speaker?.name || talk.title}
           </h4>
-          {timeSlot.description && (
+          {talk.title && talk.speaker && (
             <p className="mt-1 tracking-tight text-blue-900">
-              {timeSlot.description}
+              {talk.title}
             </p>
           )}
           <p className="mt-1 font-mono text-sm text-slate-500">
-            <time dateTime={`${day.dateTime}T${timeSlot.start}-08:00`}>
-              {timeSlot.start}
+            <time dateTime={`${track.date}T${talk.start}-08:00`}>
+              {talk.start}
             </time>{' '}
             -{' '}
-            <time dateTime={`${day.dateTime}T${timeSlot.end}-08:00`}>
-              {timeSlot.end}
+            <time dateTime={`${track.date}T${talk.end}-08:00`}>
+              {talk.end}
             </time>{' '}
-            PST
           </p>
         </li>
       ))}
@@ -291,20 +126,20 @@ function TimeSlots({ day, className }: { day: Day; className?: string }) {
   )
 }
 
-function ScheduleStatic() {
+function ScheduleStatic({ tracks }: { tracks: TrackType[] }) {
   return (
     <div className="hidden lg:grid lg:grid-cols-3 lg:gap-x-8">
-      {schedule.map((day) => (
-        <section key={day.dateTime}>
-          <DaySummary day={day} />
-          <TimeSlots day={day} className="mt-10" />
+      {tracks.map((track) => (
+        <section key={track.number}>
+          <TrackSummary track={track} />
+          <TimeSlots track={track} className="mt-10" />
         </section>
       ))}
     </div>
   )
 }
 
-export function Schedule() {
+export function Schedule({ tracks }: { tracks: TrackType[] }) {
   return (
     <section id="schedule" aria-label="Schedule" className="py-20 sm:py-32">
       <Container className="relative z-10">
@@ -323,8 +158,8 @@ export function Schedule() {
       <div className="relative mt-14 sm:mt-24">
         <BackgroundImage position="right" className="-bottom-32 -top-40" />
         <Container className="relative">
-          <ScheduleTabbed />
-          <ScheduleStatic />
+          <ScheduleTabbed tracks={tracks} />
+          <ScheduleStatic tracks={tracks} />
         </Container>
       </div>
     </section>

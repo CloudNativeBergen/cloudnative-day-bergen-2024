@@ -4,141 +4,10 @@ import { useEffect, useId, useState } from 'react'
 import Image from 'next/image'
 import { Tab } from '@headlessui/react'
 import clsx from 'clsx'
+import { Track as TrackType } from '@/lib/schedule'
 
 import { Container } from '@/components/Container'
 import { DiamondIcon } from '@/components/DiamondIcon'
-import andrewGreeneImage from '@/images/avatars/andrew-greene.jpg'
-import cathleneBurrageImage from '@/images/avatars/cathlene-burrage.jpg'
-import damarisKimuraImage from '@/images/avatars/damaris-kimura.jpg'
-import dianneGuilianelliImage from '@/images/avatars/dianne-guilianelli.jpg'
-import erhartCockrinImage from '@/images/avatars/erhart-cockrin.jpg'
-import giordanoSagucioImage from '@/images/avatars/giordano-sagucio.jpg'
-import gordonSandersonImage from '@/images/avatars/gordon-sanderson.jpg'
-import heatherTerryImage from '@/images/avatars/heather-terry.jpg'
-import ibrahimFraschImage from '@/images/avatars/ibrahim-frasch.jpg'
-import jaquelinIschImage from '@/images/avatars/jaquelin-isch.jpg'
-import kimberlyParsonsImage from '@/images/avatars/kimberly-parsons.jpg'
-import parkerJohnsonImage from '@/images/avatars/parker-johnson.jpg'
-import piersWilkinsImage from '@/images/avatars/piers-wilkins.jpg'
-import richardAstley from '@/images/avatars/richard-astley.jpg'
-import rinaldoBeynonImage from '@/images/avatars/rinaldo-beynon.jpg'
-import ronniCantadoreImage from '@/images/avatars/ronni-cantadore.jpg'
-import stevenMchailImage from '@/images/avatars/steven-mchail.jpg'
-import waylonHydenImage from '@/images/avatars/waylon-hyden.jpg'
-
-const days = [
-  {
-    name: 'Platform Engineering',
-    date: 'Track 1',
-    dateTime: '2024-10-23',
-    speakers: [
-      {
-        name: 'Luke Skywalker',
-        role: 'Jedi Knight',
-        image: stevenMchailImage,
-      },
-      {
-        name: 'Leia Organa',
-        role: 'Princess of Alderaan',
-        image: jaquelinIschImage,
-      },
-      {
-        name: 'Han Solo',
-        role: 'Smuggler',
-        image: dianneGuilianelliImage,
-      },
-      {
-        name: 'Darth Vader',
-        role: 'Sith Lord',
-        image: ronniCantadoreImage,
-      },
-      {
-        name: 'Obi-Wan Kenobi',
-        role: 'Jedi Master',
-        image: erhartCockrinImage,
-      },
-      {
-        name: 'Yoda',
-        role: 'Jedi Grand Master',
-        image: parkerJohnsonImage,
-      },
-    ],
-  },
-  {
-    name: 'Cloud Native Security',
-    date: 'Track 2',
-    dateTime: '2024-10-23',
-    speakers: [
-      {
-        name: 'Anakin Skywalker',
-        role: 'Jedi Knight',
-        image: damarisKimuraImage,
-      },
-      {
-        name: 'Padmé Amidala',
-        role: 'Queen of Naboo',
-        image: ibrahimFraschImage,
-      },
-      {
-        name: 'Rey',
-        role: 'Jedi',
-        image: cathleneBurrageImage,
-      },
-      {
-        name: 'Kylo Ren',
-        role: 'Sith Warrior',
-        image: rinaldoBeynonImage,
-      },
-      {
-        name: 'Finn',
-        role: 'Resistance Fighter',
-        image: waylonHydenImage,
-      },
-      {
-        name: 'Poe Dameron',
-        role: 'Resistance Pilot',
-        image: giordanoSagucioImage,
-      },
-    ],
-  },
-  {
-    name: 'Observability',
-    date: 'Track 3',
-    dateTime: '2024-10-23',
-    speakers: [
-      {
-        name: 'Chewbacca',
-        role: 'Wookiee Warrior',
-        image: andrewGreeneImage,
-      },
-      {
-        name: 'Princess Amidala',
-        role: 'Queen of Naboo',
-        image: heatherTerryImage,
-      },
-      {
-        name: 'Lando Calrissian',
-        role: 'Smuggler',
-        image: piersWilkinsImage,
-      },
-      {
-        name: 'BB-8',
-        role: 'Astro-mech Droid',
-        image: gordonSandersonImage,
-      },
-      {
-        name: 'Mace Windu',
-        role: 'Jedi Master',
-        image: kimberlyParsonsImage,
-      },
-      {
-        name: 'Darth Sidious',
-        role: 'Sith Lord',
-        image: richardAstley,
-      },
-    ],
-  },
-]
 
 function ImageClipPaths({
   id,
@@ -161,7 +30,7 @@ function ImageClipPaths({
   )
 }
 
-export function Speakers() {
+export function Speakers({ tracks }: { tracks: TrackType[] }) {
   let id = useId()
   let [tabOrientation, setTabOrientation] = useState('horizontal')
 
@@ -210,8 +79,8 @@ export function Speakers() {
             <Tab.List className="grid auto-cols-auto grid-flow-col justify-start gap-x-8 gap-y-10 whitespace-nowrap px-4 sm:mx-auto sm:max-w-2xl sm:grid-cols-3 sm:px-0 sm:text-center lg:grid-flow-row lg:grid-cols-1 lg:text-left">
               {({ selectedIndex }) => (
                 <>
-                  {days.map((day, dayIndex) => (
-                    <div key={day.dateTime} className="relative lg:pl-8">
+                  {tracks.map((track, dayIndex) => (
+                    <div key={track.number} className="relative lg:pl-8">
                       <DiamondIcon
                         className={clsx(
                           'absolute left-[-0.5px] top-[0.5625rem] hidden h-1.5 w-1.5 overflow-visible lg:block',
@@ -231,14 +100,14 @@ export function Speakers() {
                         >
                           <Tab className="ui-not-focus-visible:outline-none">
                             <span className="absolute inset-0" />
-                            {day.name}
+                            {track.title}
                           </Tab>
                         </div>
                         <time
-                          dateTime={day.dateTime}
+                          dateTime={track.date}
                           className="mt-1.5 block text-2xl font-semibold tracking-tight text-blue-900"
                         >
-                          {day.date}
+                          {track.name}
                         </time>
                       </div>
                     </div>
@@ -248,13 +117,13 @@ export function Speakers() {
             </Tab.List>
           </div>
           <Tab.Panels className="lg:col-span-3">
-            {days.map((day) => (
+            {tracks.map((track) => (
               <Tab.Panel
-                key={day.dateTime}
+                key={track.number}
                 className="grid grid-cols-1 gap-x-8 gap-y-10 ui-not-focus-visible:outline-none sm:grid-cols-2 sm:gap-y-16 md:grid-cols-3"
                 unmount={false}
               >
-                {day.speakers.map((speaker, speakerIndex) => (
+                {track.speakers.map((speaker, speakerIndex) => (
                   <div key={speakerIndex}>
                     <div className="group relative h-[17.5rem] transform overflow-hidden rounded-4xl">
                       <div
@@ -273,7 +142,9 @@ export function Speakers() {
                       >
                         <Image
                           className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-110"
-                          src={speaker.image}
+                          src={speaker.image ? `${speaker.image}?h=300` : "https://via.placeholder.com/300"}
+                          width={300}
+                          height={300}
                           alt=""
                           priority
                           sizes="(min-width: 1280px) 17.5rem, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
@@ -284,7 +155,7 @@ export function Speakers() {
                       {speaker.name}
                     </h3>
                     <p className="mt-1 text-base tracking-tight text-slate-500">
-                      {speaker.role}
+                      {speaker.title}
                     </p>
                   </div>
                 ))}

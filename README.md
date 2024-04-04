@@ -18,9 +18,19 @@ npm run dev
 
 Finally, open [http://localhost:3000](http://localhost:3000) in your browser to view the website.
 
-## Customizing
+## Sanity
 
-You can start editing this template by modifying the files in the `/src` folder. The site will auto-update as you edit these files.
+Install the Sanity CLI:
+
+```bash
+npm install --global sanity@latest
+```
+
+Deploy Sanity Studio to Sanity.io
+
+```bash
+cd studio && sanity deploy
+```
 
 ## License
 
