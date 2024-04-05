@@ -19,11 +19,11 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - KubeCon Bergen',
-    default: 'KubeCon Bergen - A community-driven Kubernetes conference',
+    template: '%s - CloudNative Day Bergen',
+    default: 'CloudNative Day Bergen - A community-driven Kubernetes conference',
   },
   description:
-    'At KubeCon Bergen you’ll learn about the latest dark patterns being developed to trick even the smartest visitors, and you’ll learn how to deploy them without ever being detected.',
+    'At CloudNative Day Bergen you’ll learn about the latest dark patterns being developed to trick even the smartest visitors, and you’ll learn how to deploy them without ever being detected.',
 }
 
 export default function RootLayout({
