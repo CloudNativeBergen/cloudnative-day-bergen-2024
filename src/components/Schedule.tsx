@@ -6,7 +6,7 @@ import clsx from 'clsx'
 
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
-import { Track as TrackType } from '@/lib/schedule'
+import { Track as TrackType, Talk as TalkType } from '@/lib/schedule'
 
 function ScheduleTabbed({ tracks }: { tracks: TrackType[] }) {
   let [tabOrientation, setTabOrientation] = useState('horizontal')
@@ -86,6 +86,49 @@ function TrackSummary({ track }: { track: TrackType }) {
   )
 }
 
+function PlaceholderTimeSlot({ track, talk }: { track: TrackType, talk: TalkType }) {
+  return (
+    <button className="relative block w-full pb-4 py-3 rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+      <p className="mt-1 font-mono text-sm text-slate-500">
+        Submit to Speak
+      </p>
+      <TimeSlotTime date={track.date} start={talk.start} end={talk.end} />
+    </button >
+  )
+}
+
+function TalkTimeSlot({ track, talk }: { track: TrackType, talk: TalkType }) {
+  return (
+    <div className="relative block">
+      <h4 className="text-lg font-semibold tracking-tight text-blue-900">
+        {talk.speaker?.name || talk.title}
+      </h4>
+      {
+        talk.title && talk.speaker && (
+          <p className="mt-1 tracking-tight text-blue-900">
+            {talk.title}
+          </p>
+        )
+      }
+      <TimeSlotTime date={track.date} start={talk.start} end={talk.end} />
+    </div>
+  )
+}
+
+function TimeSlotTime({ date, start, end }: { date: string, start: string, end: string }) {
+  return (
+    <p className="mt-1 font-mono text-sm text-slate-500">
+      <time dateTime={`${date}T${start} CEST`}>
+        {start}
+      </time>{' '}
+      -{' '}
+      <time dateTime={`${date}T${end} CEST`}>
+        {end}
+      </time>{' '}
+    </p>
+  )
+}
+
 function TimeSlots({ track, className }: { track: TrackType; className?: string }) {
   return (
     <ol
@@ -103,26 +146,15 @@ function TimeSlots({ track, className }: { track: TrackType; className?: string 
           {talkIndex > 0 && (
             <div className="mx-auto mb-8 h-px w-48 bg-indigo-500/10" />
           )}
-          <h4 className="text-lg font-semibold tracking-tight text-blue-900">
-            {talk.speaker?.name || talk.title}
-          </h4>
-          {talk.title && talk.speaker && (
-            <p className="mt-1 tracking-tight text-blue-900">
-              {talk.title}
-            </p>
+          {talk.title === "TBD" ? (
+            <PlaceholderTimeSlot track={track} talk={talk} />
+          ) : (
+            <TalkTimeSlot track={track} talk={talk} />
           )}
-          <p className="mt-1 font-mono text-sm text-slate-500">
-            <time dateTime={`${track.date}T${talk.start}-08:00`}>
-              {talk.start}
-            </time>{' '}
-            -{' '}
-            <time dateTime={`${track.date}T${talk.end}-08:00`}>
-              {talk.end}
-            </time>{' '}
-          </p>
         </li>
-      ))}
-    </ol>
+      ))
+      }
+    </ol >
   )
 }
 
@@ -145,13 +177,12 @@ export function Schedule({ tracks }: { tracks: TrackType[] }) {
       <Container className="relative z-10">
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-4xl lg:pr-24">
           <h2 className="font-display text-4xl font-medium tracking-tighter text-blue-600 sm:text-5xl">
-            Our three day schedule is jam-packed with brilliant, creative, evil
-            geniuses.
+            Our three track schedule is jam-packed with brilliant, creative and innovative
+            experts.
           </h2>
           <p className="mt-4 font-display text-2xl tracking-tight text-blue-900">
-            The worst people in our industry giving the best talks you’ve ever
-            seen. Nothing will be recorded and every attendee has to sign an NDA
-            to watch the talks.
+            Immerse yourself in a world of cutting-edge cloud and Kubernetes technologies.
+            Our conference features cloud native experts from Bergen and around the world.
           </p>
         </div>
       </Container>
