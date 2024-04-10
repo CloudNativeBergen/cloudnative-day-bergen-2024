@@ -18,6 +18,7 @@
     "@types/node": "20.12.6",
     "@types/react": "18.2.75",
     "@types/react-dom": "18.2.24",
+    "@vercel/analytics": "^1.2.2",
     "autoprefixer": "^10.4.19",
     "clsx": "^2.1.0",
     "next": "14.1.4",
