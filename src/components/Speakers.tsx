@@ -35,17 +35,15 @@ function SubmitToSpeakLi() {
     key="submit-to-speak-1"
     className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center"
   >
-    <button
+    <a
       type="button"
+      href="/cfp"
       className="relative block w-full rounded-lg sm:gap-y-16 border-2 border-dashed border-gray-300 p-10 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
     >
-      <span className="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
-        <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      </span>
-      <span className="mt-2 block text-sm font-semibold text-gray-900">Submit to speak</span>
-    </button>
+      <p className="mt-1 font-mono text-sm text-slate-500">
+        Become a speaker
+      </p>
+    </a>
   </li>
   )
 }

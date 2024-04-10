@@ -1,5 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  publicRuntimeConfig: {
+    cocLink: 'https://github.com/cncf/foundation/blob/main/code-of-conduct.md#community-code-of-conduct',
+    dates: {
+      cfpStart: '2024-05-20',
+      cfpEnd: '2024-08-01',
+      cfpNotify: '2024-08-20',
+      program: '2024-09-01',
+      conference: '2024-10-23',
+    }
+  },
   images: {
     remotePatterns: [
       {

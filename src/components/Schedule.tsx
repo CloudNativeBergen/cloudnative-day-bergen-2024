@@ -88,12 +88,16 @@ function TrackSummary({ track }: { track: TrackType }) {
 
 function PlaceholderTimeSlot({ track, talk }: { track: TrackType, talk: TalkType }) {
   return (
-    <button className="relative block w-full pb-4 py-3 rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+    <a
+      type="button"
+      href="/cfp"
+      className="relative block w-full pb-4 py-3 rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+    >
       <p className="mt-1 font-mono text-sm text-slate-500">
-        Submit to Speak
+        Submit to speak
       </p>
       <TimeSlotTime date={track.date} start={talk.start} end={talk.end} />
-    </button >
+    </a>
   )
 }
 
