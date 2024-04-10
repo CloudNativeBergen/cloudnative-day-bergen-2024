@@ -42,7 +42,7 @@ export default async function CFP() {
               </p>
             </div>
 
-            <Button href="$" className="mt-10 w-full">
+            <Button href="#" className="mt-10 w-full">
               Submit your proposal
             </Button>
 

@@ -81,11 +81,10 @@ export function Speakers({ tracks }: { tracks: TrackType[] }) {
             id="speakers-title"
             className="font-display text-4xl font-medium tracking-tighter text-blue-600 sm:text-5xl"
           >
-            Speakers
+            Our Speakers
           </h2>
           <p className="mt-4 font-display text-2xl tracking-tight text-blue-900">
-            Learn from the experts on the cutting-edge of deception at the most
-            sinister companies.
+            Learn from yaml-experts and cloud-native nerds from Bergen and around the world at CloudNative Day Bergen.
           </p>
           {!hasSpeakers && (
             <ul role="list" className="grid grid-cols-2 gap-6 mt-8 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3">

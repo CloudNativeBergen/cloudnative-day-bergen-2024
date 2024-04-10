@@ -9,14 +9,14 @@ export function Hero() {
       <Container className="relative">
         <div className="mx-auto max-w-2xl lg:max-w-4xl lg:px-12">
           <h1 className="font-display text-5xl font-bold tracking-tighter text-blue-600 sm:text-7xl">
-            <span className="sr-only">CloudNative Day Bergen - </span>Full day Cloud and Kubernetes in Bergen.
+            <span className="sr-only">CloudNative Day Bergen - </span>A day with Cloud & Kubernetes in Bergen.
           </h1>
           <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
             <p>
-              CloudNative Day Bergen is the premier local conference for all things cloud and Kubernetes. Join us to learn about the latest trends, best practices, and cutting-edge technologies in the cloud-native ecosystem.
+              CloudNative Day Bergen is the nerdiest tech conference in Bergen. Join us to learn about the latest trends, best practices, and experience reports from local and international cloud-native experts.
             </p>
             <p>
-              Our expert speakers will share their insights and experiences, covering topics such as containerization, orchestration, microservices, and more. Whether you&apos;re a beginner or an experienced practitioner, there&apos;s something for everyone at CloudNative Day Bergen.
+              Our speakers will share their insights and experiences, covering topics such as containerization, orchestration, microservices, and more. Whether you&apos;re a beginner or an 10x&apos;er, there&apos;s something for everyone at CloudNative Day Bergen.
             </p>
           </div>
           <Button href="#" className="mt-10 w-full sm:hidden">
@@ -24,7 +24,7 @@ export function Hero() {
           </Button>
           <dl className="mt-10 grid grid-cols-2 gap-x-10 gap-y-6 sm:mt-16 sm:gap-x-16 sm:gap-y-10 sm:text-center lg:auto-cols-auto lg:grid-flow-col lg:grid-cols-none lg:justify-start lg:text-left">
             {[
-              ['Speakers', 'TBA'],
+              ['Speakers', '~20'],
               ['People Attending', '100+'],
               ['Venue', 'TBA'],
               ['Location', 'Bergen, Norway'],

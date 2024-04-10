@@ -181,12 +181,11 @@ export function Schedule({ tracks }: { tracks: TrackType[] }) {
       <Container className="relative z-10">
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-4xl lg:pr-24">
           <h2 className="font-display text-4xl font-medium tracking-tighter text-blue-600 sm:text-5xl">
-            Our three track schedule is jam-packed with brilliant, creative and innovative
+            Our three track schedule is bin-packed with brilliant, creative and innovative
             experts.
           </h2>
           <p className="mt-4 font-display text-2xl tracking-tight text-blue-900">
-            Immerse yourself in a world of cutting-edge cloud and Kubernetes technologies.
-            Our conference features cloud native experts from Bergen and around the world.
+            Immerse yourself in a world of cutting-edge cloud and Kubernetes technologies and choose the talks that interest you the most.
           </p>
         </div>
       </Container>

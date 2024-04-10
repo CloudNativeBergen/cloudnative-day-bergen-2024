@@ -1,20 +1,14 @@
 import Image from 'next/image'
 
 import { Container } from '@/components/Container'
-import logoLaravel from '@/images/logos/laravel.svg'
-import logoMirage from '@/images/logos/mirage.svg'
-import logoStatamic from '@/images/logos/statamic.svg'
-import logoStaticKit from '@/images/logos/statickit.svg'
-import logoTransistor from '@/images/logos/transistor.svg'
-import logoTuple from '@/images/logos/tuple.svg'
 
 const sponsors = [
-  { name: 'Transistor', logo: logoTransistor },
-  { name: 'Tuple', logo: logoTuple },
-  { name: 'StaticKit', logo: logoStaticKit },
-  { name: 'Mirage', logo: logoMirage },
-  { name: 'Laravel', logo: logoLaravel },
-  { name: 'Statamic', logo: logoStatamic },
+  { name: 'TBD', logo: '' },
+  { name: 'TBD', logo: '' },
+  { name: 'TBD', logo: '' },
+  { name: 'TBD', logo: '' },
+  { name: 'TBD', logo: '' },
+  { name: 'TBD', logo: '' },
 ]
 
 export function Sponsors() {
@@ -30,7 +24,20 @@ export function Sponsors() {
               key={sponsor.name}
               className="flex items-center justify-center"
             >
-              <Image src={sponsor.logo} alt={sponsor.name} unoptimized />
+              {sponsor.name === "TBD" && (
+                <a
+                  type="button"
+                  href="/sponsor"
+                  className="relative block w-full rounded-lg sm:gap-y-16 border-2 border-dashed border-gray-300 p-10 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  <p className="mt-1 font-mono text-sm text-slate-500">
+                    Become a sponsor
+                  </p>
+                </a>
+              )}
+              {sponsor.name !== "TBD" && (
+                <Image src={sponsor.logo} alt={sponsor.name} unoptimized />
+              )}
             </div>
           ))}
         </div>
