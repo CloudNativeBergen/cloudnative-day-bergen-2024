@@ -15,8 +15,17 @@ export enum Format {
   presentation_45 = 'presentation_45',
 }
 
-export interface CFP {
+export enum Status {
+  submitted = 'submitted', // submitted by the speaker
+  selected = 'selected',   // selected by the organizers
+  accepted = 'accepted',   // accepted by the speaker
+  rejected = 'rejected',   // rejected by the organizers
+}
+
+export interface Proposal {
   _id?: string
+  _createdAt?: string
+  _updatedAt?: string
   title: string
   description: string
   language: Language
@@ -25,10 +34,33 @@ export interface CFP {
   outline: string
   tags?: string[]
   tos: boolean
+  status?: Status
 }
 
-export interface CfpResponse {
-  cfp?: CFP
+export interface ProposalResponse {
+  proposal?: Proposal
+  error?: string
+  status?: number
+}
+
+export interface ProposalSubmitResponse {
+  error?: ProposalSubmitError
+  status?: number
+}
+
+export interface ProposalSubmitError {
+  message: string
+  type: string
+  validationErrors?: ProposalValidationError[]
+}
+
+export interface ProposalValidationError {
+  message: string
+  field: string
+}
+
+export interface ProposalListResponse {
+  proposals: Proposal[]
   error?: string
   status?: number
 }

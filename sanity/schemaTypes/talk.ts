@@ -1,4 +1,4 @@
-import { Format, Language, Level } from '../../src/types/cfp';
+import { Format, Language, Level, Status } from '../../src/types/proposal';
 import { defineField, defineType } from 'sanity'
 import { form } from 'sanity/structure';
 
@@ -67,6 +67,20 @@ export default defineType({
       name: 'tos',
       title: 'Terms of Service',
       type: 'boolean',
+    }),
+    defineField({
+      name: 'status',
+      title: 'Status',
+      type: 'string',
+      initialValue: Status.submitted,
+      options: {
+        list: [
+          { title: 'Submitted', value: Status.submitted },
+          { title: 'Selected', value: Status.selected },
+          { title: 'Accepted', value: Status.accepted },
+          { title: 'Rejected', value: Status.rejected },
+        ],
+      }
     }),
     defineField({
       name: 'speaker',

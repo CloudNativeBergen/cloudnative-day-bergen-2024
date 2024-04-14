@@ -5,22 +5,22 @@ import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { CFP as CFPType, CfpResponse } from '@/types/cfp'
+import { Format, Language, Level, Proposal, ProposalResponse, ProposalSubmitError } from '@/types/proposal'
 import { useState, useEffect } from 'react'
-import { getCfp, postCfp } from '@/lib/cfpClient'
-import { formats, languages, levels } from '@/types/cfp'
+import { getProposal, postProposal } from '@/lib/proposalClient'
+import { formats, languages, levels } from '@/types/proposal'
 import { Input, Textarea, Dropdown, HelpText, Checkbox } from '@/components/Form'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function Submit() {
   const searchParams = useSearchParams()
   const id = searchParams.get('id') ?? undefined
 
-  const [cfp, setCfp] = useState<CFPType | null>(null);
+  let [proposal, setProposal] = useState<Proposal | null>(null);
 
   useEffect(() => {
-    const fetchCfp = async () => {
-      const data: CfpResponse = await getCfp(id as string);
+    const fetchProposal = async () => {
+      const data: ProposalResponse = await getProposal(id as string);
 
       if (data.error) {
         // @TODO Show error message to user
@@ -28,15 +28,19 @@ export default function Submit() {
         return;
       }
 
-      if (data.cfp) {
-        setCfp(data.cfp);
+      if (data.proposal) {
+        setProposal(data.proposal);
       }
     };
 
-    fetchCfp();
-  }, []);
+    if (id) {
+      fetchProposal();
+    } else {
+      setProposal({} as Proposal);
+    }
+  }, [id]);
 
-  if (!cfp) {
+  if (!proposal) {
     return <div>Loading...</div>; // or some loading spinner
   }
 
@@ -56,7 +60,7 @@ export default function Submit() {
             </div>
           </div>
           <div className="mt-12 p-6 mx-auto max-w-2xl lg:max-w-4xl lg:px-12 bg-white rounded-lg">
-            <Form data={cfp} id={id} />
+            <Form data={proposal} id={id} />
           </div>
         </Container>
       </div>
@@ -64,36 +68,33 @@ export default function Submit() {
   )
 }
 
-export function Form({ data, id }: { data: CFPType, id?: string }) {
-  const [title, setTitle] = useState(data.title)
-  const [language, setLanguage] = useState(data.language)
-  const [description, setDescription] = useState(data.description)
-  const [format, setFormat] = useState(data.format)
-  const [level, setLevel] = useState(data.level)
-  const [outline, setOutline] = useState(data.outline)
-  const [tos, setTos] = useState(data.tos)
+export function Form({ data, id }: { data: Proposal, id?: string }) {
+  const [title, setTitle] = useState(data.title ?? '')
+  const [language, setLanguage] = useState(data.language ?? Language.norwegian)
+  const [description, setDescription] = useState(data.description ?? '')
+  const [format, setFormat] = useState(data.format ?? Format.lightning_10)
+  const [level, setLevel] = useState(data.level ?? Level.beginner)
+  const [outline, setOutline] = useState(data.outline ?? '')
+  const [tos, setTos] = useState(data.tos ?? false)
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formError, setFormError] = useState('');
+  const [proposalSubmitError, setProposalSubmitError] = useState({} as ProposalSubmitError);
+
+  const router = useRouter()
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     setIsSubmitting(true);
 
-    const cfp: CFPType = {
-      title,
-      language,
-      description,
-      format,
-      level,
-      outline,
-      tos,
-    };
+    const proposal: Proposal = { title, language, description, format, level, outline, tos };
+    const response = await postProposal(proposal, id);
 
-    const response = await postCfp(cfp, id);
+    if (!response.error) {
+      router.push('/cfp/list?success=true')
+    }
 
     if (response.error) {
-      setFormError(response.error);
+      setProposalSubmitError(response.error);
     }
 
     setIsSubmitting(false);
@@ -102,16 +103,23 @@ export function Form({ data, id }: { data: CFPType, id?: string }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-12">
-        {formError !== '' && (
+        {proposalSubmitError.type && (
           <div className="rounded-md bg-red-50 p-4">
             <div className="flex">
               <div className="flex-shrink-0">
                 <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
               </div>
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Submission failed</h3>
+                <h3 className="text-sm font-medium text-red-800">Submission failed: {proposalSubmitError.type}</h3>
                 <div className="mt-2 text-sm text-red-700">
-                  <p>{formError}</p>
+                  <p>{proposalSubmitError.message}</p>
+                  {proposalSubmitError.validationErrors && proposalSubmitError.validationErrors.length > 0 && (
+                    <ul className="mt-2 list-disc list-inside text-sm text-red-700">
+                      {proposalSubmitError.validationErrors.map((error) => (
+                        <li key={error.field}>{error.message}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>
@@ -203,9 +211,9 @@ export function Form({ data, id }: { data: CFPType, id?: string }) {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+        <a href="/cfp/list" type="button" className="text-sm font-semibold leading-6 text-gray-900">
           Cancel
-        </button>
+        </a>
         <button
           type="submit"
           disabled={isSubmitting}
