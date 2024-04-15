@@ -25,6 +25,11 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'email',
+      title: 'Email',
+      type: 'string',
+    }),
+    defineField({
       name: 'image',
       title: 'Image',
       type: 'image',
@@ -51,6 +56,21 @@ export default defineType({
           lists: [],
         },
       ],
+    }),
+    defineField({
+      name: 'is_local',
+      title: 'Is local speaker?',
+      type: 'boolean',
+    }),
+    defineField({
+      name: 'is_first_time',
+      title: 'Is first time speaker?',
+      type: 'boolean',
+    }),
+    defineField({
+      name: 'is_diverse',
+      title: 'Is from an underrepresented group?',
+      type: 'boolean',
     }),
   ],
   preview: {

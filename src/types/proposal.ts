@@ -35,20 +35,24 @@ export interface Proposal {
   tags?: string[]
   tos: boolean
   status?: Status
+  speaker?: Speaker
 }
 
-export interface ProposalResponse {
-  proposal?: Proposal
-  error?: string
-  status?: number
+export interface Speaker {
+  _id?: string
+  name: string
+  title: string
+  email: string
+  is_local: boolean
+  is_first_time: boolean
+  is_diverse: boolean
 }
 
-export interface ProposalSubmitResponse {
-  error?: ProposalSubmitError
-  status?: number
+export interface ProposalBaseResponse {
+  status: number
 }
 
-export interface ProposalSubmitError {
+export interface ProposalError {
   message: string
   type: string
   validationErrors?: ProposalValidationError[]
@@ -59,10 +63,14 @@ export interface ProposalValidationError {
   field: string
 }
 
-export interface ProposalListResponse {
-  proposals: Proposal[]
-  error?: string
-  status?: number
+export interface ProposalResponse extends ProposalBaseResponse {
+  proposal?: Proposal
+  error?: ProposalError
+}
+
+export interface ProposalListResponse extends ProposalBaseResponse {
+  proposals?: Proposal[]
+  error?: ProposalError
 }
 
 export const languages = new Map([

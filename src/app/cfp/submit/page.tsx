@@ -1,18 +1,22 @@
 'use client'
 
+import { useSession } from "next-auth/react"
 import { XCircleIcon } from '@heroicons/react/24/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { Format, Language, Level, Proposal, ProposalResponse, ProposalSubmitError } from '@/types/proposal'
+import { Format, Language, Level, Proposal, ProposalResponse, ProposalError, Speaker } from '@/types/proposal'
 import { useState, useEffect } from 'react'
 import { getProposal, postProposal } from '@/lib/proposalClient'
 import { formats, languages, levels } from '@/types/proposal'
 import { Input, Textarea, Dropdown, HelpText, Checkbox } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { auth } from '@/lib/auth'
 
 export default function Submit() {
+  const { data: session } = useSession()
+
   const searchParams = useSearchParams()
   const id = searchParams.get('id') ?? undefined
 
@@ -24,6 +28,7 @@ export default function Submit() {
 
       if (data.error) {
         // @TODO Show error message to user
+        // Access denied or proposal not found (both are 404)
         console.error(data.error);
         return;
       }
@@ -36,7 +41,7 @@ export default function Submit() {
     if (id) {
       fetchProposal();
     } else {
-      setProposal({} as Proposal);
+      setProposal({ speaker: { email: session?.user?.email, name: session?.user?.name } } as Proposal);
     }
   }, [id]);
 
@@ -76,17 +81,24 @@ export function Form({ data, id }: { data: Proposal, id?: string }) {
   const [level, setLevel] = useState(data.level ?? Level.beginner)
   const [outline, setOutline] = useState(data.outline ?? '')
   const [tos, setTos] = useState(data.tos ?? false)
+  const [speakerName, setSpeakerName] = useState(data.speaker?.name ?? '')
+  const [speakerTitle, setSpeakerTitle] = useState(data.speaker?.title ?? '')
+  const [speakerEmail, setSpeakerEmail] = useState(data.speaker?.email ?? '')
+  const [speakerIsLocal, setSpeakerIsLocal] = useState(data.speaker?.is_local ?? false)
+  const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(data.speaker?.is_first_time ?? false)
+  const [speakerIsDiverse, setSpeakerIsDiverse] = useState(data.speaker?.is_diverse ?? false)
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [proposalSubmitError, setProposalSubmitError] = useState({} as ProposalSubmitError);
+  const [proposalSubmitError, setProposalSubmitError] = useState({} as ProposalError);
 
   const router = useRouter()
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     setIsSubmitting(true);
 
-    const proposal: Proposal = { title, language, description, format, level, outline, tos };
+    const speaker: Speaker = { name: speakerName, title: speakerTitle, email: speakerEmail, is_local: speakerIsLocal, is_first_time: speakerIsFirstTime, is_diverse: speakerIsDiverse };
+    const proposal: Proposal = { title, language, description, format, level, outline, tos, speaker };
     const response = await postProposal(proposal, id);
 
     if (!response.error) {
@@ -172,35 +184,31 @@ export function Form({ data, id }: { data: Proposal, id?: string }) {
           <p className="mt-1 text-sm leading-6 text-gray-600">We need information about you as the speaker.</p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-3">
-              <Input name="first-name" label="First name" />
-            </div>
-
-            <div className="sm:col-span-3">
-              <Input name="last-name" label="Last name" />
+            <div className="sm:col-span-4">
+              <Input name="speaker_name" label="Name" value={speakerName} setValue={setSpeakerName} />
             </div>
 
             <div className="sm:col-span-4">
-              <Input name="email" label="Email address" type="email" />
+              <Input name="speaker_title" label="Title or affiliation" value={speakerTitle} setValue={setSpeakerTitle} />
             </div>
 
             <div className="sm:col-span-4">
-              <Input name="title" label="Title" />
+              <Input name="speaker_email" label="Email address" type="email" value={speakerEmail} />
             </div>
 
             <div className="col-span-full">
               <fieldset>
                 <legend className="text-sm font-semibold leading-6 text-gray-900">Speaker Details</legend>
                 <div className="mt-6 space-y-6">
-                  <Checkbox name="local" label="I am a local speaker">
+                  <Checkbox name="local" label="I am a local speaker" value={speakerIsLocal} setValue={setSpeakerIsLocal}>
                     <HelpText>Local speakers are given priority and are more likely to be selected.</HelpText>
                   </Checkbox>
 
-                  <Checkbox name="first-time" label="I am a first time speaker">
+                  <Checkbox name="first-time" label="I am a first time speaker" value={speakerIsFirstTime} setValue={setSpeakerIsFirstTime}>
                     <HelpText>We encourage first time speakers to submit presentations.</HelpText>
                   </Checkbox>
 
-                  <Checkbox name="diversity" label="I am from an underrepresented group">
+                  <Checkbox name="diversity" label="I am from an underrepresented group" value={speakerIsDiverse} setValue={setSpeakerIsDiverse}>
                     <HelpText>We are committed to increasing diversity among our speakers.</HelpText>
                   </Checkbox>
                 </div>

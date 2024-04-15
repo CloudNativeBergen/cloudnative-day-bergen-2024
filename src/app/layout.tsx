@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/react"
 import clsx from 'clsx'
 
 import '@/styles/tailwind.css'
+import { SessionProvider } from 'next-auth/react'
+import { auth } from '@/lib/auth'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,11 +29,22 @@ export const metadata: Metadata = {
     'At CloudNative Day Bergen you’ll learn about the latest dark patterns being developed to trick even the smartest visitors, and you’ll learn how to deploy them without ever being detected.',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const session = await auth()
+  if (session?.user) {
+    // TODO: Look into https://react.dev/reference/react/experimental_taintObjectReference
+    // filter out sensitive data before passing to client.
+    session.user = {
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+    }
+  }
+
   return (
     <html
       lang="en"
@@ -42,7 +55,11 @@ export default function RootLayout({
       )}
     >
       <body className="flex min-h-full">
-        <div className="flex w-full flex-col">{children}</div>
+        <div className="flex w-full flex-col">
+          <SessionProvider basePath={"/api/auth"} session={session}>
+            {children}
+          </SessionProvider>
+        </div>
         <Analytics />
       </body>
     </html>

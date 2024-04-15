@@ -1,21 +1,30 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ProposalResponse, Proposal } from "@/types/proposal";
 import { clientPreview } from "@/lib/sanity/client";
+import { NextAuthRequest, auth } from "@/lib/auth";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export const GET = auth(async (req: NextAuthRequest, { params }: { params: Record<string, string | string[] | undefined> }): Promise<NextResponse> => {
+  const id = params.id as string
+
+  if (!req.auth || !req.auth.user || !req.auth.user.email) {
+    return NextResponse.json({ error: { message: "Unauthorized", type: "authentication" }, status: 401 }, { status: 401 })
+  }
+
   try {
-    const proposal = await clientPreview.fetch('*[_type == "talk" && _id == $id][0]', { id: params.id })
+    const proposal = await clientPreview.fetch(`*[ _type == "talk" && _id==$id ]{
+      ...,
+      speaker->
+    }[ speaker.email==$email ][0]`, { id, email: req.auth.user.email })
     if (proposal) {
-      // @TODO check user permissions
       return NextResponse.json({ proposal, status: 200 } as ProposalResponse)
     } else {
-      return new Response(JSON.stringify({ error: "Document not found", status: 404 } as ProposalResponse), { status: 404 })
+      return NextResponse.json({ error: "Document not found", status: 404 } as ProposalResponse, { status: 404 })
     }
   } catch (error) {
     console.error(error)
-    return new Response(JSON.stringify({ error: "An unknown error occurred", status: 500 } as ProposalResponse), { status: 500 })
+    return new NextResponse(JSON.stringify({ error: "An unknown error occurred", status: 500 } as ProposalResponse), { status: 500 })
   }
-}
+}) as any;
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   const proposal = await request.json() as Proposal

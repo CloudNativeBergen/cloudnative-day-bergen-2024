@@ -2,11 +2,11 @@ import {
   Proposal,
   ProposalListResponse,
   ProposalResponse,
-  ProposalSubmitResponse,
   ProposalValidationError,
   Format,
   Language,
   Level,
+  Speaker,
 } from '@/types/proposal';
 
 // This function converts a JSON object to a Proposal object. This is useful when we receive a Proposal object from the API and we want to convert it to a Proposal object that we can use in our application.
@@ -57,6 +57,26 @@ export function validateProposal(proposal: Proposal): ProposalValidationError[] 
     validationErrors.push({ message: 'Terms of Service must be accepted', field: 'tos' })
   }
 
+  // validate speaker
+
+  return validationErrors
+}
+
+export function validateSpeaker(speaker: Speaker): ProposalValidationError[] {
+  const validationErrors = []
+
+  if (!speaker.name) {
+    validationErrors.push({ message: 'Name can not be empty', field: 'speaker_name' })
+  }
+
+  if (!speaker.title) {
+    validationErrors.push({ message: 'Title can not be empty', field: 'speaker_title' })
+  }
+
+  if (!speaker.email) {
+    validationErrors.push({ message: 'Email can not be empty', field: 'speaker_email' })
+  }
+
   return validationErrors
 }
 
@@ -75,7 +95,7 @@ export async function getProposal(id?: string): Promise<ProposalResponse> {
   return await res.json() as ProposalResponse
 }
 
-export async function postProposal(proposal: Proposal, id?: string): Promise<ProposalSubmitResponse> {
+export async function postProposal(proposal: Proposal, id?: string): Promise<ProposalResponse> {
   let url = `${process.env.NEXT_PUBLIC_URL}/api/cfp`
   let method = 'POST'
   if (id) {
@@ -92,5 +112,5 @@ export async function postProposal(proposal: Proposal, id?: string): Promise<Pro
     body: JSON.stringify(proposal),
   });
 
-  return await res.json() as ProposalSubmitResponse
+  return await res.json() as ProposalResponse
 }
