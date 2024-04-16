@@ -18,11 +18,11 @@ export const GET = auth(async (req: NextAuthRequest, { params }: { params: Recor
     if (proposal) {
       return NextResponse.json({ proposal, status: 200 } as ProposalResponse)
     } else {
-      return NextResponse.json({ error: "Document not found", status: 404 } as ProposalResponse, { status: 404 })
+      return NextResponse.json({ error: { message: "Document not found", type: "not_found" }, status: 404 } as ProposalResponse, { status: 404 })
     }
   } catch (error) {
     console.error(error)
-    return new NextResponse(JSON.stringify({ error: "An unknown error occurred", status: 500 } as ProposalResponse), { status: 500 })
+    return new NextResponse(JSON.stringify({ error: { message: "An unknown error occurred", type: "server" }, status: 500 } as ProposalResponse), { status: 500 })
   }
 }) as any;
 
@@ -46,7 +46,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       message = error.message
     }
 
-    const response = NextResponse.json({ error: message, status: 500 } as ProposalResponse, { status: 500 })
+    const response = NextResponse.json({ error: { message, type: "server" }, status: 500 } as ProposalResponse, { status: 500 })
     response.headers.set('cache-control', 'no-store')
     return response
   }

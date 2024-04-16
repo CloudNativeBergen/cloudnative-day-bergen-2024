@@ -11,7 +11,7 @@ import { parseCookies } from 'nookies';
 import { NextRequest } from 'next/server'
 
 // eslint-disable-next-line @next/next/no-async-client-component
-export default function MyProposals(req: NextRequest) {
+export default function MyProposals() {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [error, setError] = useState<string>('');
 

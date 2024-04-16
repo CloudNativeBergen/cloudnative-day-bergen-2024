@@ -82,7 +82,7 @@ export default function Submit() {
   )
 }
 
-export function Form({ data, id }: { data: Proposal | null, id?: string }) {
+function Form({ data, id }: { data: Proposal | null, id?: string }) {
   console.log(id, data)
   const [title, setTitle] = useState(data?.title ?? '')
   const [language, setLanguage] = useState(data?.language ?? Language.norwegian)
