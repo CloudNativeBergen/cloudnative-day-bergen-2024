@@ -3,12 +3,17 @@ import { NextResponse } from "next/server"
 
 export default auth((req) => {
   if (!req.auth) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_URL}/api/auth/signin`)
+    const signInPage = '/api/auth/signin';
+    const signInUrl = new URL(signInPage, req.nextUrl.origin);
+    signInUrl.searchParams.append('callbackUrl', req.url);
+    return NextResponse.redirect(signInUrl);
   }
+
+  return NextResponse.next();
 })
 
 export const config = {
   matcher: [
-    "/cfp/:path*",
+    "/cfp/:path+",
   ]
 }

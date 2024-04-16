@@ -49,51 +49,61 @@ export default function MyProposals(req: NextRequest) {
             </div>
           </div>
           {loading ? (
-            <div className="flex justify-center mt-12">
+            <div className="flex justify-center mt-12 mb-12">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
             </div>
           ) : (
-            <ul
-              role="list"
-              className="divide-y divide-gray-100 overflow-hidden mx-auto max-w-2xl lg:max-w-4xl mt-12 bg-white shadow-sm ring-1 ring-gray-900/5 rounded-xl"
-            >
-              {proposals.map((proposal) => (
-                <li key={proposal._id} className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
-                  <div className="flex min-w-0 gap-x-4">
-                    <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://via.placeholder.com/48" alt="" />
-                    <div className="min-w-0 flex-auto">
-                      <p className="text-sm font-semibold leading-6 text-gray-900">
-                        <a href={`/cfp/submit?id=${proposal._id}`}>
-                          <span className="absolute inset-x-0 -top-px bottom-0" />
-                          {proposal.title}
-                        </a>
-                      </p>
-                      <p className="mt-1 flex text-xs leading-5 text-gray-500">
-                        {proposal.description}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-x-4">
-                    <div className="hidden sm:flex sm:flex-col sm:items-end">
-                      <p className="text-sm leading-6 text-gray-900">{proposal.status}</p>
-                      {proposal._updatedAt ? (
-                        <p className="mt-1 text-xs leading-5 text-gray-500">
-                          Last updated <time dateTime={proposal._updatedAt}>{proposal._updatedAt}</time>
-                        </p>
-                      ) : (
-                        <div className="mt-1 flex items-center gap-x-1.5">
-                          <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                          </div>
-                          <p className="text-xs leading-5 text-gray-500">Online</p>
+            <>
+              {proposals.length === 0 ? (
+                <div className="flex flex-col items-center mx-auto p-6 mt-12 max-w-2xl lg:max-w-4xl lg:px-12 bg-white rounded-lg border-dashed border-2 border-blue-600">
+                  <p className="text-lg font-semibold text-gray-900">You have no proposals yet.</p>
+                  <p className="mt-2 text-sm text-gray-500">Submit a proposal to become a speaker.</p>
+                  <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit Proposal</a>
+                </div>
+              ) : (
+                <ul
+                  role="list"
+                  className="divide-y divide-gray-100 overflow-hidden mx-auto max-w-2xl lg:max-w-4xl mt-12 bg-white shadow-sm ring-1 ring-gray-900/5 rounded-xl"
+                >
+                  {proposals.map((proposal) => (
+                    <li key={proposal._id} className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
+                      <div className="flex min-w-0 gap-x-4">
+                        <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://via.placeholder.com/48" alt="" />
+                        <div className="min-w-0 flex-auto">
+                          <p className="text-sm font-semibold leading-6 text-gray-900">
+                            <a href={`/cfp/submit?id=${proposal._id}`}>
+                              <span className="absolute inset-x-0 -top-px bottom-0" />
+                              {proposal.title}
+                            </a>
+                          </p>
+                          <p className="mt-1 flex text-xs leading-5 text-gray-500">
+                            {proposal.description}
+                          </p>
                         </div>
-                      )}
-                    </div>
-                    <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                  </div>
-                </li>
-              ))}
-            </ul>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-x-4">
+                        <div className="hidden sm:flex sm:flex-col sm:items-end">
+                          <p className="text-sm leading-6 text-gray-900">{proposal.status}</p>
+                          {proposal._updatedAt ? (
+                            <p className="mt-1 text-xs leading-5 text-gray-500">
+                              Last updated <time dateTime={proposal._updatedAt}>{proposal._updatedAt}</time>
+                            </p>
+                          ) : (
+                            <div className="mt-1 flex items-center gap-x-1.5">
+                              <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+                                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                              </div>
+                              <p className="text-xs leading-5 text-gray-500">Online</p>
+                            </div>
+                          )}
+                        </div>
+                        <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
         </Container>
       </div>

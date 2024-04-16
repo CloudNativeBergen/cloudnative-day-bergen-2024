@@ -13,6 +13,7 @@ import { formats, languages, levels } from '@/types/proposal'
 import { Input, Textarea, Dropdown, HelpText, Checkbox } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { auth } from '@/lib/auth'
+import { set, useDocumentPreviewStore } from "sanity"
 
 export default function Submit() {
   const { data: session } = useSession()
@@ -20,10 +21,13 @@ export default function Submit() {
   const searchParams = useSearchParams()
   const id = searchParams.get('id') ?? undefined
 
+  let [isLoading, setIsLoading] = useState(true)
   let [proposal, setProposal] = useState<Proposal | null>(null);
+  //let [proposal, setProposal] = useState<Proposal>({ speaker: { email: session?.user?.email, name: session?.user?.name } } as Proposal);
 
   useEffect(() => {
     const fetchProposal = async () => {
+      console.log('fetchProposal', id)
       const data: ProposalResponse = await getProposal(id as string);
 
       if (data.error) {
@@ -35,6 +39,8 @@ export default function Submit() {
 
       if (data.proposal) {
         setProposal(data.proposal);
+        //setProposal(proposal => ({ ...proposal, ...data.proposal }));
+        setIsLoading(false);
       }
     };
 
@@ -42,12 +48,9 @@ export default function Submit() {
       fetchProposal();
     } else {
       setProposal({ speaker: { email: session?.user?.email, name: session?.user?.name } } as Proposal);
+      setIsLoading(false);
     }
-  }, [id]);
-
-  if (!proposal) {
-    return <div>Loading...</div>; // or some loading spinner
-  }
+  }, []);
 
   return (
     <Layout>
@@ -65,7 +68,13 @@ export default function Submit() {
             </div>
           </div>
           <div className="mt-12 p-6 mx-auto max-w-2xl lg:max-w-4xl lg:px-12 bg-white rounded-lg">
-            <Form data={proposal} id={id} />
+            {isLoading ? (
+              <div className="flex justify-center mt-12 mb-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              </div>
+            ) : (
+              <Form data={proposal} id={id} />
+            )}
           </div>
         </Container>
       </div>
@@ -73,20 +82,21 @@ export default function Submit() {
   )
 }
 
-export function Form({ data, id }: { data: Proposal, id?: string }) {
-  const [title, setTitle] = useState(data.title ?? '')
-  const [language, setLanguage] = useState(data.language ?? Language.norwegian)
-  const [description, setDescription] = useState(data.description ?? '')
-  const [format, setFormat] = useState(data.format ?? Format.lightning_10)
-  const [level, setLevel] = useState(data.level ?? Level.beginner)
-  const [outline, setOutline] = useState(data.outline ?? '')
-  const [tos, setTos] = useState(data.tos ?? false)
-  const [speakerName, setSpeakerName] = useState(data.speaker?.name ?? '')
-  const [speakerTitle, setSpeakerTitle] = useState(data.speaker?.title ?? '')
-  const [speakerEmail, setSpeakerEmail] = useState(data.speaker?.email ?? '')
-  const [speakerIsLocal, setSpeakerIsLocal] = useState(data.speaker?.is_local ?? false)
-  const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(data.speaker?.is_first_time ?? false)
-  const [speakerIsDiverse, setSpeakerIsDiverse] = useState(data.speaker?.is_diverse ?? false)
+export function Form({ data, id }: { data: Proposal | null, id?: string }) {
+  console.log(id, data)
+  const [title, setTitle] = useState(data?.title ?? '')
+  const [language, setLanguage] = useState(data?.language ?? Language.norwegian)
+  const [description, setDescription] = useState(data?.description ?? '')
+  const [format, setFormat] = useState(data?.format ?? Format.lightning_10)
+  const [level, setLevel] = useState(data?.level ?? Level.beginner)
+  const [outline, setOutline] = useState(data?.outline ?? '')
+  const [tos, setTos] = useState(data?.tos ?? false)
+  const [speakerName, setSpeakerName] = useState(data?.speaker?.name ?? '')
+  const [speakerTitle, setSpeakerTitle] = useState(data?.speaker?.title ?? '')
+  const [speakerEmail, setSpeakerEmail] = useState(data?.speaker?.email ?? '')
+  const [speakerIsLocal, setSpeakerIsLocal] = useState(data?.speaker?.is_local ?? false)
+  const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(data?.speaker?.is_first_time ?? false)
+  const [speakerIsDiverse, setSpeakerIsDiverse] = useState(data?.speaker?.is_diverse ?? false)
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [proposalSubmitError, setProposalSubmitError] = useState({} as ProposalError);

@@ -73,8 +73,8 @@ export const POST = auth(async (req: NextAuthRequest) => {
   // Upsert speaker profile
   const speaker = { _type: 'reference', _ref: '' }
   try {
-    let { _id: speakerId } = await clientPreview.fetch(`*[ _type == "speaker" && email=="$email" ][0] { _id }`, { email: req.auth.user.email })
-    if (!speakerId) {
+    let speakerCheck = await clientPreview.fetch(`*[ _type == "speaker" && email==$email ][0] { _id }`, { email: req.auth.user.email })
+    if (!speakerCheck) {
       let { _id: speakerId } = await clientPreview.create({
         _type: 'speaker',
         email: req.auth.user.email,
@@ -83,11 +83,11 @@ export const POST = auth(async (req: NextAuthRequest) => {
       })
       speaker._ref = speakerId
     } else {
-      await clientPreview.patch(speakerId).set({
+      await clientPreview.patch(speakerCheck._id).set({
         name: proposal.speaker?.name ?? req.auth.user.name ?? "",
         title: proposal.speaker?.title ?? "",
       }).commit()
-      speaker._ref = speakerId
+      speaker._ref = speakerCheck._id
     }
   } catch (error) {
     return proposalResponseError({ error, message: "Failed to upsert speaker profile" })

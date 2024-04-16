@@ -33,6 +33,9 @@ export const config = {
       if (trigger === "update") token.name = session.user.name
       return token
     },
+    redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl) ? url : baseUrl
+    }
   },
 } satisfies NextAuthConfig
 
