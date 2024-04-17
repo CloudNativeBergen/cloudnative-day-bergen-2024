@@ -1,13 +1,4 @@
-import {
-  Proposal,
-  ProposalListResponse,
-  ProposalResponse,
-  ProposalValidationError,
-  Format,
-  Language,
-  Level,
-  Speaker,
-} from '@/types/proposal';
+import { Format, Language, Level, Proposal, ProposalValidationError, Speaker } from "@/types/proposal"
 
 // This function converts a JSON object to a Proposal object. This is useful when we receive a Proposal object from the API and we want to convert it to a Proposal object that we can use in our application.
 // This function omits fields that should not be set by the user, such as the ID of the Proposal and the status of the Proposal.
@@ -21,6 +12,14 @@ export function convertJsonToProposal(json: any): Proposal {
     tags: json.tags || [],
     tos: json.tos as boolean,
     outline: json.outline as string,
+    speaker: {
+      name: json.speaker.name as string,
+      title: json.speaker.title as string,
+      email: json.speaker.email as string,
+      is_diverse: json.speaker.is_diverse as boolean,
+      is_first_time: json.speaker.is_first_time as boolean,
+      is_local: json.speaker.is_local as boolean,
+    } as Speaker,
   }
 }
 
@@ -78,39 +77,4 @@ export function validateSpeaker(speaker: Speaker): ProposalValidationError[] {
   }
 
   return validationErrors
-}
-
-export async function listProposals(): Promise<ProposalListResponse> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/cfp`, { cache: 'no-store' })
-  return await res.json() as ProposalListResponse
-}
-
-export async function getProposal(id?: string): Promise<ProposalResponse> {
-  let url = `${process.env.NEXT_PUBLIC_URL}/api/cfp`
-  if (id) {
-    url += `/${id}`
-  }
-
-  const res = await fetch(url, { cache: 'no-store' })
-  return await res.json() as ProposalResponse
-}
-
-export async function postProposal(proposal: Proposal, id?: string): Promise<ProposalResponse> {
-  let url = `${process.env.NEXT_PUBLIC_URL}/api/cfp`
-  let method = 'POST'
-  if (id) {
-    url += `/${id}`
-    method = 'PUT'
-  }
-
-  const res = await fetch(url, {
-    cache: 'no-store',
-    method: method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(proposal),
-  });
-
-  return await res.json() as ProposalResponse
 }

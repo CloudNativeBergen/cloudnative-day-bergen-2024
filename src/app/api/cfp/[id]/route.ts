@@ -1,53 +1,70 @@
-import { NextRequest, NextResponse } from "next/server";
-import { ProposalResponse, Proposal } from "@/types/proposal";
-import { clientPreview } from "@/lib/sanity/client";
+import { Proposal, Speaker } from "@/types/proposal";
 import { NextAuthRequest, auth } from "@/lib/auth";
+import { convertJsonToProposal, validateProposal } from "@/lib/proposal/validation";
+import { getProposal, updateProposal, updateSpeaker } from "@/lib/proposal/sanity";
+import { proposalResponse, proposalResponseError } from "@/lib/proposal/server";
 
-export const GET = auth(async (req: NextAuthRequest, { params }: { params: Record<string, string | string[] | undefined> }): Promise<NextResponse> => {
+export const dynamic = 'force-dynamic'
+
+export const GET = auth(async (req: NextAuthRequest, { params }: { params: Record<string, string | string[] | undefined> }) => {
   const id = params.id as string
 
   if (!req.auth || !req.auth.user || !req.auth.user.email) {
-    return NextResponse.json({ error: { message: "Unauthorized", type: "authentication" }, status: 401 }, { status: 401 })
+    return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
-  try {
-    const proposal = await clientPreview.fetch(`*[ _type == "talk" && _id==$id ]{
-      ...,
-      speaker->
-    }[ speaker.email==$email ][0]`, { id, email: req.auth.user.email })
-    if (proposal) {
-      return NextResponse.json({ proposal, status: 200 } as ProposalResponse)
-    } else {
-      return NextResponse.json({ error: { message: "Document not found", type: "not_found" }, status: 404 } as ProposalResponse, { status: 404 })
-    }
-  } catch (error) {
-    console.error(error)
-    return new NextResponse(JSON.stringify({ error: { message: "An unknown error occurred", type: "server" }, status: 500 } as ProposalResponse), { status: 500 })
+  const { proposal, err: error } = await getProposal(id, req.auth.user.email)
+  if (error) {
+    return proposalResponseError({ error, message: "Error fetching proposal from database", type: "server", status: 500 })
+  }
+
+  if (proposal) {
+    console.log(proposal._id, proposal.title, proposal.speaker?.name)
+    return proposalResponse(proposal)
+  } else {
+    return proposalResponseError({ message: "Document not found", type: "not_found", status: 404 })
   }
 }) as any;
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  const proposal = await request.json() as Proposal
+export const PUT = auth(async (req: NextAuthRequest, { params }: { params: Record<string, string | string[] | undefined> }) => {
+  const id = params.id as string
 
-  // @TODO Validate request body
-  // @TODO Attach user as author
-  // @TODO Check user permissions
-
-  try {
-    const patched = await clientPreview.patch(params.id).set(proposal).commit()
-    const response = NextResponse.json({ proposal: patched } as unknown as ProposalResponse)
-    response.headers.set('cache-control', 'no-store')
-    return response
-  } catch (error) {
-    console.error(error)
-
-    let message = "An unknown error occurred"
-    if (error instanceof Error) {
-      message = error.message
-    }
-
-    const response = NextResponse.json({ error: { message, type: "server" }, status: 500 } as ProposalResponse, { status: 500 })
-    response.headers.set('cache-control', 'no-store')
-    return response
+  if (!req.auth || !req.auth.user || !req.auth.user.email) {
+    return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
-}
+
+  const data = await req.json() as Proposal
+  const proposal = convertJsonToProposal(data)
+
+  const validationErrors = validateProposal(proposal)
+  if (validationErrors.length > 0) {
+    return proposalResponseError({ message: "Proposal contains invalid fields", validationErrors, type: "validation", status: 400 })
+  }
+
+  const { proposal: existingProposal, err: checkErr } = await getProposal(id, req.auth.user.email)
+  if (checkErr) {
+    return proposalResponseError({ error: checkErr, message: "Error fetching proposal from database", type: "server", status: 500 })
+  }
+
+  if (!existingProposal) {
+    return proposalResponseError({ message: "Proposal not found", type: "not_found", status: 404 })
+  }
+
+  if (!existingProposal.speaker || !("_id" in existingProposal.speaker) || !existingProposal.speaker._id) {
+    const error = new Error("Invalid speaker reference")
+    return proposalResponseError({ error, message: error.message, type: "server", status: 500 })
+  }
+
+  const speakerId = existingProposal.speaker._id
+  const { speaker: _, err: speakerErr } = await updateSpeaker(speakerId, proposal.speaker as Speaker, req.auth.user.email)
+  if (speakerErr) {
+    return proposalResponseError({ error: speakerErr, message: "Error updating speaker in database", type: "server", status: 500 })
+  }
+
+  const { proposal: updatedProposal, err: updateErr } = await updateProposal(id, proposal, speakerId)
+  if (updateErr) {
+    return proposalResponseError({ error: updateErr, message: "Error updating proposal in database", type: "server", status: 500 })
+  }
+
+  return proposalResponse(updatedProposal)
+}) as any;

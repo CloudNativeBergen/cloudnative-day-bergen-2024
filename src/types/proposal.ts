@@ -24,6 +24,7 @@ export enum Status {
 
 export interface Proposal {
   _id?: string
+  _rev?: string
   _createdAt?: string
   _updatedAt?: string
   title: string
@@ -36,6 +37,11 @@ export interface Proposal {
   tos: boolean
   status?: Status
   speaker?: Speaker
+}
+
+export interface SpeakerRef {
+  _ref: string
+  _type: string
 }
 
 export interface Speaker {
@@ -72,6 +78,13 @@ export interface ProposalListResponse extends ProposalBaseResponse {
   proposals?: Proposal[]
   error?: ProposalError
 }
+
+export const statuses = new Map([
+  [Status.submitted, 'Submitted'],
+  [Status.selected, 'Selected'],
+  [Status.accepted, 'Accepted'],
+  [Status.rejected, 'Rejected'],
+])
 
 export const languages = new Map([
   [Language.norwegian, 'Norwegian'],

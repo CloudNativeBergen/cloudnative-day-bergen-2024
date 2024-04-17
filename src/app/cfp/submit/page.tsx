@@ -8,12 +8,12 @@ import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
 import { Format, Language, Level, Proposal, ProposalResponse, ProposalError, Speaker } from '@/types/proposal'
 import { useState, useEffect } from 'react'
-import { getProposal, postProposal } from '@/lib/proposalClient'
+import { getProposal, postProposal } from '@/lib/proposal/api'
 import { formats, languages, levels } from '@/types/proposal'
 import { Input, Textarea, Dropdown, HelpText, Checkbox } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { auth } from '@/lib/auth'
-import { set, useDocumentPreviewStore } from "sanity"
+
+export const dynamic = 'force-dynamic'
 
 export default function Submit() {
   const { data: session } = useSession()
@@ -23,12 +23,12 @@ export default function Submit() {
 
   let [isLoading, setIsLoading] = useState(true)
   let [proposal, setProposal] = useState<Proposal | null>(null);
-  //let [proposal, setProposal] = useState<Proposal>({ speaker: { email: session?.user?.email, name: session?.user?.name } } as Proposal);
 
   useEffect(() => {
     const fetchProposal = async () => {
       console.log('fetchProposal', id)
       const data: ProposalResponse = await getProposal(id as string);
+      console.log('fetchProposal', data.proposal?.title)
 
       if (data.error) {
         // @TODO Show error message to user
@@ -50,7 +50,7 @@ export default function Submit() {
       setProposal({ speaker: { email: session?.user?.email, name: session?.user?.name } } as Proposal);
       setIsLoading(false);
     }
-  }, []);
+  }, [id, session?.user?.email, session?.user?.name]);
 
   return (
     <Layout>
@@ -83,7 +83,6 @@ export default function Submit() {
 }
 
 function Form({ data, id }: { data: Proposal | null, id?: string }) {
-  console.log(id, data)
   const [title, setTitle] = useState(data?.title ?? '')
   const [language, setLanguage] = useState(data?.language ?? Language.norwegian)
   const [description, setDescription] = useState(data?.description ?? '')
@@ -112,7 +111,7 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
     const response = await postProposal(proposal, id);
 
     if (!response.error) {
-      router.push('/cfp/list?success=true')
+      router.push(`/cfp/list${!id ? "?success=true" : ""}`)
     }
 
     if (response.error) {
@@ -243,3 +242,4 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
     </form>
   )
 }
+
