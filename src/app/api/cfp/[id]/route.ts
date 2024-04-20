@@ -1,15 +1,16 @@
 import { Proposal, Speaker } from "@/types/proposal";
 import { NextAuthRequest, auth } from "@/lib/auth";
 import { convertJsonToProposal, validateProposal } from "@/lib/proposal/validation";
-import { getProposal, updateProposal, updateSpeaker } from "@/lib/proposal/sanity";
+import { getProposal, updateProposal } from "@/lib/proposal/sanity";
 import { proposalResponse, proposalResponseError } from "@/lib/proposal/server";
+import { updateSpeaker } from "@/lib/speaker/sanity";
 
 export const dynamic = 'force-dynamic'
 
 export const GET = auth(async (req: NextAuthRequest, { params }: { params: Record<string, string | string[] | undefined> }) => {
   const id = params.id as string
 
-  if (!req.auth || !req.auth.user || !req.auth.user.email) {
+  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id) {
     return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
@@ -29,7 +30,7 @@ export const GET = auth(async (req: NextAuthRequest, { params }: { params: Recor
 export const PUT = auth(async (req: NextAuthRequest, { params }: { params: Record<string, string | string[] | undefined> }) => {
   const id = params.id as string
 
-  if (!req.auth || !req.auth.user || !req.auth.user.email) {
+  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id) {
     return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 

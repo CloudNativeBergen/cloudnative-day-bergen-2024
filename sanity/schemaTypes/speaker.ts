@@ -28,6 +28,9 @@ export default defineType({
       name: 'email',
       title: 'Email',
       type: 'string',
+      hidden: ({ currentUser }) => {
+        return !(currentUser != null && currentUser.roles.find(({ name }) => name === 'editor' || name === 'editor'))
+      }
     }),
     defineField({
       name: 'image',
