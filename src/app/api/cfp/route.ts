@@ -8,8 +8,6 @@ import { proposalListResponse, proposalListResponseError, proposalResponse, prop
 export const dynamic = 'force-dynamic'
 
 export const GET = auth(async (req: NextAuthRequest) => {
-  console.log("req.auth", req.auth?.speaker);
-
   if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id) {
     return proposalListResponseError(new Error("Unauthorized"), "Unauthorized", "authentication", 401)
   }
@@ -52,10 +50,13 @@ export const POST = auth(async (req: NextAuthRequest) => {
     return proposalResponseError({ error, message: "Failed to upsert speaker profile" })
   }
 
-  // Create the proposal
+  // Set proposal metadata fields
   const _type = 'talk'
   const _id = randomUUID().toString()
   const status = Status.submitted
+
+  // Delete the speaker field from the proposal object before creating since it needs to be a reference and not an object
+  delete proposal.speaker
 
   try {
     const created = await clientWrite.create({ _type, _id, status, speaker, ...proposal }) as Proposal

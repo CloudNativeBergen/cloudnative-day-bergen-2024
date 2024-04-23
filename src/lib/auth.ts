@@ -38,7 +38,6 @@ export const config = {
       } as Session
     },
     jwt({ token, trigger, session }) {
-      //console.log("jwt", token, trigger, session)
       if (trigger === "update") token.name = session.user.name
       return token
     },

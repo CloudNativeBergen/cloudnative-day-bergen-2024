@@ -20,7 +20,6 @@ export const GET = auth(async (req: NextAuthRequest, { params }: { params: Recor
   }
 
   if (proposal) {
-    console.log(proposal._id, proposal.title, proposal.speaker?.name)
     return proposalResponse(proposal)
   } else {
     return proposalResponseError({ message: "Document not found", type: "not_found", status: 404 })

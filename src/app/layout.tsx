@@ -56,7 +56,7 @@ export default async function RootLayout({
     >
       <body className="flex min-h-full">
         <div className="flex w-full flex-col">
-          <SessionProvider basePath={"/api/auth"} session={session}>
+          <SessionProvider session={session}>
             {children}
           </SessionProvider>
         </div>

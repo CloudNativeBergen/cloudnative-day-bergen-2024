@@ -12,7 +12,6 @@ async function getData() {
 
 export default async function Home() {
   const schedule = await getData()
-  console.log(schedule.filter(item => item.talk).map(item => item.talk?.speaker))
   const tracks = scheduleToTracks(schedule)
 
   return (

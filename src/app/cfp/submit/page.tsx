@@ -26,9 +26,7 @@ export default function Submit() {
 
   useEffect(() => {
     const fetchProposal = async () => {
-      console.log('fetchProposal', id)
       const data: ProposalResponse = await getProposal(id as string);
-      console.log('fetchProposal', data.proposal?.title)
 
       if (data.error) {
         // @TODO Show error message to user
