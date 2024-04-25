@@ -3,8 +3,7 @@ import GitHub from "next-auth/providers/github"
 import type { NextAuthConfig, Session } from "next-auth"
 import { NextRequest } from "next/server";
 import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module.js";
-import { JwkKeyExportOptions } from "crypto";
-import { getOrCreateSpeaker, getSpeaker } from "./speaker/sanity";
+import { getOrCreateSpeaker } from "./speaker/sanity";
 
 export interface NextAuthRequest extends NextRequest {
   auth: Session | null;
