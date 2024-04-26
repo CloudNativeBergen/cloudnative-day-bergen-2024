@@ -13,7 +13,7 @@ const packages = [
   {
     name: 'Pod',
     id: 'sponsor-pod',
-    href: '#',
+    href: 'mailto:hans@flaatten.org?subject=Sponsorship Inquiry - Pod',
     price: '5.000 NOK',
     description: "It is the basic unit of Kubernetes, and the 'Pod' sponsorship level gives you the basic benefits that just works.",
     features: [
@@ -26,7 +26,7 @@ const packages = [
   {
     name: 'Service',
     id: 'sponsor-service',
-    href: '#',
+    href: 'mailto:hans@flaatten.org?subject=Sponsorship Inquiry - Service',
     price: '15.000 NOK',
     description: "It enables traffic to your application, and the 'Service' sponsorship level offers more benefits and reach a larger audience.",
     features: [
@@ -41,7 +41,7 @@ const packages = [
   {
     name: 'Ingress',
     id: 'sponsor-ingress',
-    href: '#',
+    href: 'mailto:hans@flaatten.org?subject=Sponsorship Inquiry - Ingress',
     price: '30.000 NOK',
     description: "It is the entry point for your application, and the 'Ingress' sponsorship level is for sponsors who want to make a big impact.",
     features: [
