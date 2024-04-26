@@ -1,5 +1,5 @@
 import { Proposal, ProposalResponse, Speaker, Status } from "@/types/proposal";
-import { clientWrite } from "../sanity/client";
+import { clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 
 export async function getProposal(id: string, email: string): Promise<{ proposal: Proposal; err: Error | null; }> {

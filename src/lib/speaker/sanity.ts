@@ -1,5 +1,5 @@
 import { Speaker } from "@/types/proposal";
-import { clientWrite } from "../sanity/client";
+import { clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 
 export async function getOrCreateSpeaker(user: { name: string, email: string }): Promise<{ speaker: Speaker; err: Error | null; }> {

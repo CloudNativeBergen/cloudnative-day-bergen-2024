@@ -3,12 +3,6 @@
  */
 import { expect, it, jest } from '@jest/globals';
 import { GET } from './route';
-import { getProposals } from '@/lib/proposal/sanity';
-import { auth } from '@/lib/auth';
-
-//jest.mock('@/lib/auth', () => ({
-//  auth: jest.fn((handler) => handler),
-//}));
 
 jest.mock('@/lib/proposal/sanity', () => ({
   getProposals: jest.fn(),
