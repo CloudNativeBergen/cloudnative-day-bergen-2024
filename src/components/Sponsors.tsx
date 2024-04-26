@@ -1,9 +1,10 @@
 import Image from 'next/image'
 
 import { Container } from '@/components/Container'
+import logoFortytwo from '@/images/logos/fortytwo.svg'
 
 const sponsors = [
-  { name: 'TBD', logo: '' },
+  { name: 'Fortytwo', logo: logoFortytwo, href: 'https://fortytwo.io' },
   { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
@@ -36,7 +37,9 @@ export function Sponsors() {
                 </a>
               )}
               {sponsor.name !== "TBD" && (
-                <Image src={sponsor.logo} alt={sponsor.name} unoptimized />
+                <a href={sponsor.href} className='hover:opacity-80'>
+                  <Image src={sponsor.logo} alt={sponsor.name} unoptimized />
+                </a>
               )}
             </div>
           ))}
