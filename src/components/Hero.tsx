@@ -1,6 +1,7 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
+import { GitHubIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from './SocialIcons'
 
 export function Hero() {
   return (
@@ -37,6 +38,20 @@ export function Hero() {
               </div>
             ))}
           </dl>
+          <div className="flex justify-center mt-10 space-x-4 sm:hidden">
+            <a href="#" className="text-blue-600 hover:text-blue-800">
+              <InstagramIcon className="w-12 h-12" />
+            </a>
+            <a href="#" className="text-blue-600 hover:text-blue-800">
+              <TwitterIcon className="w-12 h-12" />
+            </a>
+            <a href="https://github.com/CloudNativeBergen" className="text-blue-600 hover:text-blue-800">
+              <GitHubIcon className="w-12 h-12" />
+            </a>
+            <a href="https://www.linkedin.com/company/cloud-native-bergen" className="text-blue-600 hover:text-blue-800">
+              <LinkedInIcon className="w-12 h-12" />
+            </a>
+          </div>
         </div>
       </Container>
     </div>

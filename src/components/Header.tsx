@@ -2,6 +2,7 @@ import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { DiamondIcon } from '@/components/DiamondIcon'
 import { Logo } from '@/components/Logo'
+import { GitHubIcon, LinkedInIcon } from './SocialIcons'
 
 export function Header() {
   return (
@@ -21,7 +22,13 @@ export function Header() {
             <p>Bergen, Norway</p>
           </div>
         </div>
-        <div className="hidden sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
+        <div className="hidden whitespace-nowrap sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
+          <a href="https://github.com/CloudNativeBergen" className="mt-1 mr-3 text-blue-800">
+            <GitHubIcon className="w-12 h-12 fill-current" />
+          </a>
+          <a href="https://www.linkedin.com/company/cloud-native-bergen" className="mt-1 mr-3 text-blue-800 hover:text-blue-800">
+            <LinkedInIcon className="w-12 h-12 fill-current" />
+          </a>
           <Button href="#">Get your tickets</Button>
         </div>
       </Container>
