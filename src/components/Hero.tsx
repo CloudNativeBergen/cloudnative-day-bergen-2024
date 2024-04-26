@@ -1,7 +1,7 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
-import { GitHubIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from './SocialIcons'
+import { GitHubIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from '@/components/SocialIcons'
 
 export function Hero() {
   return (
