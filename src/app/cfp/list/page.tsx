@@ -6,7 +6,7 @@ import { Layout } from '@/components/Layout'
 import { Proposal, Status, statuses } from '@/types/proposal'
 import { useState, useEffect } from 'react'
 import { listProposals } from '@/lib/proposal/api'
-import { CheckCircleIcon, ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { CheckCircleIcon, ChevronRightIcon, XMarkIcon, PlusCircleIcon } from '@heroicons/react/24/solid'
 import { formatDate } from '@/lib/time'
 import { useSearchParams } from 'next/navigation'
 
@@ -130,7 +130,6 @@ function Success() {
   );
 }
 
-// eslint-disable-next-line @next/next/no-async-client-component
 export default function MyProposals() {
   const searchParams = useSearchParams()
   const success = searchParams.get('success') ?? undefined
@@ -164,6 +163,9 @@ export default function MyProposals() {
           <div className="mx-auto max-w-2xl lg:max-w-4xl lg:px-12">
             <h1 className="font-display text-5xl font-bold tracking-tighter text-blue-600 sm:text-7xl">
               Speaker Dashboard
+              <a href='/cfp/submit'>
+                <PlusCircleIcon className="h-14 w-14 inline-block ml-8 text-blue-600 hover:text-blue-500" />
+              </a>
             </h1>
             <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
               <p>
