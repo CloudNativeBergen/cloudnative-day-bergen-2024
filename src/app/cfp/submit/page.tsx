@@ -95,6 +95,9 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
   const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(data?.speaker?.is_first_time ?? false)
   const [speakerIsDiverse, setSpeakerIsDiverse] = useState(data?.speaker?.is_diverse ?? false)
 
+  const buttonPrimary = id ? 'Update' : 'Submit';
+  const buttonPrimaryLoading = id ? 'Updating...' : 'Submitting...';
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [proposalSubmitError, setProposalSubmitError] = useState({} as ProposalError);
 
@@ -234,7 +237,7 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
           disabled={isSubmitting}
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          {isSubmitting ? 'Submitting...' : 'Submit'}
+          {isSubmitting ? buttonPrimaryLoading : buttonPrimary}
         </button>
       </div>
     </form>
