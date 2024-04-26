@@ -37,12 +37,12 @@ export function Header() {
           </a>
           <Button href="#">Get your tickets</Button>
         </div>
-        <div className="mt-10 sm:flex lg:ml-4 lg:mt-0">
+        <div className="mt-10 sm:flex ml-10 lg:ml-4 lg:mt-0">
           <a href='/cfp/list'>
             {session ? (
-              <img src={session.user.picture} alt={session.user.name} className="w-14 h-14 rounded-full" />
+              <img src={session.user.picture} alt={session.user.name} className="w-12 h-12 rounded-full" />
             ) : (
-              <UserCircleIcon className="w-14 h-14 text-slate-900" />
+              <UserCircleIcon className="w-12 h-12 text-slate-900" />
             )}
           </a>
         </div>
