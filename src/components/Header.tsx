@@ -29,12 +29,6 @@ export function Header() {
           </div>
         </div>
         <div className="hidden whitespace-nowrap sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
-          <a href="https://github.com/CloudNativeBergen" className="mt-1 mr-3 text-blue-800">
-            <GitHubIcon className="w-12 h-12 fill-current" />
-          </a>
-          <a href="https://www.linkedin.com/company/cloud-native-bergen" className="mt-1 mr-3 text-blue-800 hover:text-blue-800">
-            <LinkedInIcon className="w-12 h-12 fill-current" />
-          </a>
           <Button href="#">Get your tickets</Button>
         </div>
         <div className="mt-10 sm:flex ml-10 lg:ml-4 lg:mt-0">
