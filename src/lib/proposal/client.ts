@@ -2,16 +2,16 @@ import {
   Proposal,
   ProposalListResponse,
   ProposalResponse,
-} from '@/types/proposal';
+} from '@/lib/proposal/types';
 
 
 export async function listProposals(): Promise<ProposalListResponse> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/cfp`, { cache: 'no-store', next: { revalidate: 0 } })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal`, { cache: 'no-store', next: { revalidate: 0 } })
   return await res.json() as ProposalListResponse
 }
 
 export async function getProposal(id?: string): Promise<ProposalResponse> {
-  let url = `${process.env.NEXT_PUBLIC_URL}/api/cfp`
+  let url = `${process.env.NEXT_PUBLIC_URL}/api/proposal`
   if (id) {
     url += `/${id}`
   }
@@ -23,7 +23,7 @@ export async function getProposal(id?: string): Promise<ProposalResponse> {
 export async function postProposal(proposal: Proposal, id?: string): Promise<ProposalResponse> {
   if (id === 'new') id = undefined
 
-  let url = `${process.env.NEXT_PUBLIC_URL}/api/cfp`
+  let url = `${process.env.NEXT_PUBLIC_URL}/api/proposal`
   let method = 'POST'
   if (id) {
     url += `/${id}`

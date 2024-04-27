@@ -1,4 +1,4 @@
-import { Format, Language, Level, Status } from '../../src/types/proposal';
+import { Format, Language, Level, Status } from '../../src/lib/proposal/types';
 import { defineField, defineType } from 'sanity'
 import { form } from 'sanity/structure';
 

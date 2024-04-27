@@ -1,3 +1,5 @@
+import { Speaker } from "@/lib/speaker/types"
+
 export enum Language {
   norwegian = 'norwegian',
   english = 'english',
@@ -39,47 +41,29 @@ export interface Proposal {
   speaker?: Speaker
 }
 
-export interface SpeakerRef {
-  _ref: string
-  _type: string
-}
-
-export interface Speaker {
-  _id?: string
-  name: string
-  title?: string
-  bio?: string
-  email?: string
-  links?: string[]
-  imageURL?: string
-  is_local: boolean
-  is_first_time: boolean
-  is_diverse: boolean
-}
-
 export interface ProposalBaseResponse {
   status: number
 }
 
-export interface ProposalError {
+export interface FormError {
   message: string
   type: string
-  validationErrors?: ProposalValidationError[]
+  validationErrors?: FormValidationError[]
 }
 
-export interface ProposalValidationError {
+export interface FormValidationError {
   message: string
   field: string
 }
 
 export interface ProposalResponse extends ProposalBaseResponse {
   proposal?: Proposal
-  error?: ProposalError
+  error?: FormError
 }
 
 export interface ProposalListResponse extends ProposalBaseResponse {
   proposals?: Proposal[]
-  error?: ProposalError
+  error?: FormError
 }
 
 export const statuses = new Map([

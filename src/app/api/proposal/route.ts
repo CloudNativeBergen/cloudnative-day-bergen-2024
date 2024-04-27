@@ -1,9 +1,8 @@
-import { Proposal, Speaker } from "@/types/proposal";
+import { Proposal } from "@/lib/proposal/types";
 import { convertJsonToProposal, validateProposal } from "@/lib/proposal/validation";
 import { NextAuthRequest, auth } from "@/lib/auth";
 import { proposalListResponse, proposalListResponseError, proposalResponse, proposalResponseError } from "@/lib/proposal/server";
 import { createProposal, getProposals } from "@/lib/proposal/sanity";
-import { updateSpeaker } from "@/lib/speaker/sanity";
 
 export const dynamic = 'force-dynamic'
 
@@ -31,12 +30,6 @@ export const POST = auth(async (req: NextAuthRequest) => {
   const validationErrors = validateProposal(proposal)
   if (validationErrors.length > 0) {
     return proposalResponseError({ message: "Proposal contains invalid fields", validationErrors, type: "validation", status: 400 })
-  }
-
-  // validate speaker
-  const { err: speakerErr } = await updateSpeaker(req.auth.speaker._id, proposal.speaker as Speaker, req.auth.user.email)
-  if (speakerErr) {
-    return proposalResponseError({ error: speakerErr, message: "Failed to update speaker" })
   }
 
   const { proposal: created, err } = await createProposal(proposal, req.auth.speaker._id)

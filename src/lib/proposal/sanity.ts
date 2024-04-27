@@ -1,4 +1,4 @@
-import { Proposal, ProposalResponse, Speaker, Status } from "@/types/proposal";
+import { Proposal, Status } from "@/lib/proposal/types";
 import { clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 

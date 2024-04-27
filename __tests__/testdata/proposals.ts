@@ -1,4 +1,4 @@
-import { Format, Language, Level, Proposal } from "@/types/proposal";
+import { Format, Language, Level, Proposal } from "@/lib/proposal/types";
 import speakers from "./speakers";
 
 const proposals: Proposal[] = [{

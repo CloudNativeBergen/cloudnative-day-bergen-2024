@@ -1,4 +1,4 @@
-import { Format, Language, Level, Proposal, ProposalValidationError, Speaker } from "@/types/proposal"
+import { Format, Language, Level, Proposal, FormValidationError } from "@/lib/proposal/types"
 
 // This function converts a JSON object to a Proposal object. This is useful when we receive a Proposal object from the API and we want to convert it to a Proposal object that we can use in our application.
 // This function omits fields that should not be set by the user, such as the ID of the Proposal and the status of the Proposal.
@@ -12,19 +12,10 @@ export function convertJsonToProposal(json: any): Proposal {
     tags: json.tags || [],
     tos: json.tos as boolean,
     outline: json.outline as string,
-    speaker: {
-      name: json.speaker.name as string,
-      title: json.speaker.title as string,
-      bio: json.speaker.bio as string,
-      links: json.speaker.links || [],
-      is_diverse: json.speaker.is_diverse as boolean,
-      is_first_time: json.speaker.is_first_time as boolean,
-      is_local: json.speaker.is_local as boolean,
-    } as Speaker,
   }
 }
 
-export function validateProposal(proposal: Proposal): ProposalValidationError[] {
+export function validateProposal(proposal: Proposal): FormValidationError[] {
   const validationErrors = []
 
   if (!proposal.title) {
@@ -56,22 +47,6 @@ export function validateProposal(proposal: Proposal): ProposalValidationError[] 
   if (!proposal.tos) {
     validationErrors.push({ message: 'Terms of Service must be accepted', field: 'tos' })
   }
-
-  return validationErrors
-}
-
-export function validateSpeaker(speaker: Speaker): ProposalValidationError[] {
-  const validationErrors = []
-
-  if (!speaker.name) {
-    validationErrors.push({ message: 'Name can not be empty', field: 'speaker_name' })
-  }
-
-  if (!speaker.email) {
-    validationErrors.push({ message: 'Email can not be empty', field: 'speaker_email' })
-  }
-
-  // validate speaker links
 
   return validationErrors
 }

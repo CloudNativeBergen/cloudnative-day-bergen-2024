@@ -4,40 +4,65 @@ import { XCircleIcon } from '@heroicons/react/24/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { Format, Language, Level, Proposal, ProposalResponse, ProposalError, Speaker } from '@/types/proposal'
+import { Format, Language, Level, Proposal, ProposalResponse, FormError } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
-import { getProposal, postProposal } from '@/lib/proposal/api'
-import { formats, languages, levels } from '@/types/proposal'
+import { getProposal, postProposal } from '@/lib/proposal/client'
+import { formats, languages, levels } from '@/lib/proposal/types'
 import { Input, Textarea, Dropdown, HelpText, Checkbox, LinkInput } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { Speaker } from '@/lib/speaker/types'
+import { getSpeaker, putSpeaker } from '@/lib/speaker/client'
+import { set } from 'sanity'
 
 export const dynamic = 'force-dynamic'
 
 export default function Submit() {
   const searchParams = useSearchParams()
-  const id = searchParams.get('id') ?? 'new'
+  const id = searchParams.get('id') ?? undefined
 
   let [isLoading, setIsLoading] = useState(true)
-  let [proposal, setProposal] = useState<Proposal | null>(null);
+  let [proposal, setProposal] = useState<Proposal | undefined>(undefined);
+  let [speaker, setSpeaker] = useState<Speaker | undefined>(undefined);
+
+  const fetchProposal = async (id: string) => {
+    const data: ProposalResponse = await getProposal(id);
+
+    if (data.error) {
+      // @TODO Show error message to user
+      // Access denied or proposal not found (both are 404)
+      console.error(data.error);
+      return;
+    }
+
+    if (data.proposal) {
+      setProposal(data.proposal);
+      setSpeaker(data.proposal.speaker);
+      setIsLoading(false);
+    }
+  };
+
+  const fetchSpeaker = async () => {
+    const data = await getSpeaker();
+
+    if (data.error) {
+      // @TODO Show error message to user
+      // Access denied or proposal not found (both are 404)
+      console.error(data.error);
+      return;
+    }
+
+    if (data.speaker) {
+      setSpeaker(data.speaker);
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProposal = async () => {
-      const data: ProposalResponse = await getProposal(id);
-
-      if (data.error) {
-        // @TODO Show error message to user
-        // Access denied or proposal not found (both are 404)
-        console.error(data.error);
-        return;
-      }
-
-      if (data.proposal) {
-        setProposal(data.proposal);
-        setIsLoading(false);
-      }
-    };
-
-    fetchProposal();
+    if (id) {
+      fetchProposal(id);
+    } else {
+      fetchSpeaker();
+    }
   }, [id]);
 
   return (
@@ -61,7 +86,7 @@ export default function Submit() {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
               </div>
             ) : (
-              <Form data={proposal} id={id} />
+              <Form proposal={proposal} speaker={speaker} id={id} />
             )}
           </div>
         </Container>
@@ -70,28 +95,28 @@ export default function Submit() {
   )
 }
 
-function Form({ data, id }: { data: Proposal | null, id?: string }) {
-  const [title, setTitle] = useState(data?.title ?? '')
-  const [language, setLanguage] = useState(data?.language ?? Language.norwegian)
-  const [description, setDescription] = useState(data?.description ?? '')
-  const [format, setFormat] = useState(data?.format ?? Format.lightning_10)
-  const [level, setLevel] = useState(data?.level ?? Level.beginner)
-  const [outline, setOutline] = useState(data?.outline ?? '')
-  const [tos, setTos] = useState(data?.tos ?? false)
-  const [speakerName, setSpeakerName] = useState(data?.speaker?.name ?? '')
-  const [speakerTitle, setSpeakerTitle] = useState(data?.speaker?.title ?? '')
-  const [speakerBio, setSpeakerBio] = useState(data?.speaker?.bio ?? '')
-  const [speakerEmail, setSpeakerEmail] = useState(data?.speaker?.email ?? '')
-  const [speakerIsLocal, setSpeakerIsLocal] = useState(data?.speaker?.is_local ?? false)
-  const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(data?.speaker?.is_first_time ?? false)
-  const [speakerIsDiverse, setSpeakerIsDiverse] = useState(data?.speaker?.is_diverse ?? false)
-  const [speakerLinks, setSpeakerLinks] = useState(data?.speaker?.links ?? [''])
+function Form({ proposal, speaker, id }: { proposal?: Proposal, speaker?: Speaker, id?: string }) {
+  const [title, setTitle] = useState(proposal?.title ?? '')
+  const [language, setLanguage] = useState(proposal?.language ?? Language.norwegian)
+  const [description, setDescription] = useState(proposal?.description ?? '')
+  const [format, setFormat] = useState(proposal?.format ?? Format.lightning_10)
+  const [level, setLevel] = useState(proposal?.level ?? Level.beginner)
+  const [outline, setOutline] = useState(proposal?.outline ?? '')
+  const [tos, setTos] = useState(proposal?.tos ?? false)
+  const [speakerName, setSpeakerName] = useState(speaker?.name ?? '')
+  const [speakerTitle, setSpeakerTitle] = useState(speaker?.title ?? '')
+  const [speakerBio, setSpeakerBio] = useState(speaker?.bio ?? '')
+  const [speakerEmail, setSpeakerEmail] = useState(speaker?.email ?? '')
+  const [speakerIsLocal, setSpeakerIsLocal] = useState(speaker?.is_local ?? false)
+  const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(speaker?.is_first_time ?? false)
+  const [speakerIsDiverse, setSpeakerIsDiverse] = useState(speaker?.is_diverse ?? false)
+  const [speakerLinks, setSpeakerLinks] = useState(speaker?.links ?? [''])
 
   const buttonPrimary = id !== 'new' ? 'Update' : 'Submit';
   const buttonPrimaryLoading = id !== 'new' ? 'Updating...' : 'Submitting...';
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [proposalSubmitError, setProposalSubmitError] = useState({} as ProposalError);
+  const [proposalSubmitError, setProposalSubmitError] = useState({} as FormError);
 
   const router = useRouter()
 
@@ -118,18 +143,25 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
     const links = speakerLinks.filter(link => link.length > 0);
 
     const speaker: Speaker = { name: speakerName, title: speakerTitle, bio: speakerBio, links, is_local: speakerIsLocal, is_first_time: speakerIsFirstTime, is_diverse: speakerIsDiverse };
-    const proposal: Proposal = { title, language, description, format, level, outline, tos, speaker };
-    const response = await postProposal(proposal, id);
+    const proposal: Proposal = { title, language, description, format, level, outline, tos };
 
-    if (!response.error) {
+    const proposalRes = await postProposal(proposal, id);
+    if (proposalRes.error) {
+      setProposalSubmitError(proposalRes.error);
+      setIsSubmitting(false);
+      window.scrollTo(0, 0);
+    }
+
+    const speakerRes = await putSpeaker(speaker);
+    if (speakerRes.error) {
+      setProposalSubmitError(speakerRes.error);
+      setIsSubmitting(false);
+      window.scrollTo(0, 0);
+    }
+
+    if (!proposalRes.error && !speakerRes.error) {
       router.push(`/cfp/list${!id ? "?success=true" : ""}`)
     }
-
-    if (response.error) {
-      setProposalSubmitError(response.error);
-    }
-
-    setIsSubmitting(false);
   };
 
   return (
@@ -224,7 +256,8 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
 
             <div className="sm:col-span-4">
               <fieldset>
-                <legend className="text-sm font-semibold leading-6 text-gray-900">Speaker profiles</legend>
+                <legend className="text-sm font-semibold leading-6 text-gray-900">Social profiles and links</legend>
+                <HelpText>Provide links to your social profiles, personal website or other relevant links you want to share with the audience.</HelpText>
                 <div className="mt-6 space-y-6">
                   {speakerLinks.map((link, index) => (
                     <LinkInput index={index} key={`speaker_link_${index}`} name={`speaker_link_${index}`} value={link} update={updateSpeakerUrl} remove={removeSpeakerUrl} add={addSpeakerUrl} />

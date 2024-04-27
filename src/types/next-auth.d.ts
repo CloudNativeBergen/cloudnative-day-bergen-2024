@@ -1,4 +1,4 @@
-import { Speaker } from "@/types/proposal";
+import { Speaker } from "@/lib/proposal/types";
 import NextAuth from "next-auth";
 
 declare module "next-auth" {

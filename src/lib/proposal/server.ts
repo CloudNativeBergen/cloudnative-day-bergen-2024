@@ -1,7 +1,7 @@
-import { Proposal, ProposalListResponse, ProposalResponse, ProposalValidationError } from "@/types/proposal"
+import { Proposal, ProposalListResponse, ProposalResponse, FormValidationError } from "@/lib/proposal/types"
 import { NextResponse } from "next/server"
 
-export function proposalResponseError({ error, message, validationErrors, type = "server", status = 500 }: { error?: any, message: string, validationErrors?: ProposalValidationError[], type?: string, status?: number }) {
+export function proposalResponseError({ error, message, validationErrors, type = "server", status = 500 }: { error?: any, message: string, validationErrors?: FormValidationError[], type?: string, status?: number }) {
   if (error) {
     console.error(error)
   }
