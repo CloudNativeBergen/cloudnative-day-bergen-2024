@@ -2,7 +2,7 @@ import { Speaker } from "@/types/proposal";
 import { clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 
-export async function getOrCreateSpeaker(user: { name: string, email: string }): Promise<{ speaker: Speaker; err: Error | null; }> {
+export async function getOrCreateSpeaker(user: { name: string, email: string, picture?: string | null }): Promise<{ speaker: Speaker; err: Error | null; }> {
   let speaker = {} as Speaker
   let err = null
 
@@ -17,9 +17,7 @@ export async function getOrCreateSpeaker(user: { name: string, email: string }):
       _id: randomUUID(),
       email: user.email,
       name: user.name,
-      is_diverse: false,
-      is_first_time: false,
-      is_local: false,
+      imageURL: user.picture || "",
     } as Speaker
     try {
       speaker = await clientWrite.create({ _type: "speaker", ...speaker }) as Speaker

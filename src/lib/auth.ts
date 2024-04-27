@@ -44,7 +44,7 @@ export const config = {
       }
 
       if (!token.speaker) {
-        const { speaker, err } = await getOrCreateSpeaker({ email: token.email, name: token.name })
+        const { speaker, err } = await getOrCreateSpeaker({ email: token.email, name: token.name, picture: token.picture })
         if (err) {
           console.error("Error fetching speaker profile", err)
         }
