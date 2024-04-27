@@ -61,7 +61,7 @@ export default defineType({
     defineField({
       name: 'bio',
       title: 'Bio',
-      type: 'string',
+      type: 'text',
     }),
     defineField({
       name: 'is_local',
@@ -76,6 +76,11 @@ export default defineType({
     defineField({
       name: 'is_diverse',
       title: 'Is from an underrepresented group?',
+      type: 'boolean',
+    }),
+    defineField({
+      name: 'is_organizer',
+      title: 'Is organizer?',
       type: 'boolean',
     }),
   ],
