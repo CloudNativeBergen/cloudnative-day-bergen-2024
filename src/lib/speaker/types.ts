@@ -9,6 +9,7 @@ export interface Speaker {
   title?: string
   bio?: string
   email?: string
+  image?: string
   links?: string[]
   imageURL?: string
   is_local: boolean

@@ -1,5 +1,5 @@
 import { Speaker } from "@/lib/speaker/types";
-import { clientWrite } from "@/lib/sanity/client";
+import { clientRead, clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 
 export async function getOrCreateSpeaker(user: { name: string, email: string, picture?: string | null }): Promise<{ speaker: Speaker; err: Error | null; }> {
@@ -7,7 +7,7 @@ export async function getOrCreateSpeaker(user: { name: string, email: string, pi
   let err = null
 
   try {
-    speaker = await clientWrite.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email: user.email })
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email: user.email })
   } catch (error) {
     err = error as Error
   }
@@ -34,7 +34,7 @@ export async function getSpeaker(email: string): Promise<{ speaker: Speaker; err
   let err = null
 
   try {
-    speaker = await clientWrite.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email })
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email })
   } catch (error) {
     err = error as Error
   }
@@ -55,4 +55,19 @@ export async function updateSpeaker(spekaerId: string, speaker: Speaker, email: 
   }
 
   return { speaker, err }
+}
+
+export async function getOrganizers(): Promise<{ organizers: Speaker[]; err: Error | null; }> {
+  let organizers: Speaker[] = []
+  let err = null
+
+  try {
+    organizers = await clientRead.fetch(`*[ _type == "speaker" && is_organizer == true ]{
+      name, title, links, "image": image.asset->url
+    }`)
+  } catch (error) {
+    err = error as Error
+  }
+
+  return { organizers, err }
 }
