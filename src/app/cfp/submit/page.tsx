@@ -19,14 +19,14 @@ export default function Submit() {
   const { data: session } = useSession()
 
   const searchParams = useSearchParams()
-  const id = searchParams.get('id') ?? undefined
+  const id = searchParams.get('id') ?? 'new'
 
   let [isLoading, setIsLoading] = useState(true)
   let [proposal, setProposal] = useState<Proposal | null>(null);
 
   useEffect(() => {
     const fetchProposal = async () => {
-      const data: ProposalResponse = await getProposal(id as string);
+      const data: ProposalResponse = await getProposal(id);
 
       if (data.error) {
         // @TODO Show error message to user
@@ -37,18 +37,12 @@ export default function Submit() {
 
       if (data.proposal) {
         setProposal(data.proposal);
-        //setProposal(proposal => ({ ...proposal, ...data.proposal }));
         setIsLoading(false);
       }
     };
 
-    if (id) {
-      fetchProposal();
-    } else {
-      setProposal({ speaker: { email: session?.user?.email, name: session?.user?.name } } as Proposal);
-      setIsLoading(false);
-    }
-  }, [id, session?.user?.email, session?.user?.name]);
+    fetchProposal();
+  }, [id]);
 
   return (
     <Layout>

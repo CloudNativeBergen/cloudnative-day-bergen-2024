@@ -22,22 +22,36 @@ export const config = {
   },
   callbacks: {
     async session({ session, token }) {
-
-      const { speaker, err } = await getOrCreateSpeaker({ email: session.user.email, name: session.user.name })
-      if (err) {
-        console.error("Error fetching speaker profile", err)
-      }
+      const speaker = token.speaker
 
       return {
         ...session,
         user: {
-          ...token,
+          sub: token.sub,
+          name: token.name,
+          email: token.email,
+          picture: token.picture,
         },
         speaker,
       } as Session
     },
-    jwt({ token, trigger, session }) {
+    async jwt({ token, trigger, session }) {
       if (trigger === "update") token.name = session.user.name
+
+      if (!token || !token.email || !token.name) {
+        console.error("Invalid token", token)
+        return token
+      }
+
+      if (!token.speaker) {
+        const { speaker, err } = await getOrCreateSpeaker({ email: token.email, name: token.name })
+        if (err) {
+          console.error("Error fetching speaker profile", err)
+        }
+
+        token.speaker = { _id: speaker._id }
+      }
+
       return token
     },
     redirect({ url, baseUrl }) {
