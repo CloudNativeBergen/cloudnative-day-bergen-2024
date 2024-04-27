@@ -15,7 +15,8 @@ export function convertJsonToProposal(json: any): Proposal {
     speaker: {
       name: json.speaker.name as string,
       title: json.speaker.title as string,
-      email: json.speaker.email as string,
+      bio: json.speaker.bio as string,
+      links: json.speaker.links || [],
       is_diverse: json.speaker.is_diverse as boolean,
       is_first_time: json.speaker.is_first_time as boolean,
       is_local: json.speaker.is_local as boolean,
@@ -56,8 +57,6 @@ export function validateProposal(proposal: Proposal): ProposalValidationError[] 
     validationErrors.push({ message: 'Terms of Service must be accepted', field: 'tos' })
   }
 
-  // validate speaker
-
   return validationErrors
 }
 
@@ -68,13 +67,11 @@ export function validateSpeaker(speaker: Speaker): ProposalValidationError[] {
     validationErrors.push({ message: 'Name can not be empty', field: 'speaker_name' })
   }
 
-  if (!speaker.title) {
-    validationErrors.push({ message: 'Title can not be empty', field: 'speaker_title' })
-  }
-
   if (!speaker.email) {
     validationErrors.push({ message: 'Email can not be empty', field: 'speaker_email' })
   }
+
+  // validate speaker links
 
   return validationErrors
 }

@@ -8,8 +8,6 @@ import { updateSpeaker } from "@/lib/speaker/sanity";
 export const dynamic = 'force-dynamic'
 
 export const GET = auth(async (req: NextAuthRequest) => {
-  console.log(getProposals)
-
   if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id) {
     return proposalListResponseError(new Error("Unauthorized"), "Unauthorized", "authentication", 401)
   }
@@ -35,6 +33,7 @@ export const POST = auth(async (req: NextAuthRequest) => {
     return proposalResponseError({ message: "Proposal contains invalid fields", validationErrors, type: "validation", status: 400 })
   }
 
+  // validate speaker
   const { err: speakerErr } = await updateSpeaker(req.auth.speaker._id, proposal.speaker as Speaker, req.auth.user.email)
   if (speakerErr) {
     return proposalResponseError({ error: speakerErr, message: "Failed to update speaker" })

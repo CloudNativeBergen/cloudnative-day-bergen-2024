@@ -29,8 +29,13 @@ export default defineType({
       title: 'Email',
       type: 'string',
       hidden: ({ currentUser }) => {
-        return !(currentUser != null && currentUser.roles.find(({ name }) => name === 'editor' || name === 'editor'))
+        return !(currentUser != null && currentUser.roles.find(({ name }) => name === 'administrator' || name === 'editor'))
       }
+    }),
+    defineField({
+      name: 'imageURL',
+      title: 'Image URL',
+      type: 'string',
     }),
     defineField({
       name: 'image',
@@ -48,17 +53,15 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'links',
+      title: 'Links',
+      type: 'array',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
       name: 'bio',
       title: 'Bio',
-      type: 'array',
-      of: [
-        {
-          title: 'Block',
-          type: 'block',
-          styles: [{ title: 'Normal', value: 'normal' }],
-          lists: [],
-        },
-      ],
+      type: 'string',
     }),
     defineField({
       name: 'is_local',

@@ -47,8 +47,11 @@ export interface SpeakerRef {
 export interface Speaker {
   _id?: string
   name: string
-  title: string
-  email: string
+  title?: string
+  bio?: string
+  email?: string
+  links?: string[]
+  imageURL?: string
   is_local: boolean
   is_first_time: boolean
   is_diverse: boolean

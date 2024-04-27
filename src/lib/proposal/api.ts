@@ -21,6 +21,8 @@ export async function getProposal(id?: string): Promise<ProposalResponse> {
 }
 
 export async function postProposal(proposal: Proposal, id?: string): Promise<ProposalResponse> {
+  if (id === 'new') id = undefined
+
   let url = `${process.env.NEXT_PUBLIC_URL}/api/cfp`
   let method = 'POST'
   if (id) {

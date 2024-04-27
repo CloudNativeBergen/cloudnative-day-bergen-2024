@@ -1,23 +1,19 @@
 'use client'
 
-import { useSession } from "next-auth/react"
 import { XCircleIcon } from '@heroicons/react/24/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
-import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
 import { Format, Language, Level, Proposal, ProposalResponse, ProposalError, Speaker } from '@/types/proposal'
 import { useState, useEffect } from 'react'
 import { getProposal, postProposal } from '@/lib/proposal/api'
 import { formats, languages, levels } from '@/types/proposal'
-import { Input, Textarea, Dropdown, HelpText, Checkbox } from '@/components/Form'
+import { Input, Textarea, Dropdown, HelpText, Checkbox, LinkInput } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
 export default function Submit() {
-  const { data: session } = useSession()
-
   const searchParams = useSearchParams()
   const id = searchParams.get('id') ?? 'new'
 
@@ -84,24 +80,44 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
   const [tos, setTos] = useState(data?.tos ?? false)
   const [speakerName, setSpeakerName] = useState(data?.speaker?.name ?? '')
   const [speakerTitle, setSpeakerTitle] = useState(data?.speaker?.title ?? '')
+  const [speakerBio, setSpeakerBio] = useState(data?.speaker?.bio ?? '')
   const [speakerEmail, setSpeakerEmail] = useState(data?.speaker?.email ?? '')
   const [speakerIsLocal, setSpeakerIsLocal] = useState(data?.speaker?.is_local ?? false)
   const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(data?.speaker?.is_first_time ?? false)
   const [speakerIsDiverse, setSpeakerIsDiverse] = useState(data?.speaker?.is_diverse ?? false)
+  const [speakerLinks, setSpeakerLinks] = useState(data?.speaker?.links ?? [''])
 
-  const buttonPrimary = id ? 'Update' : 'Submit';
-  const buttonPrimaryLoading = id ? 'Updating...' : 'Submitting...';
+  const buttonPrimary = id !== 'new' ? 'Update' : 'Submit';
+  const buttonPrimaryLoading = id !== 'new' ? 'Updating...' : 'Submitting...';
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [proposalSubmitError, setProposalSubmitError] = useState({} as ProposalError);
 
   const router = useRouter()
 
+  function updateSpeakerUrl(i: number, val: string) {
+    setSpeakerLinks(speakerLinks.map((link, index) => index === i ? val : link))
+  }
+
+  function addSpeakerUrl(i: number) {
+    setSpeakerLinks([...speakerLinks, ''])
+  }
+
+  function removeSpeakerUrl(i: number) {
+    const links = speakerLinks.filter((link, index) => index !== i)
+    if (links.length === 0) {
+      links.push('')
+    }
+    setSpeakerLinks(links)
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsSubmitting(true);
 
-    const speaker: Speaker = { name: speakerName, title: speakerTitle, email: speakerEmail, is_local: speakerIsLocal, is_first_time: speakerIsFirstTime, is_diverse: speakerIsDiverse };
+    const links = speakerLinks.filter(link => link.length > 0);
+
+    const speaker: Speaker = { name: speakerName, title: speakerTitle, bio: speakerBio, links, is_local: speakerIsLocal, is_first_time: speakerIsFirstTime, is_diverse: speakerIsDiverse };
     const proposal: Proposal = { title, language, description, format, level, outline, tos, speaker };
     const response = await postProposal(proposal, id);
 
@@ -196,8 +212,25 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
               <Input name="speaker_title" label="Title or affiliation" value={speakerTitle} setValue={setSpeakerTitle} />
             </div>
 
+            <div className="col-span-full">
+              <Textarea name="speaker_bio" label="Bio" rows={3} value={speakerBio} setValue={setSpeakerBio} />
+              <HelpText>This is what will be displayed to the audience on the conference website. It should provide information about you as a speaker and your expertise.</HelpText>
+            </div>
+
             <div className="sm:col-span-4">
               <Input name="speaker_email" label="Email address" type="email" value={speakerEmail} />
+              <HelpText>Your email address will not be displayed publicly. It will only be used to contact you regarding your presentation.</HelpText>
+            </div>
+
+            <div className="sm:col-span-4">
+              <fieldset>
+                <legend className="text-sm font-semibold leading-6 text-gray-900">Speaker profiles</legend>
+                <div className="mt-6 space-y-6">
+                  {speakerLinks.map((link, index) => (
+                    <LinkInput index={index} key={`speaker_link_${index}`} name={`speaker_link_${index}`} value={link} update={updateSpeakerUrl} remove={removeSpeakerUrl} add={addSpeakerUrl} />
+                  ))}
+                </div>
+              </fieldset>
             </div>
 
             <div className="col-span-full">
@@ -213,7 +246,7 @@ function Form({ data, id }: { data: Proposal | null, id?: string }) {
                   </Checkbox>
 
                   <Checkbox name="diversity" label="I am from an underrepresented group" value={speakerIsDiverse} setValue={setSpeakerIsDiverse}>
-                    <HelpText>We are committed to increasing diversity among our speakers.</HelpText>
+                    <HelpText>We are committed to increasing diversity among our selected speakers.</HelpText>
                   </Checkbox>
                 </div>
               </fieldset>
