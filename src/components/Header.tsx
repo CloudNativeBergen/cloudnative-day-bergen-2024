@@ -1,10 +1,16 @@
+'use client';
+
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { DiamondIcon } from '@/components/DiamondIcon'
 import { Logo } from '@/components/Logo'
 import { GitHubIcon, LinkedInIcon } from '@/components/SocialIcons'
+import { useSession } from 'next-auth/react'
+import { UserCircleIcon } from '@heroicons/react/24/solid'
 
 export function Header() {
+  const { data: session, status } = useSession();
+
   return (
     <header className="relative z-50 flex-none lg:pt-11">
       <Container className="flex flex-wrap items-center justify-center sm:justify-between lg:flex-nowrap">
@@ -23,13 +29,16 @@ export function Header() {
           </div>
         </div>
         <div className="hidden whitespace-nowrap sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
-          <a href="https://github.com/CloudNativeBergen" className="mt-1 mr-3 text-blue-800">
-            <GitHubIcon className="w-12 h-12 fill-current" />
-          </a>
-          <a href="https://www.linkedin.com/company/cloud-native-bergen" className="mt-1 mr-3 text-blue-800 hover:text-blue-800">
-            <LinkedInIcon className="w-12 h-12 fill-current" />
-          </a>
           <Button href="#">Get your tickets</Button>
+        </div>
+        <div className="mt-10 sm:flex ml-10 lg:ml-4 lg:mt-0">
+          <a href='/cfp/list'>
+            {session ? (
+              <img src={session.user.picture} alt={session.user.name} className="w-12 h-12 rounded-full" />
+            ) : (
+              <UserCircleIcon className="w-12 h-12 text-slate-900" />
+            )}
+          </a>
         </div>
       </Container>
     </header>

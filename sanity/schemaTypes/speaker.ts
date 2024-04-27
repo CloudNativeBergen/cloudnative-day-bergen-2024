@@ -25,6 +25,19 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'email',
+      title: 'Email',
+      type: 'string',
+      hidden: ({ currentUser }) => {
+        return !(currentUser != null && currentUser.roles.find(({ name }) => name === 'administrator' || name === 'editor'))
+      }
+    }),
+    defineField({
+      name: 'imageURL',
+      title: 'Image URL',
+      type: 'string',
+    }),
+    defineField({
       name: 'image',
       title: 'Image',
       type: 'image',
@@ -40,17 +53,30 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'links',
+      title: 'Links',
+      type: 'array',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
       name: 'bio',
       title: 'Bio',
-      type: 'array',
-      of: [
-        {
-          title: 'Block',
-          type: 'block',
-          styles: [{ title: 'Normal', value: 'normal' }],
-          lists: [],
-        },
-      ],
+      type: 'string',
+    }),
+    defineField({
+      name: 'is_local',
+      title: 'Is local speaker?',
+      type: 'boolean',
+    }),
+    defineField({
+      name: 'is_first_time',
+      title: 'Is first time speaker?',
+      type: 'boolean',
+    }),
+    defineField({
+      name: 'is_diverse',
+      title: 'Is from an underrepresented group?',
+      type: 'boolean',
     }),
   ],
   preview: {

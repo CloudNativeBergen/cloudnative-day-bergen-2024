@@ -20,9 +20,9 @@ export function Sponsors() {
           Current sponsorships for our workshops and speakers.
         </h2>
         <div className="mx-auto mt-20 grid max-w-max grid-cols-1 place-content-center gap-x-32 gap-y-12 sm:grid-cols-3 md:gap-x-16 lg:gap-x-32">
-          {sponsors.map((sponsor) => (
+          {sponsors.map((sponsor, i) => (
             <div
-              key={sponsor.name}
+              key={`${sponsor.name}-${i}`}
               className="flex items-center justify-center"
             >
               {sponsor.name === "TBD" && (

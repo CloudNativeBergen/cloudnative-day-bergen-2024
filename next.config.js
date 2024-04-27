@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: false, // disabled due to https://github.com/vercel/next.js/issues/35822
   publicRuntimeConfig: {
     cocLink: 'https://github.com/cncf/foundation/blob/main/code-of-conduct.md#community-code-of-conduct',
     dates: {

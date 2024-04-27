@@ -1,4 +1,5 @@
 import headlessuiPlugin from '@headlessui/tailwindcss'
+import formsPlugin from '@tailwindcss/forms'
 import { type Config } from 'tailwindcss'
 
 export default {
@@ -33,5 +34,8 @@ export default {
       },
     },
   },
-  plugins: [headlessuiPlugin],
+  plugins: [
+    headlessuiPlugin,
+    formsPlugin,
+  ],
 } satisfies Config
