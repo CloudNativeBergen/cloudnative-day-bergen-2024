@@ -7,7 +7,7 @@ export async function getOrCreateSpeaker(user: { name: string, email: string, pi
   let err = null
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email: user.email })
+    speaker = await clientWrite.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email: user.email })
   } catch (error) {
     err = error as Error
   }
@@ -34,7 +34,7 @@ export async function getSpeaker(email: string): Promise<{ speaker: Speaker; err
   let err = null
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email })
+    speaker = await clientWrite.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email })
   } catch (error) {
     err = error as Error
   }
