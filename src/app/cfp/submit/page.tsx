@@ -12,7 +12,6 @@ import { Input, Textarea, Dropdown, HelpText, Checkbox, LinkInput } from '@/comp
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Speaker } from '@/lib/speaker/types'
 import { getSpeaker, putSpeaker } from '@/lib/speaker/client'
-import { set } from 'sanity'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,8 +20,8 @@ export default function Submit() {
   const id = searchParams.get('id') ?? undefined
 
   let [isLoading, setIsLoading] = useState(true)
-  let [proposal, setProposal] = useState<Proposal | undefined>(undefined);
-  let [speaker, setSpeaker] = useState<Speaker | undefined>(undefined);
+  let [proposal, setProposal] = useState<Proposal>({ title: '', language: Language.norwegian, description: '', format: Format.lightning_10, level: Level.beginner, outline: '', tos: false });
+  let [speaker, setSpeaker] = useState<Speaker>({ name: '', is_local: false, is_first_time: false, is_diverse: false });
 
   const fetchProposal = async (id: string) => {
     const data: ProposalResponse = await getProposal(id);
@@ -36,7 +35,7 @@ export default function Submit() {
 
     if (data.proposal) {
       setProposal(data.proposal);
-      setSpeaker(data.proposal.speaker);
+      setSpeaker(data.proposal.speaker!);
       setIsLoading(false);
     }
   };
@@ -86,7 +85,7 @@ export default function Submit() {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
               </div>
             ) : (
-              <Form proposal={proposal} speaker={speaker} id={id} />
+              <Form proposal={proposal} setProposal={setProposal} speaker={speaker} setSpeaker={setSpeaker} id={id} />
             )}
           </div>
         </Container>
@@ -95,23 +94,7 @@ export default function Submit() {
   )
 }
 
-function Form({ proposal, speaker, id }: { proposal?: Proposal, speaker?: Speaker, id?: string }) {
-  const [title, setTitle] = useState(proposal?.title ?? '')
-  const [language, setLanguage] = useState(proposal?.language ?? Language.norwegian)
-  const [description, setDescription] = useState(proposal?.description ?? '')
-  const [format, setFormat] = useState(proposal?.format ?? Format.lightning_10)
-  const [level, setLevel] = useState(proposal?.level ?? Level.beginner)
-  const [outline, setOutline] = useState(proposal?.outline ?? '')
-  const [tos, setTos] = useState(proposal?.tos ?? false)
-  const [speakerName, setSpeakerName] = useState(speaker?.name ?? '')
-  const [speakerTitle, setSpeakerTitle] = useState(speaker?.title ?? '')
-  const [speakerBio, setSpeakerBio] = useState(speaker?.bio ?? '')
-  const [speakerEmail, setSpeakerEmail] = useState(speaker?.email ?? '')
-  const [speakerIsLocal, setSpeakerIsLocal] = useState(speaker?.is_local ?? false)
-  const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(speaker?.is_first_time ?? false)
-  const [speakerIsDiverse, setSpeakerIsDiverse] = useState(speaker?.is_diverse ?? false)
-  const [speakerLinks, setSpeakerLinks] = useState(speaker?.links ?? [''])
-
+function Form({ proposal, setProposal, speaker, setSpeaker, id }: { proposal: Proposal, setProposal: any, speaker: Speaker, setSpeaker: any, id?: string }) {
   const buttonPrimary = id !== 'new' ? 'Update' : 'Submit';
   const buttonPrimaryLoading = id !== 'new' ? 'Updating...' : 'Submitting...';
 
@@ -120,30 +103,9 @@ function Form({ proposal, speaker, id }: { proposal?: Proposal, speaker?: Speake
 
   const router = useRouter()
 
-  function updateSpeakerUrl(i: number, val: string) {
-    setSpeakerLinks(speakerLinks.map((link, index) => index === i ? val : link))
-  }
-
-  function addSpeakerUrl(i: number) {
-    setSpeakerLinks([...speakerLinks, ''])
-  }
-
-  function removeSpeakerUrl(i: number) {
-    const links = speakerLinks.filter((link, index) => index !== i)
-    if (links.length === 0) {
-      links.push('')
-    }
-    setSpeakerLinks(links)
-  }
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsSubmitting(true);
-
-    const links = speakerLinks.filter(link => link.length > 0);
-
-    const speaker: Speaker = { name: speakerName, title: speakerTitle, bio: speakerBio, links, is_local: speakerIsLocal, is_first_time: speakerIsFirstTime, is_diverse: speakerIsDiverse };
-    const proposal: Proposal = { title, language, description, format, level, outline, tos };
 
     const proposalRes = await postProposal(proposal, id);
     if (proposalRes.error) {
@@ -189,103 +151,8 @@ function Form({ proposal, speaker, id }: { proposal?: Proposal, speaker?: Speake
             </div>
           </div>
         )}
-        <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Presentation Details</h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">
-            Please provide the following details about your presentation.
-          </p>
-
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="col-span-full">
-              <Input name="title" label="Title" value={title} setValue={setTitle} />
-            </div>
-
-            <div className="sm:col-span-3">
-              <Dropdown name="language" label="Language" value={language} setValue={setLanguage} options={languages} />
-            </div>
-
-            <div className="col-span-full">
-              <Textarea name="description" label="Abstract" rows={5} value={description} setValue={setDescription} />
-              <HelpText>This is what will be displayed to the audience on the conference website. It should make the reader want to attend your presentation.</HelpText>
-            </div>
-
-            <div className="sm:col-span-3">
-              <Dropdown name="format" label="Presentation Format" value={format} setValue={setFormat} options={formats} />
-            </div>
-
-            <div className="sm:col-span-3">
-              <Dropdown name="level" label="Skill Level" value={level} setValue={setLevel} options={levels} />
-            </div>
-
-            <div className="col-span-full">
-              <Textarea name="outline" label="Outline (not public)" rows={3} value={outline} setValue={setOutline} />
-              <HelpText>Provide a detailed outline of the content of your presentation. How do you plan to structure the presentation and what is the expected takeaways for the participants. This will only be visible to the organizers and not displayed on the website.</HelpText>
-            </div>
-
-            <div className="col-span-full">
-              <Checkbox name="tos" label="I agree to the Terms of Service" value={tos} setValue={setTos}>
-                <HelpText>You must agree to the Terms of Service to submit your presentation.</HelpText>
-              </Checkbox>
-            </div>
-
-          </div>
-        </div>
-
-        <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Speaker Information</h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">We need information about you as the speaker.</p>
-
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-4">
-              <Input name="speaker_name" label="Name" value={speakerName} setValue={setSpeakerName} />
-            </div>
-
-            <div className="sm:col-span-4">
-              <Input name="speaker_title" label="Title or affiliation" value={speakerTitle} setValue={setSpeakerTitle} />
-            </div>
-
-            <div className="col-span-full">
-              <Textarea name="speaker_bio" label="Bio" rows={3} value={speakerBio} setValue={setSpeakerBio} />
-              <HelpText>This is what will be displayed to the audience on the conference website. It should provide information about you as a speaker and your expertise.</HelpText>
-            </div>
-
-            <div className="sm:col-span-4">
-              <Input name="speaker_email" label="Email address" type="email" value={speakerEmail} />
-              <HelpText>Your email address will not be displayed publicly. It will only be used to contact you regarding your presentation.</HelpText>
-            </div>
-
-            <div className="sm:col-span-4">
-              <fieldset>
-                <legend className="text-sm font-semibold leading-6 text-gray-900">Social profiles and links</legend>
-                <HelpText>Provide links to your social profiles, personal website or other relevant links you want to share with the audience.</HelpText>
-                <div className="mt-6 space-y-6">
-                  {speakerLinks.map((link, index) => (
-                    <LinkInput index={index} key={`speaker_link_${index}`} name={`speaker_link_${index}`} value={link} update={updateSpeakerUrl} remove={removeSpeakerUrl} add={addSpeakerUrl} />
-                  ))}
-                </div>
-              </fieldset>
-            </div>
-
-            <div className="col-span-full">
-              <fieldset>
-                <legend className="text-sm font-semibold leading-6 text-gray-900">Speaker Details</legend>
-                <div className="mt-6 space-y-6">
-                  <Checkbox name="local" label="I am a local speaker" value={speakerIsLocal} setValue={setSpeakerIsLocal}>
-                    <HelpText>Local speakers are given priority and are more likely to be selected.</HelpText>
-                  </Checkbox>
-
-                  <Checkbox name="first-time" label="I am a first time speaker" value={speakerIsFirstTime} setValue={setSpeakerIsFirstTime}>
-                    <HelpText>We encourage first time speakers to submit presentations.</HelpText>
-                  </Checkbox>
-
-                  <Checkbox name="diversity" label="I am from an underrepresented group" value={speakerIsDiverse} setValue={setSpeakerIsDiverse}>
-                    <HelpText>We are committed to increasing diversity among our selected speakers.</HelpText>
-                  </Checkbox>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-        </div>
+        <ProposalForm proposal={proposal} setProposal={setProposal} />
+        <SpeakerProfileForm speaker={speaker} setSpeaker={setSpeaker} />
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
@@ -304,3 +171,159 @@ function Form({ proposal, speaker, id }: { proposal?: Proposal, speaker?: Speake
   )
 }
 
+function ProposalForm({ proposal, setProposal }: { proposal: Proposal, setProposal: any }) {
+  const [title, setTitle] = useState(proposal?.title ?? '')
+  const [language, setLanguage] = useState(proposal?.language ?? Language.norwegian)
+  const [description, setDescription] = useState(proposal?.description ?? '')
+  const [format, setFormat] = useState(proposal?.format ?? Format.lightning_10)
+  const [level, setLevel] = useState(proposal?.level ?? Level.beginner)
+  const [outline, setOutline] = useState(proposal?.outline ?? '')
+  const [tos, setTos] = useState(proposal?.tos ?? false)
+
+  useEffect(() => {
+    setProposal({ title, language, description, format, level, outline, tos });
+  }, [title, language, description, format, level, outline, tos]);
+
+  return (
+    <div className="border-b border-gray-900/10 pb-12">
+      <h2 className="text-base font-semibold leading-7 text-gray-900">Presentation Details</h2>
+      <p className="mt-1 text-sm leading-6 text-gray-600">
+        Please provide the following details about your presentation.
+      </p>
+
+      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div className="col-span-full">
+          <Input name="title" label="Title" value={title} setValue={setTitle} />
+        </div>
+
+        <div className="sm:col-span-3">
+          <Dropdown name="language" label="Language" value={language} setValue={setLanguage} options={languages} />
+        </div>
+
+        <div className="col-span-full">
+          <Textarea name="description" label="Abstract" rows={5} value={description} setValue={setDescription} />
+          <HelpText>This is what will be displayed to the audience on the conference website. It should make the reader want to attend your presentation.</HelpText>
+        </div>
+
+        <div className="sm:col-span-3">
+          <Dropdown name="format" label="Presentation Format" value={format} setValue={setFormat} options={formats} />
+        </div>
+
+        <div className="sm:col-span-3">
+          <Dropdown name="level" label="Skill Level" value={level} setValue={setLevel} options={levels} />
+        </div>
+
+        <div className="col-span-full">
+          <Textarea name="outline" label="Outline (not public)" rows={3} value={outline} setValue={setOutline} />
+          <HelpText>Provide a detailed outline of the content of your presentation. How do you plan to structure the presentation and what is the expected takeaways for the participants. This will only be visible to the organizers and not displayed on the website.</HelpText>
+        </div>
+
+        <div className="col-span-full">
+          <Checkbox name="tos" label="I agree to the Terms of Service" value={tos} setValue={setTos}>
+            <HelpText>You must agree to the Terms of Service to submit your presentation.</HelpText>
+          </Checkbox>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SpeakerProfileForm({ speaker, setSpeaker }: { speaker: Speaker, setSpeaker: any }) {
+  const [speakerName, setSpeakerName] = useState(speaker?.name ?? '')
+  const [speakerTitle, setSpeakerTitle] = useState(speaker?.title ?? '')
+  const [speakerBio, setSpeakerBio] = useState(speaker?.bio ?? '')
+  const [speakerEmail, setSpeakerEmail] = useState(speaker?.email ?? '')
+  const [speakerIsLocal, setSpeakerIsLocal] = useState(speaker?.is_local ?? false)
+  const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(speaker?.is_first_time ?? false)
+  const [speakerIsDiverse, setSpeakerIsDiverse] = useState(speaker?.is_diverse ?? false)
+  const [speakerLinks, setSpeakerLinks] = useState(speaker?.links ?? [''])
+
+  function updateSpeakerLink(i: number, val: string) {
+    setSpeakerLinks(speakerLinks.map((link, index) => index === i ? val : link))
+  }
+
+  function addSpeakerLink(i: number) {
+    setSpeakerLinks([...speakerLinks, ''])
+  }
+
+  function removeSpeakerLink(i: number) {
+    const links = speakerLinks.filter((link, index) => index !== i)
+    if (links.length === 0) {
+      links.push('')
+    }
+    setSpeakerLinks(links)
+  }
+
+  useEffect(() => {
+    const links = speakerLinks.filter(link => link.length > 0);
+
+    setSpeaker({
+      name: speakerName,
+      title: speakerTitle,
+      bio: speakerBio,
+      email: speakerEmail,
+      is_local: speakerIsLocal,
+      is_first_time: speakerIsFirstTime,
+      is_diverse: speakerIsDiverse,
+      links,
+    });
+  }, [speakerName, speakerTitle, speakerBio, speakerEmail, speakerIsLocal, speakerIsFirstTime, speakerIsDiverse, speakerLinks]);
+
+  return (
+    <div className="border-b border-gray-900/10 pb-12">
+      <h2 className="text-base font-semibold leading-7 text-gray-900">Speaker Information</h2>
+      <p className="mt-1 text-sm leading-6 text-gray-600">We need information about you as the speaker.</p>
+
+      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div className="sm:col-span-4">
+          <Input name="speaker_name" label="Name" value={speakerName} setValue={setSpeakerName} />
+        </div>
+
+        <div className="sm:col-span-4">
+          <Input name="speaker_title" label="Title or affiliation" value={speakerTitle} setValue={setSpeakerTitle} />
+        </div>
+
+        <div className="col-span-full">
+          <Textarea name="speaker_bio" label="Bio" rows={3} value={speakerBio} setValue={setSpeakerBio} />
+          <HelpText>This is what will be displayed to the audience on the conference website. It should provide information about you as a speaker and your expertise.</HelpText>
+        </div>
+
+        <div className="sm:col-span-4">
+          <Input name="speaker_email" label="Email address" type="email" value={speakerEmail} />
+          <HelpText>Your email address will not be displayed publicly. It will only be used to contact you regarding your presentation.</HelpText>
+        </div>
+
+        <div className="sm:col-span-4">
+          <fieldset>
+            <legend className="text-sm font-semibold leading-6 text-gray-900">Social profiles and links</legend>
+            <HelpText>Provide links to your social profiles, personal website or other relevant links you want to share with the audience.</HelpText>
+            <div className="mt-6 space-y-6">
+              {speakerLinks.map((link, index) => (
+                <LinkInput index={index} key={`speaker_link_${index}`} name={`speaker_link_${index}`} value={link} update={updateSpeakerLink} remove={removeSpeakerLink} add={addSpeakerLink} />
+              ))}
+            </div>
+          </fieldset>
+        </div>
+
+        <div className="col-span-full">
+          <fieldset>
+            <legend className="text-sm font-semibold leading-6 text-gray-900">Speaker Details</legend>
+            <div className="mt-6 space-y-6">
+              <Checkbox name="local" label="I am a local speaker" value={speakerIsLocal} setValue={setSpeakerIsLocal}>
+                <HelpText>Local speakers are given priority and are more likely to be selected.</HelpText>
+              </Checkbox>
+
+              <Checkbox name="first-time" label="I am a first time speaker" value={speakerIsFirstTime} setValue={setSpeakerIsFirstTime}>
+                <HelpText>We encourage first time speakers to submit presentations.</HelpText>
+              </Checkbox>
+
+              <Checkbox name="diversity" label="I am from an underrepresented group" value={speakerIsDiverse} setValue={setSpeakerIsDiverse}>
+                <HelpText>We are committed to increasing diversity among our selected speakers.</HelpText>
+              </Checkbox>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  )
+}
