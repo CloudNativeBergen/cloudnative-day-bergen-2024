@@ -13,7 +13,7 @@ export const GET = auth(async (req: NextAuthRequest) => {
   }
 
   const { speaker, err } = await getSpeaker(req.auth.user.email)
-  if (err) {
+  if (err || !speaker) {
     return speakerResponseError({ error: err, message: "Failed to fetch speaker" })
   }
 
