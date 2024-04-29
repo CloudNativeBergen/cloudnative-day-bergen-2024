@@ -25,9 +25,10 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
       email: user.email,
       name: user.name,
       imageURL: user.image || "",
+      providers: [provider],
     } as Speaker
     try {
-      speaker = await clientWrite.create({ _type: "speaker", ...speaker }) as Speaker
+      speaker = await clientWrite.create({ _type: "speaker", providers: [provider], ...speaker }) as Speaker
     } catch (error) {
       err = error as Error
     }

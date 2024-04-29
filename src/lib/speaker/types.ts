@@ -15,6 +15,7 @@ export interface Speaker {
   is_local: boolean
   is_first_time: boolean
   is_diverse: boolean
+  providers?: string[]
 }
 
 export interface SpeakerResponse {
