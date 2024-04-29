@@ -3,16 +3,17 @@ import { clientReadUncached as clientRead, clientWrite } from "@/lib/sanity/clie
 import { randomUUID } from "crypto";
 import { Account } from "next-auth";
 import { providerAccount } from "@/lib/speaker/sanity";
+import { groq } from "next-sanity";
 
 export async function getProposal(id: string, speakerId: string): Promise<{ proposal: Proposal; err: Error | null; }> {
   let proposal: Proposal = {} as Proposal
   let err = null
 
   try {
-    proposal = await clientRead.fetch(`*[ _type == "talk" && _id==$id ]{
+    proposal = await clientRead.fetch(groq`*[ _type == "talk" && _id==$id ]{
       ...,
       speaker->
-    }[ speaker._id == $speakerId ][0]`, { id, speakerId })
+    }[ speaker._id == $speakerId ][0]`, { id, speakerId }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
   }
@@ -30,7 +31,7 @@ export async function getProposals(speakerId: string): Promise<{ proposals: Prop
       speaker-> {
         _id, name, email, providers
       }
-    }[ speaker._id == $speakerId ]`, { speakerId })
+    }[ speaker._id == $speakerId ]`, { speakerId }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
   }

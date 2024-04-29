@@ -1,5 +1,5 @@
 import { Speaker } from "@/lib/speaker/types";
-import { clientReadUncached as clientRead, clientWrite } from "@/lib/sanity/client";
+import { clientReadUncached as clientRead, clientWrite, clientReadCached } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 import { Account, User } from "next-auth";
 
@@ -14,7 +14,7 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
   const provider = providerAccount(account.provider, account.providerAccountId)
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && $provider in providers][0]`, { provider })
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && $provider in providers][0]`, { provider }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
   }
@@ -42,7 +42,7 @@ export async function getSpeaker(speakerId: string): Promise<{ speaker: Speaker;
   let err = null
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && _id == $speakerId][0]`, { speakerId })
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && _id == $speakerId][0]`, { speakerId }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
   }
@@ -67,7 +67,7 @@ export async function getOrganizers(): Promise<{ organizers: Speaker[]; err: Err
   let err = null
 
   try {
-    organizers = await clientRead.fetch(`*[ _type == "speaker" && is_organizer == true ]{
+    organizers = await clientReadCached.fetch(`*[ _type == "speaker" && is_organizer == true ]{
       name, title, links, "image": image.asset->url
     }`)
   } catch (error) {
