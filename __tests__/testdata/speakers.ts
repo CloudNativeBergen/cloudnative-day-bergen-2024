@@ -1,4 +1,4 @@
-import { Speaker } from "@/lib/proposal/types";
+import { Speaker } from "@/lib/speaker/types";
 
 const spekaers = [
   {

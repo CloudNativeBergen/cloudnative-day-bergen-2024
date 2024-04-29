@@ -20,4 +20,5 @@ export interface Speaker {
 export interface SpeakerResponse {
   speaker?: Speaker
   error?: FormError
+  status: number
 }

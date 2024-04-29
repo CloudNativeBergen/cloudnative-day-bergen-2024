@@ -11,7 +11,8 @@ import { formats, languages, levels } from '@/lib/proposal/types'
 import { Input, Textarea, Dropdown, HelpText, Checkbox, LinkInput } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Speaker } from '@/lib/speaker/types'
-import { getSpeaker, putSpeaker } from '@/lib/speaker/client'
+import { ProfileEmail } from '@/lib/profile/types'
+import { getEmails, getProfile, putProfile } from '@/lib/profile/client'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,36 +23,39 @@ export default function Submit() {
   let [isLoading, setIsLoading] = useState(true)
   let [proposal, setProposal] = useState<Proposal>({ title: '', language: Language.norwegian, description: '', format: Format.lightning_10, level: Level.beginner, outline: '', tos: false });
   let [speaker, setSpeaker] = useState<Speaker>({ name: '', is_local: false, is_first_time: false, is_diverse: false });
+  let [emails, setEmails] = useState<ProfileEmail[]>([]);
 
   const fetchProposal = async (id: string) => {
-    const data: ProposalResponse = await getProposal(id);
+    const [proposal, emails] = await Promise.all([getProposal(id), getEmails()]);
 
-    if (data.error) {
+    if (proposal.error || emails.error) {
       // @TODO Show error message to user
       // Access denied or proposal not found (both are 404)
-      console.error(data.error);
+      console.error(proposal.error || emails.error);
       return;
     }
 
-    if (data.proposal) {
-      setProposal(data.proposal);
-      setSpeaker(data.proposal.speaker!);
+    if (proposal.proposal) {
+      setProposal(proposal.proposal);
+      setSpeaker(proposal.proposal.speaker!);
+      setEmails(emails.emails);
       setIsLoading(false);
     }
   };
 
   const fetchSpeaker = async () => {
-    const data = await getSpeaker();
+    const [speaker, emails] = await Promise.all([getProfile(), getEmails()]);
 
-    if (data.error) {
+    if (speaker.error || emails.error) {
       // @TODO Show error message to user
       // Access denied or proposal not found (both are 404)
-      console.error(data.error);
+      console.error(speaker.error || emails.error);
       return;
     }
 
-    if (data.speaker) {
-      setSpeaker(data.speaker);
+    if (speaker.speaker) {
+      setSpeaker(speaker.speaker);
+      setEmails(emails.emails);
       setIsLoading(false);
     }
   };
@@ -85,7 +89,7 @@ export default function Submit() {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
               </div>
             ) : (
-              <Form proposal={proposal} setProposal={setProposal} speaker={speaker} setSpeaker={setSpeaker} id={id} />
+              <Form proposal={proposal} setProposal={setProposal} speaker={speaker} setSpeaker={setSpeaker} id={id} emails={emails} />
             )}
           </div>
         </Container>
@@ -94,9 +98,9 @@ export default function Submit() {
   )
 }
 
-function Form({ proposal, setProposal, speaker, setSpeaker, id }: { proposal: Proposal, setProposal: any, speaker: Speaker, setSpeaker: any, id?: string }) {
-  const buttonPrimary = id !== 'new' ? 'Update' : 'Submit';
-  const buttonPrimaryLoading = id !== 'new' ? 'Updating...' : 'Submitting...';
+function Form({ proposal, setProposal, speaker, setSpeaker, id, emails }: { proposal: Proposal, setProposal: any, speaker: Speaker, setSpeaker: any, id?: string, emails: ProfileEmail[] }) {
+  const buttonPrimary = id ? 'Update' : 'Submit';
+  const buttonPrimaryLoading = id ? 'Updating...' : 'Submitting...';
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [proposalSubmitError, setProposalSubmitError] = useState({} as FormError);
@@ -114,7 +118,7 @@ function Form({ proposal, setProposal, speaker, setSpeaker, id }: { proposal: Pr
       window.scrollTo(0, 0);
     }
 
-    const speakerRes = await putSpeaker(speaker);
+    const speakerRes = await putProfile(speaker);
     if (speakerRes.error) {
       setProposalSubmitError(speakerRes.error);
       setIsSubmitting(false);
@@ -152,7 +156,7 @@ function Form({ proposal, setProposal, speaker, setSpeaker, id }: { proposal: Pr
           </div>
         )}
         <ProposalForm proposal={proposal} setProposal={setProposal} />
-        <SpeakerProfileForm speaker={speaker} setSpeaker={setSpeaker} />
+        <SpeakerProfileForm speaker={speaker} setSpeaker={setSpeaker} emails={emails} />
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
@@ -228,7 +232,7 @@ function ProposalForm({ proposal, setProposal }: { proposal: Proposal, setPropos
   )
 }
 
-function SpeakerProfileForm({ speaker, setSpeaker }: { speaker: Speaker, setSpeaker: any }) {
+function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker, setSpeaker: any, emails: ProfileEmail[] }) {
   const [speakerName, setSpeakerName] = useState(speaker?.name ?? '')
   const [speakerTitle, setSpeakerTitle] = useState(speaker?.title ?? '')
   const [speakerBio, setSpeakerBio] = useState(speaker?.bio ?? '')
@@ -237,6 +241,8 @@ function SpeakerProfileForm({ speaker, setSpeaker }: { speaker: Speaker, setSpea
   const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(speaker?.is_first_time ?? false)
   const [speakerIsDiverse, setSpeakerIsDiverse] = useState(speaker?.is_diverse ?? false)
   const [speakerLinks, setSpeakerLinks] = useState(speaker?.links ?? [''])
+
+  const emailOptions = new Map(emails.map(email => [email.email, email.email]));
 
   function updateSpeakerLink(i: number, val: string) {
     setSpeakerLinks(speakerLinks.map((link, index) => index === i ? val : link))
@@ -289,7 +295,7 @@ function SpeakerProfileForm({ speaker, setSpeaker }: { speaker: Speaker, setSpea
         </div>
 
         <div className="sm:col-span-4">
-          <Input name="speaker_email" label="Email address" type="email" value={speakerEmail} />
+          <Dropdown name="speaker_email" label="Email address" value={speakerEmail} setValue={setSpeakerEmail} options={emailOptions} />
           <HelpText>Your email address will not be displayed publicly. It will only be used to contact you regarding your presentation.</HelpText>
         </div>
 

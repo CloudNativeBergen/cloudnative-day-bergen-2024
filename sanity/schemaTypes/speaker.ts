@@ -33,6 +33,15 @@ export default defineType({
       }
     }),
     defineField({
+      name: 'providers',
+      title: 'Profile Providers',
+      type: 'array',
+      of: [{ type: 'string' }],
+      hidden: ({ currentUser }) => {
+        return !(currentUser != null && currentUser.roles.find(({ name }) => name === 'administrator' || name === 'editor'))
+      }
+    }),
+    defineField({
       name: 'imageURL',
       title: 'Image URL',
       type: 'string',

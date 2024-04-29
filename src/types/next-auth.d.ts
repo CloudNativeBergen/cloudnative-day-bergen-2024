@@ -1,5 +1,5 @@
 import { Speaker } from "@/lib/proposal/types";
-import NextAuth from "next-auth";
+import NextAuth, { Account } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
@@ -9,5 +9,6 @@ declare module "next-auth" {
       picture: string;
     };
     speaker?: Speaker;
+    account?: Account;
   }
 }

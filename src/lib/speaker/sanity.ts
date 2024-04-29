@@ -1,13 +1,20 @@
 import { Speaker } from "@/lib/speaker/types";
 import { clientRead, clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
+import { Account, User } from "next-auth";
 
-export async function getOrCreateSpeaker(user: { name: string, email: string, picture?: string | null }): Promise<{ speaker: Speaker; err: Error | null; }> {
+export function providerAccount(provider: string, providerAccountId: string): string {
+  return `${provider}:${providerAccountId}`
+}
+
+export async function getOrCreateSpeaker(user: User, account: Account): Promise<{ speaker: Speaker; err: Error | null; }> {
   let speaker = {} as Speaker
   let err = null
 
+  const provider = providerAccount(account.provider, account.providerAccountId)
+
   try {
-    speaker = await clientWrite.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email: user.email })
+    speaker = await clientWrite.fetch(`*[ _type == "speaker" && $provider in providers][0]`, { provider })
   } catch (error) {
     err = error as Error
   }
@@ -17,7 +24,7 @@ export async function getOrCreateSpeaker(user: { name: string, email: string, pi
       _id: randomUUID(),
       email: user.email,
       name: user.name,
-      imageURL: user.picture || "",
+      imageURL: user.image || "",
     } as Speaker
     try {
       speaker = await clientWrite.create({ _type: "speaker", ...speaker }) as Speaker
@@ -29,12 +36,14 @@ export async function getOrCreateSpeaker(user: { name: string, email: string, pi
   return { speaker, err }
 }
 
-export async function getSpeaker(email: string): Promise<{ speaker: Speaker; err: Error | null; }> {
+export async function getSpeaker(account: Account): Promise<{ speaker: Speaker; err: Error | null; }> {
   let speaker: Speaker = {} as Speaker
   let err = null
 
+  const provider = providerAccount(account.provider, account.providerAccountId)
+
   try {
-    speaker = await clientWrite.fetch(`*[ _type == "speaker" && email==$email ][0]`, { email })
+    speaker = await clientWrite.fetch(`*[ _type == "speaker" && $provider in providers][0]`, { provider })
   } catch (error) {
     err = error as Error
   }
@@ -42,11 +51,8 @@ export async function getSpeaker(email: string): Promise<{ speaker: Speaker; err
   return { speaker, err }
 }
 
-export async function updateSpeaker(spekaerId: string, speaker: Speaker, email: string): Promise<{ speaker: Speaker; err: Error | null; }> {
+export async function updateSpeaker(spekaerId: string, speaker: Speaker): Promise<{ speaker: Speaker; err: Error | null; }> {
   let err = null
-
-  // Ensure the email is updated to match the user's email
-  speaker.email = email
 
   try {
     speaker = await clientWrite.patch(spekaerId).set(speaker).commit()

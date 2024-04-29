@@ -1,6 +1,6 @@
 import { getOrganizers } from "@/lib/speaker/sanity"
-import { Container } from "./Container"
-import { GitHubIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from "./SocialIcons"
+import { Container } from "@/components/Container"
+import { GitHubIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from "@/components/SocialIcons"
 import { GlobeAltIcon } from "@heroicons/react/24/solid"
 
 function renderLink(link: string) {

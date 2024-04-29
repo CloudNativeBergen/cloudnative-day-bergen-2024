@@ -7,6 +7,7 @@ export function convertJsonToSpeaker(json: any): Speaker {
     title: json.title as string,
     bio: json.bio as string,
     links: json.links || [],
+    email: json.email as string,
     is_diverse: json.is_diverse as boolean,
     is_first_time: json.is_first_time as boolean,
     is_local: json.is_local as boolean,

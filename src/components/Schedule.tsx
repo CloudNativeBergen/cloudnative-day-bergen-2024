@@ -6,9 +6,9 @@ import clsx from 'clsx'
 
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
-import { Track as TrackType, Talk as TalkType } from '@/lib/schedule'
+import { ScheduleTrack, ScheduleTalk } from '@/lib/schedule'
 
-function ScheduleTabbed({ tracks }: { tracks: TrackType[] }) {
+function ScheduleTabbed({ tracks }: { tracks: ScheduleTrack[] }) {
   let [tabOrientation, setTabOrientation] = useState('horizontal')
 
   useEffect(() => {
@@ -73,7 +73,7 @@ function ScheduleTabbed({ tracks }: { tracks: TrackType[] }) {
   )
 }
 
-function TrackSummary({ track }: { track: TrackType }) {
+function TrackSummary({ track }: { track: ScheduleTrack }) {
   return (
     <>
       <h3 className="text-2xl font-semibold tracking-tight text-blue-900">
@@ -86,7 +86,7 @@ function TrackSummary({ track }: { track: TrackType }) {
   )
 }
 
-function PlaceholderTimeSlot({ track, talk }: { track: TrackType, talk: TalkType }) {
+function PlaceholderTimeSlot({ track, talk }: { track: ScheduleTrack, talk: ScheduleTalk }) {
   return (
     <a
       type="button"
@@ -101,7 +101,7 @@ function PlaceholderTimeSlot({ track, talk }: { track: TrackType, talk: TalkType
   )
 }
 
-function TalkTimeSlot({ track, talk }: { track: TrackType, talk: TalkType }) {
+function TalkTimeSlot({ track, talk }: { track: ScheduleTrack, talk: ScheduleTalk }) {
   return (
     <div className="relative block">
       <h4 className="text-lg font-semibold tracking-tight text-blue-900">
@@ -133,7 +133,7 @@ function TimeSlotTime({ date, start, end }: { date: string, start: string, end: 
   )
 }
 
-function TimeSlots({ track, className }: { track: TrackType; className?: string }) {
+function TimeSlots({ track, className }: { track: ScheduleTrack; className?: string }) {
   return (
     <ol
       role="list"
@@ -162,7 +162,7 @@ function TimeSlots({ track, className }: { track: TrackType; className?: string 
   )
 }
 
-function ScheduleStatic({ tracks }: { tracks: TrackType[] }) {
+function ScheduleStatic({ tracks }: { tracks: ScheduleTrack[] }) {
   return (
     <div className="hidden lg:grid lg:grid-cols-3 lg:gap-x-8">
       {tracks.map((track) => (
@@ -175,7 +175,7 @@ function ScheduleStatic({ tracks }: { tracks: TrackType[] }) {
   )
 }
 
-export function Schedule({ tracks }: { tracks: TrackType[] }) {
+export function Schedule({ tracks }: { tracks: ScheduleTrack[] }) {
   return (
     <section id="schedule" aria-label="Schedule" className="py-20 sm:py-32">
       <Container className="relative z-10">

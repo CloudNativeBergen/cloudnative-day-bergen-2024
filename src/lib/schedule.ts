@@ -19,32 +19,32 @@ export type Schedule = {
   }
 }
 
-export type Track = {
+export type ScheduleTrack = {
   date: string
   number: number
   name: React.ReactNode
   title: string
   description?: string
-  talks: Talk[]
-  speakers: Speaker[]
+  talks: ScheduleTalk[]
+  speakers: ScheduleSpeaker[]
 }
 
-export type Talk = {
+export type ScheduleTalk = {
   title: string
   description?: string
   start: string
   end: string
-  speaker?: Speaker
+  speaker?: ScheduleSpeaker
 }
 
-export type Speaker = {
+export type ScheduleSpeaker = {
   name: string
   title: string
   image?: string
 }
 
-export function scheduleToTracks(schedule: Schedule[]): Track[] {
-  const tracks: Track[] = []
+export function scheduleToTracks(schedule: Schedule[]): ScheduleTrack[] {
+  const tracks: ScheduleTrack[] = []
 
   for (const scheduleItem of schedule) {
     let track = tracks.find(
@@ -55,7 +55,7 @@ export function scheduleToTracks(schedule: Schedule[]): Track[] {
       tracks.push({
         date: scheduleItem.date,
         number: scheduleItem.track.number,
-        name: `Track ${scheduleItem.track.number}`,
+        name: `ScheduleTrack ${scheduleItem.track.number}`,
         title: scheduleItem.track.title,
         description: scheduleItem.track.description,
         speakers: [],

@@ -2,6 +2,7 @@ import { jest } from '@jest/globals'
 
 import { NextAuthRequest } from "@/lib/auth";
 import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module";
+import { Account } from 'next-auth';
 
 export class AuthError extends Error {
 	type: string;
@@ -16,6 +17,13 @@ const NextAuth = () => ({
 		return (req: NextAuthRequest) => {
 			if (!req) req = {} as NextAuthRequest;
 
+			const account: Account = {
+				provider: 'github',
+				providerAccountId: '123',
+				access_token: 'abc',
+				type: 'oidc'
+			}
+
 			req.auth = {
 				expires: (Date.now() + 1000).toString(),
 				user: {
@@ -25,13 +33,8 @@ const NextAuth = () => ({
 				},
 				speaker: {
 					_id: '1',
-					name: 'Foo Bar',
-					email: 'foo@bar.com',
-					title: 'Software Engineer',
-					is_diverse: false,
-					is_first_time: false,
-					is_local: false,
 				},
+				account,
 			};
 			return handler(req, {});
 		}

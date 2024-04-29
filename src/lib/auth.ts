@@ -1,9 +1,9 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
-import type { NextAuthConfig, Session } from "next-auth"
+import type { NextAuthConfig, Session, User } from "next-auth"
 import { NextRequest } from "next/server";
 import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module.js";
-import { getOrCreateSpeaker } from "./speaker/sanity";
+import { getOrCreateSpeaker } from "@/lib/speaker/sanity";
 
 export interface NextAuthRequest extends NextRequest {
   auth: Session | null;
@@ -21,8 +21,10 @@ export const config = {
     strategy: "jwt",
   },
   callbacks: {
+    // This is exposed to the client
     async session({ session, token }) {
       const speaker = token.speaker
+      const account = token.account
 
       return {
         ...session,
@@ -33,22 +35,36 @@ export const config = {
           picture: token.picture,
         },
         speaker,
+        account,
       } as Session
     },
-    async jwt({ token, trigger, session }) {
-      if (trigger === "update") token.name = session.user.name
 
-      if (!token || !token.email || !token.name) {
-        console.error("Invalid token", token)
-        return token
-      }
-
-      if (!token.speaker) {
-        const { speaker, err } = await getOrCreateSpeaker({ email: token.email, name: token.name, picture: token.picture })
-        if (err) {
-          console.error("Error fetching speaker profile", err)
+    // token is the JWT token
+    // user is the user object
+    // account is the user's account object from the authentication provider
+    // account.provider is the name of the provider
+    // account.access_token is the provider access token
+    // profile is the user's profile object from the authentication provider
+    async jwt({ token, account, trigger }) {
+      if (trigger === "signIn") {
+        if (!token || !token.email || !token.name) {
+          console.error("Invalid auth token", token)
+          return {}
         }
 
+        if (!account || !account.provider || !account.providerAccountId) {
+          console.error("Invalid auth account", account);
+          return {}
+        }
+
+        const user: User = { email: token.email, name: token.name, image: token.picture }
+        const { speaker, err } = await getOrCreateSpeaker(user, account)
+        if (err) {
+          console.error("Error fetching or creating speaker profile", err)
+          return {}
+        }
+
+        token.account = account
         token.speaker = { _id: speaker._id }
       }
 

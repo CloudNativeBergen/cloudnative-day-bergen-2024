@@ -4,7 +4,7 @@ import { useEffect, useId, useState } from 'react'
 import Image from 'next/image'
 import { Tab } from '@headlessui/react'
 import clsx from 'clsx'
-import { Track as TrackType } from '@/lib/schedule'
+import { ScheduleTrack } from '@/lib/schedule'
 
 import { Container } from '@/components/Container'
 import { DiamondIcon } from '@/components/DiamondIcon'
@@ -47,7 +47,7 @@ function SubmitToSpeakLi() {
   </li>
   )
 }
-export function Speakers({ tracks }: { tracks: TrackType[] }) {
+export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
   let id = useId()
   let [tabOrientation, setTabOrientation] = useState('horizontal')
   let hasSpeakers = tracks.some((track) => track.speakers.length > 0)

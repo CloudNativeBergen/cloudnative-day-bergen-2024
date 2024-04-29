@@ -1,6 +1,6 @@
 import { FormValidationError } from "@/lib/proposal/types"
 import { NextResponse } from "next/server"
-import { Speaker, SpeakerResponse } from "./types"
+import { Speaker, SpeakerResponse } from "@/lib/speaker/types"
 
 export function speakerResponseError({ error, message, validationErrors, type = "server", status = 500 }: { error?: any, message: string, validationErrors?: FormValidationError[], type?: string, status?: number }) {
   if (error) {

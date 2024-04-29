@@ -10,11 +10,11 @@ export const dynamic = 'force-dynamic'
 export const GET = auth(async (req: NextAuthRequest, { params }: { params: Record<string, string | string[] | undefined> }) => {
   const id = params.id as string
 
-  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id) {
+  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id || !req.auth.account) {
     return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
-  const { proposal, err: error } = await getProposal(id, req.auth.user.email)
+  const { proposal, err: error } = await getProposal(id, req.auth.account)
   if (error) {
     return proposalResponseError({ error, message: "Error fetching proposal from database", type: "server", status: 500 })
   }
@@ -29,7 +29,7 @@ export const GET = auth(async (req: NextAuthRequest, { params }: { params: Recor
 export const PUT = auth(async (req: NextAuthRequest, { params }: { params: Record<string, string | string[] | undefined> }) => {
   const id = params.id as string
 
-  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id) {
+  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id || !req.auth.account) {
     return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
@@ -41,7 +41,7 @@ export const PUT = auth(async (req: NextAuthRequest, { params }: { params: Recor
     return proposalResponseError({ message: "Proposal contains invalid fields", validationErrors, type: "validation", status: 400 })
   }
 
-  const { proposal: existingProposal, err: checkErr } = await getProposal(id, req.auth.user.email)
+  const { proposal: existingProposal, err: checkErr } = await getProposal(id, req.auth.account)
   if (checkErr) {
     return proposalResponseError({ error: checkErr, message: "Error fetching proposal from database", type: "server", status: 500 })
   }

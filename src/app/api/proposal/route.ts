@@ -7,11 +7,11 @@ import { createProposal, getProposals } from "@/lib/proposal/sanity";
 export const dynamic = 'force-dynamic'
 
 export const GET = auth(async (req: NextAuthRequest) => {
-  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id) {
+  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id || !req.auth.account) {
     return proposalListResponseError(new Error("Unauthorized"), "Unauthorized", "authentication", 401)
   }
 
-  const { proposals, err } = await getProposals(req.auth.user.email)
+  const { proposals, err } = await getProposals(req.auth.account)
   if (err) {
     return proposalListResponseError(err, "Failed to fetch proposals")
   }
@@ -20,7 +20,7 @@ export const GET = auth(async (req: NextAuthRequest) => {
 }) as any;
 
 export const POST = auth(async (req: NextAuthRequest) => {
-  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id) {
+  if (!req.auth || !req.auth.user || !req.auth.speaker || !req.auth.speaker._id || !req.auth.account) {
     return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
