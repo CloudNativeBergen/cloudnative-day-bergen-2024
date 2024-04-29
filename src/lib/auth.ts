@@ -46,6 +46,11 @@ export const config = {
     // account.access_token is the provider access token
     // profile is the user's profile object from the authentication provider
     async jwt({ token, account, trigger }) {
+      if (!trigger && !(token.account && token.speaker)) {
+        console.error("Invalid auth token", token)
+        return {}
+      }
+
       if (trigger === "signIn") {
         if (!token || !token.email || !token.name) {
           console.error("Invalid auth token", token)
