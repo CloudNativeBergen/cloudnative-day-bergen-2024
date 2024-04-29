@@ -24,14 +24,20 @@ export default function Submit() {
   let [proposal, setProposal] = useState<Proposal>({ title: '', language: Language.norwegian, description: '', format: Format.lightning_10, level: Level.beginner, outline: '', tos: false });
   let [speaker, setSpeaker] = useState<Speaker>({ name: '', is_local: false, is_first_time: false, is_diverse: false });
   let [emails, setEmails] = useState<ProfileEmail[]>([]);
+  let [loadingError, setLoadingError] = useState({} as FormError);
 
   const fetchProposal = async (id: string) => {
     const [proposal, emails] = await Promise.all([getProposal(id), getEmails()]);
 
-    if (proposal.error || emails.error) {
-      // @TODO Show error message to user
-      // Access denied or proposal not found (both are 404)
-      console.error(proposal.error || emails.error);
+    if (proposal.error) {
+      console.error("Fetching proposal failed", proposal.error);
+      setLoadingError(proposal.error);
+      return;
+    }
+
+    if (emails.error) {
+      console.error("Fetching emails failed", emails.error);
+      setLoadingError(emails.error);
       return;
     }
 
@@ -46,10 +52,15 @@ export default function Submit() {
   const fetchSpeaker = async () => {
     const [speaker, emails] = await Promise.all([getProfile(), getEmails()]);
 
-    if (speaker.error || emails.error) {
-      // @TODO Show error message to user
-      // Access denied or proposal not found (both are 404)
-      console.error(speaker.error || emails.error);
+    if (speaker.error) {
+      console.error("Fetching speaker failed", speaker.error);
+      setLoadingError(speaker.error);
+      return;
+    }
+
+    if (emails.error) {
+      console.error("Fetching emails failed", emails.error);
+      setLoadingError(emails.error);
       return;
     }
 
@@ -83,6 +94,21 @@ export default function Submit() {
               </p>
             </div>
           </div>
+          {loadingError.type && (
+            <div className="mt-12 p-4 mx-auto max-w-2xl lg:max-w-4xl lg:px-12 rounded-md bg-red-50">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">Loading failed: {loadingError.type}</h3>
+                  <div className="mt-2 text-sm text-red-700">
+                    <p>{loadingError.message}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="mt-12 p-6 mx-auto max-w-2xl lg:max-w-4xl lg:px-12 bg-white rounded-lg">
             {isLoading ? (
               <div className="flex justify-center mt-12 mb-12">
