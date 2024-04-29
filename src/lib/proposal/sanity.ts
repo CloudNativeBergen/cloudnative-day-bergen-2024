@@ -1,20 +1,18 @@
 import { Proposal, Status } from "@/lib/proposal/types";
-import { clientWrite } from "@/lib/sanity/client";
+import { clientReadUncached as clientRead, clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 import { Account } from "next-auth";
 import { providerAccount } from "@/lib/speaker/sanity";
 
-export async function getProposal(id: string, account: Account): Promise<{ proposal: Proposal; err: Error | null; }> {
+export async function getProposal(id: string, speakerId: string): Promise<{ proposal: Proposal; err: Error | null; }> {
   let proposal: Proposal = {} as Proposal
   let err = null
 
-  const provider = providerAccount(account.provider, account.providerAccountId)
-
   try {
-    proposal = await clientWrite.fetch(`*[ _type == "talk" && _id==$id ]{
+    proposal = await clientRead.fetch(`*[ _type == "talk" && _id==$id ]{
       ...,
       speaker->
-    }[ $provider in speaker.providers ][0]`, { id, provider })
+    }[ speaker._id == $speakerId ][0]`, { id, speakerId })
   } catch (error) {
     err = error as Error
   }
@@ -22,19 +20,17 @@ export async function getProposal(id: string, account: Account): Promise<{ propo
   return { proposal, err }
 }
 
-export async function getProposals(account: Account): Promise<{ proposals: Proposal[]; err: Error | null; }> {
+export async function getProposals(speakerId: string): Promise<{ proposals: Proposal[]; err: Error | null; }> {
   let proposals: Proposal[] = []
   let err = null
 
-  const provider = providerAccount(account.provider, account.providerAccountId)
-
   try {
-    proposals = await clientWrite.fetch(`*[ _type == "talk" ]{
+    proposals = await clientRead.fetch(`*[ _type == "talk" ]{
       ...,
       speaker-> {
         _id, name, email, providers
       }
-    }[ $provider in speaker.providers ]`, { provider })
+    }[ speaker._id == $speakerId ]`, { speakerId })
   } catch (error) {
     err = error as Error
   }

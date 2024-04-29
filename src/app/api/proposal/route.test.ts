@@ -3,11 +3,11 @@
  */
 import { expect, it, jest, beforeEach } from '@jest/globals';
 import { GET } from './route';
-import { clientWrite } from '@/lib/sanity/client';
+import { clientReadUncached } from '@/lib/sanity/client';
 import proposals from '../../../../__tests__/testdata/proposals';
 
 beforeEach(() => {
-  clientWrite.fetch = jest.fn<() => Promise<any>>().mockResolvedValue(
+  clientReadUncached.fetch = jest.fn<() => Promise<any>>().mockResolvedValue(
     proposals.filter((p) => p.speaker?._id === '1')
   );
 });

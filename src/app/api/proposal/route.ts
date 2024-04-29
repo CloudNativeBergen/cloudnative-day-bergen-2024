@@ -11,7 +11,7 @@ export const GET = auth(async (req: NextAuthRequest) => {
     return proposalListResponseError(new Error("Unauthorized"), "Unauthorized", "authentication", 401)
   }
 
-  const { proposals, err } = await getProposals(req.auth.account)
+  const { proposals, err } = await getProposals(req.auth.speaker._id)
   if (err) {
     return proposalListResponseError(err, "Failed to fetch proposals")
   }

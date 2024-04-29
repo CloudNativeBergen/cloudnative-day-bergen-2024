@@ -4,7 +4,7 @@ import { Organizers } from '@/components/Organizers'
 import { Schedule } from '@/components/Schedule'
 import { Speakers } from '@/components/Speakers'
 import { Sponsors } from '@/components/Sponsors'
-import { clientRead } from '@/lib/sanity/client'
+import { clientReadCached as clientRead } from '@/lib/sanity/client'
 import { Schedule as ScheduleType, scheduleToTracks } from '@/lib/schedule'
 
 async function getData() {

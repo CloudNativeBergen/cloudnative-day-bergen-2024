@@ -1,9 +1,8 @@
-import { Format, Language, Level, Proposal } from "@/lib/proposal/types";
+import { Proposal } from "@/lib/proposal/types";
 import { NextAuthRequest, auth } from "@/lib/auth";
 import { convertJsonToProposal, validateProposal } from "@/lib/proposal/validation";
 import { getProposal, updateProposal } from "@/lib/proposal/sanity";
 import { proposalResponse, proposalResponseError } from "@/lib/proposal/server";
-import { getSpeaker } from "@/lib/speaker/sanity";
 
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +13,7 @@ export const GET = auth(async (req: NextAuthRequest, { params }: { params: Recor
     return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
-  const { proposal, err: error } = await getProposal(id, req.auth.account)
+  const { proposal, err: error } = await getProposal(id, req.auth.speaker._id)
   if (error) {
     return proposalResponseError({ error, message: "Error fetching proposal from database", type: "server", status: 500 })
   }
@@ -41,7 +40,7 @@ export const PUT = auth(async (req: NextAuthRequest, { params }: { params: Recor
     return proposalResponseError({ message: "Proposal contains invalid fields", validationErrors, type: "validation", status: 400 })
   }
 
-  const { proposal: existingProposal, err: checkErr } = await getProposal(id, req.auth.account)
+  const { proposal: existingProposal, err: checkErr } = await getProposal(id, req.auth.speaker._id)
   if (checkErr) {
     return proposalResponseError({ error: checkErr, message: "Error fetching proposal from database", type: "server", status: 500 })
   }

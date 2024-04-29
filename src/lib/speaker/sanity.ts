@@ -1,5 +1,5 @@
 import { Speaker } from "@/lib/speaker/types";
-import { clientRead, clientWrite } from "@/lib/sanity/client";
+import { clientReadUncached as clientRead, clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 import { Account, User } from "next-auth";
 
@@ -14,7 +14,7 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
   const provider = providerAccount(account.provider, account.providerAccountId)
 
   try {
-    speaker = await clientWrite.fetch(`*[ _type == "speaker" && $provider in providers][0]`, { provider })
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && $provider in providers][0]`, { provider })
   } catch (error) {
     err = error as Error
   }
@@ -37,14 +37,12 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
   return { speaker, err }
 }
 
-export async function getSpeaker(account: Account): Promise<{ speaker: Speaker; err: Error | null; }> {
+export async function getSpeaker(speakerId: string): Promise<{ speaker: Speaker; err: Error | null; }> {
   let speaker: Speaker = {} as Speaker
   let err = null
 
-  const provider = providerAccount(account.provider, account.providerAccountId)
-
   try {
-    speaker = await clientWrite.fetch(`*[ _type == "speaker" && $provider in providers][0]`, { provider })
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && _id == $speakerId][0]`, { speakerId })
   } catch (error) {
     err = error as Error
   }
