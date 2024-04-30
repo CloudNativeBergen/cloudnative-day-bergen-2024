@@ -1,10 +1,8 @@
-import { getToken } from "next-auth/jwt";
 import { NextAuthRequest, auth } from "@/lib/auth";
-import { proposalResponseError } from "@/lib/proposal/server";
 import { getSpeaker, updateSpeaker } from "@/lib/speaker/sanity";
 import { speakerResponse, speakerResponseError } from "@/lib/speaker/server";
 import { convertJsonToSpeaker, validateSpeaker } from "@/lib/speaker/validation";
-import { Proposal } from "@/lib/proposal/types";
+import { Speaker } from "@/lib/speaker/types";
 
 export const dynamic = 'force-dynamic'
 
@@ -27,18 +25,17 @@ export const PUT = auth(async (req: NextAuthRequest) => {
     return speakerResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
-  const data = await req.json() as Proposal
+  const data = await req.json() as Speaker
   const speaker = convertJsonToSpeaker(data)
 
-  // @TODO Validate speaker email change against existing speakers
   const validationErrors = validateSpeaker(speaker)
   if (validationErrors.length > 0) {
-    return proposalResponseError({ message: "Speaker contains invalid fields", validationErrors, type: "validation", status: 400 })
+    return speakerResponseError({ message: "Speaker contains invalid fields", validationErrors, type: "validation", status: 400 })
   }
 
   const { speaker: updatedSpeaker, err: updateErr } = await updateSpeaker(req.auth.speaker._id, speaker)
   if (updateErr) {
-    return proposalResponseError({ error: updateErr, message: "Error updating proposal in database", type: "server", status: 500 })
+    return speakerResponseError({ error: updateErr, message: "Error updating speaker profile in database", type: "server", status: 500 })
   }
 
   return speakerResponse(updatedSpeaker)

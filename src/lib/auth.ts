@@ -69,6 +69,10 @@ export const config = {
           return {}
         }
 
+        if (speaker.image && typeof speaker.image === "string") {
+          token.picture = `${speaker.image}?w=96&h=96&fit=crop`
+        }
+
         token.account = account
         token.speaker = { _id: speaker._id }
       }

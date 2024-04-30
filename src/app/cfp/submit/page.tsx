@@ -1,6 +1,6 @@
 'use client'
 
-import { XCircleIcon } from '@heroicons/react/24/solid'
+import { ExclamationCircleIcon, UserCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
@@ -8,11 +8,11 @@ import { Format, Language, Level, Proposal, ProposalResponse, FormError } from '
 import { useState, useEffect } from 'react'
 import { getProposal, postProposal } from '@/lib/proposal/client'
 import { formats, languages, levels } from '@/lib/proposal/types'
-import { Input, Textarea, Dropdown, HelpText, Checkbox, LinkInput } from '@/components/Form'
+import { Input, Textarea, Dropdown, HelpText, Checkbox, LinkInput, ErrorText } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Speaker } from '@/lib/speaker/types'
-import { ProfileEmail } from '@/lib/profile/types'
-import { getEmails, getProfile, putProfile } from '@/lib/profile/client'
+import { ProfileEmail, ProfileImageResponse } from '@/lib/profile/types'
+import { getEmails, getProfile, putProfile, postImage, putEmail } from '@/lib/profile/client'
 
 export const dynamic = 'force-dynamic'
 
@@ -263,10 +263,14 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
   const [speakerTitle, setSpeakerTitle] = useState(speaker?.title ?? '')
   const [speakerBio, setSpeakerBio] = useState(speaker?.bio ?? '')
   const [speakerEmail, setSpeakerEmail] = useState(speaker?.email ?? '')
+  const [speakerImage, setSpeakerImage] = useState(speaker?.image ?? '')
   const [speakerIsLocal, setSpeakerIsLocal] = useState(speaker?.is_local ?? false)
   const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(speaker?.is_first_time ?? false)
   const [speakerIsDiverse, setSpeakerIsDiverse] = useState(speaker?.is_diverse ?? false)
   const [speakerLinks, setSpeakerLinks] = useState(speaker?.links ?? [''])
+
+  const [imageError, setImageError] = useState('')
+  const [isUploading, setIsUploading] = useState(false);
 
   const emailOptions = new Map(emails.map(email => [email.email, email.email]));
 
@@ -286,6 +290,31 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
     setSpeakerLinks(links)
   }
 
+  async function imageUploadHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files.length > 0) {
+      setIsUploading(true);
+      const { error, image } = await postImage(e.target.files[0]);
+
+      if (error) {
+        setImageError(error.message);
+      } else if (image) {
+        setSpeakerImage(image.image);
+      }
+
+      setIsUploading(false);
+    }
+  }
+
+  async function emailSelectHandler(email: string) {
+    const res = await putEmail(email);
+    if (res.error) {
+      // @TODO: display error message
+      console.error("Error updating email", res.error);
+    } else {
+      setSpeakerEmail(email);
+    }
+  }
+
   useEffect(() => {
     const links = speakerLinks.filter(link => link.length > 0);
 
@@ -293,13 +322,12 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
       name: speakerName,
       title: speakerTitle,
       bio: speakerBio,
-      email: speakerEmail,
       is_local: speakerIsLocal,
       is_first_time: speakerIsFirstTime,
       is_diverse: speakerIsDiverse,
       links,
     });
-  }, [speakerName, speakerTitle, speakerBio, speakerEmail, speakerIsLocal, speakerIsFirstTime, speakerIsDiverse, speakerLinks]);
+  }, [speakerName, speakerTitle, speakerBio, speakerIsLocal, speakerIsFirstTime, speakerIsDiverse, speakerLinks]);
 
   return (
     <div className="border-b border-gray-900/10 pb-12">
@@ -321,8 +349,43 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
         </div>
 
         <div className="sm:col-span-4">
-          <Dropdown name="speaker_email" label="Email address" value={speakerEmail} setValue={setSpeakerEmail} options={emailOptions} />
+          <Dropdown name="speaker_email" label="Email address" value={speakerEmail} setValue={emailSelectHandler} options={emailOptions} />
           <HelpText>Your email address will not be displayed publicly. It will only be used to contact you regarding your presentation.</HelpText>
+        </div>
+
+        <div className="col-span-full">
+          <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
+            Photo
+          </label>
+          <div className="mt-2 flex items-center gap-x-3">
+            {speakerImage ? (
+              <img src={`${speakerImage}?w=96&h=96&fit=crop`} alt="Speaker Image" className="h-12 w-12 rounded-full" />
+            ) : (
+              <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
+            )}
+            <input
+              type="file"
+              id="photo"
+              className="sr-only"
+              accept="image/*"
+              onChange={imageUploadHandler}
+            />
+            {isUploading ? (
+              <div className="flex items-center gap-x-2">
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-gray-500"></div>
+                <p className="text-sm font-medium leading-6 text-gray-900">Uploading...</p>
+              </div>
+            ) : (
+              <label htmlFor="photo" className="cursor-pointer">
+                <span className="text-sm font-medium leading-6 text-gray-900">Upload Photo</span>
+              </label>
+            )}
+          </div>
+          {imageError ? (
+            <ErrorText>{imageError}</ErrorText>
+          ) : (
+            <HelpText>Your photo will be displayed on the conference website.</HelpText>
+          )}
         </div>
 
         <div className="sm:col-span-4">
@@ -331,7 +394,7 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
             <HelpText>Provide links to your social profiles, personal website or other relevant links you want to share with the audience.</HelpText>
             <div className="mt-6 space-y-6">
               {speakerLinks.map((link, index) => (
-                <LinkInput index={index} key={`speaker_link_${index}`} name={`speaker_link_${index}`} value={link} update={updateSpeakerLink} remove={removeSpeakerLink} add={addSpeakerLink} />
+                <LinkInput index={index} key={`speaker_link_${index} `} name={`speaker_link_${index} `} value={link} update={updateSpeakerLink} remove={removeSpeakerLink} add={addSpeakerLink} />
               ))}
             </div>
           </fieldset>
@@ -355,7 +418,7 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
             </div>
           </fieldset>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   )
 }

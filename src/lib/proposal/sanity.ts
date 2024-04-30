@@ -1,8 +1,6 @@
 import { Proposal, Status } from "@/lib/proposal/types";
 import { clientReadUncached as clientRead, clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
-import { Account } from "next-auth";
-import { providerAccount } from "@/lib/speaker/sanity";
 import { groq } from "next-sanity";
 
 export async function getProposal(id: string, speakerId: string): Promise<{ proposal: Proposal; err: Error | null; }> {
@@ -12,7 +10,10 @@ export async function getProposal(id: string, speakerId: string): Promise<{ prop
   try {
     proposal = await clientRead.fetch(groq`*[ _type == "talk" && _id==$id ]{
       ...,
-      speaker->
+      speaker-> {
+        ...,
+        "image": image.asset->url
+      }
     }[ speaker._id == $speakerId ][0]`, { id, speakerId }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
@@ -26,10 +27,10 @@ export async function getProposals(speakerId: string): Promise<{ proposals: Prop
   let err = null
 
   try {
-    proposals = await clientRead.fetch(`*[ _type == "talk" ]{
+    proposals = await clientRead.fetch(groq`*[ _type == "talk" ]{
       ...,
       speaker-> {
-        _id, name, email, providers
+        _id, name, email, providers, "image": image.asset->url
       }
     }[ speaker._id == $speakerId ]`, { speakerId }, { cache: "no-store" })
   } catch (error) {

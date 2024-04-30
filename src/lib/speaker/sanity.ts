@@ -14,7 +14,10 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
   const provider = providerAccount(account.provider, account.providerAccountId)
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && $provider in providers][0]`, { provider }, { cache: "no-store" })
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && $provider in providers][0]{
+      ...,
+      "image": image.asset->url
+    }`, { provider }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
   }
@@ -42,7 +45,10 @@ export async function getSpeaker(speakerId: string): Promise<{ speaker: Speaker;
   let err = null
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && _id == $speakerId][0]`, { speakerId }, { cache: "no-store" })
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && _id == $speakerId][0]{
+      ...,
+      "image": image.asset->url
+    }`, { speakerId }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
   }

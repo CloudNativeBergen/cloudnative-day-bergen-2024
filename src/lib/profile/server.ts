@@ -1,7 +1,8 @@
 import { Session } from "next-auth";
 import { NextResponse } from "next/server";
-import { ProfileEmail, ProfileEmailResponse } from "@/lib/profile/types";
+import { ProfileEmail, ProfileEmailResponse, ProfileImage, ProfileImageResponse } from "@/lib/profile/types";
 import { FormValidationError } from "@/lib/proposal/types";
+import { profile } from "console";
 
 export function defaultEmails(session: Session) {
   return [{ email: session.user.email, verified: true, primary: true, visibility: "private" }]
@@ -21,6 +22,22 @@ export function profileEmailResponseError({ emails, error, message, validationEr
 
 export function profileEmailResponse(emails: ProfileEmail[]) {
   const response = NextResponse.json({ emails } as ProfileEmailResponse)
-  // response.headers.set('cache-control', 'no-store')
+  return response
+}
+
+export function profileImageResponseError({ image, error, message, type = "server", status = 500 }: { image?: ProfileImage, error?: any, message: string, type?: string, status?: number }) {
+  if (error) {
+    console.error(error)
+  }
+
+  error = { message, type }
+  const response = new NextResponse(JSON.stringify({ image, error, status } as ProfileImageResponse), { status })
+  response.headers.set('cache-control', 'no-store')
+
+  return response
+}
+
+export function profileImageResponse(image: ProfileImage) {
+  const response = NextResponse.json({ image } as ProfileImageResponse)
   return response
 }

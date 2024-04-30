@@ -6,7 +6,7 @@ import { Layout } from '@/components/Layout'
 import { Proposal, Status, statuses } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
 import { listProposals } from '@/lib/proposal/client'
-import { CheckCircleIcon, ChevronRightIcon, XMarkIcon, PlusCircleIcon } from '@heroicons/react/24/solid'
+import { CheckCircleIcon, ChevronRightIcon, XMarkIcon, PlusCircleIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { formatDate } from '@/lib/time'
 import { useSearchParams } from 'next/navigation'
 
@@ -53,7 +53,14 @@ function ProposalList({ proposals }: { proposals: Proposal[] }) {
       {proposals.map((proposal) => (
         <li key={proposal._id} className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
           <div className="flex min-w-0 gap-x-4">
-            <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://via.placeholder.com/48" alt="" />
+            {proposal.speaker?.image ? (
+              <img
+                className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                src={`${proposal.speaker.image}?w=96&h=96&fit=crop`}
+                alt="Speaker Image" />
+            ) : (
+              <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
+            )}
             <div className="min-w-0 flex-auto">
               <p className="text-sm font-semibold leading-6 text-gray-900">
                 <a href={`/cfp/submit?id=${proposal._id}`}>

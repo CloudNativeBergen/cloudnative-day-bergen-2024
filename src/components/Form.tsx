@@ -63,6 +63,12 @@ export function LinkInput({ index, name, value, update, add, remove }: { index: 
   )
 }
 
+export function ErrorText({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mt-2 text-sm leading-6 text-red-600">{children}</p>
+  )
+}
+
 export function HelpText({ children }: { children: React.ReactNode }) {
   return (
     <p className="mt-2 text-sm leading-6 text-gray-600">{children}</p>

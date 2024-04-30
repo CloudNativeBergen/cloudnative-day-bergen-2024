@@ -12,3 +12,13 @@ export interface ProfileEmail {
   verified: boolean;
   visibility: string;
 }
+
+export interface ProfileImage {
+  image: string;
+}
+
+export interface ProfileImageResponse {
+  image?: ProfileImage;
+  error?: FormError;
+  status: number;
+}
