@@ -189,6 +189,12 @@ function Form({ proposal, setProposal, speaker, setSpeaker, id, emails }: { prop
         <SpeakerProfileForm speaker={speaker} setSpeaker={setSpeaker} emails={emails} />
       </div>
 
+      <div className="mt-6">
+        <p className="text-sm text-gray-600">
+          <span className="font-semibold">Note:</span> Don't worry. You will be able to edit your proposal after you have submitted it. Simply navigate to the <a href="/cfp/list" className="text-indigo-500 hover:text-indigo-700 underline">CFP list</a> or click on your avatar in the top right corner of the page to access your proposals.
+        </p>
+      </div>
+
       <div className="mt-6 flex items-center justify-end gap-x-6">
         <a href="/cfp/list" type="button" className="text-sm font-semibold leading-6 text-gray-900">
           Cancel
