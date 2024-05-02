@@ -416,15 +416,15 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
             <legend className="text-sm font-semibold leading-6 text-gray-900">Speaker Details</legend>
             <div className="mt-6 space-y-6">
               <Checkbox name="local" label="I am a local speaker" value={speakerIsLocal} setValue={setSpeakerIsLocal}>
-                <HelpText>Local speakers are given priority and are more likely to be selected.</HelpText>
+                <HelpText>Please indicate if you are a local speaker to help us promote local talent.</HelpText>
               </Checkbox>
 
               <Checkbox name="first-time" label="I am a first time speaker" value={speakerIsFirstTime} setValue={setSpeakerIsFirstTime}>
-                <HelpText>We encourage first time speakers to submit presentations.</HelpText>
+                <HelpText>We encourage new speakers to submit to this conference and will provide support and guidance if needed.</HelpText>
               </Checkbox>
 
               <Checkbox name="diversity" label="I am from an underrepresented group" value={speakerIsDiverse} setValue={setSpeakerIsDiverse}>
-                <HelpText>We are committed to increasing diversity among our selected speakers.</HelpText>
+                <HelpText>We are committed to increase diversity among our selected speakers.</HelpText>
               </Checkbox>
             </div>
           </fieldset>
