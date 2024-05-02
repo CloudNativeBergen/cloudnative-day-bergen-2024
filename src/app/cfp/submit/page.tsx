@@ -13,10 +13,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Speaker } from '@/lib/speaker/types'
 import { ProfileEmail, ProfileImageResponse } from '@/lib/profile/types'
 import { getEmails, getProfile, putProfile, postImage, putEmail } from '@/lib/profile/client'
+import config from '@/../next.config'
 
 export const dynamic = 'force-dynamic'
 
+const { publicRuntimeConfig: c } = config;
+
 export default function Submit() {
+
   const searchParams = useSearchParams()
   const id = searchParams.get('id') ?? undefined
 
@@ -202,6 +206,7 @@ function Form({ proposal, setProposal, speaker, setSpeaker, id, emails }: { prop
 }
 
 function ProposalForm({ proposal, setProposal }: { proposal: Proposal, setProposal: any }) {
+
   const [title, setTitle] = useState(proposal?.title ?? '')
   const [language, setLanguage] = useState(proposal?.language ?? Language.norwegian)
   const [description, setDescription] = useState(proposal?.description ?? '')
@@ -249,8 +254,8 @@ function ProposalForm({ proposal, setProposal }: { proposal: Proposal, setPropos
         </div>
 
         <div className="col-span-full">
-          <Checkbox name="tos" label="I agree to the Terms of Service" value={tos} setValue={setTos}>
-            <HelpText>You must agree to the Terms of Service to submit your presentation.</HelpText>
+          <Checkbox name="tos" label="I agree to the CNCF Code of Conduct" value={tos} setValue={setTos}>
+            <HelpText>You must agree to the <a href={c?.cocLink ?? '#'} className='text-indigo-500 hover:text-indigo-700 underline'>CNCF Code of Conduct</a> to submit your presentation.</HelpText>
           </Checkbox>
         </div>
       </div>
