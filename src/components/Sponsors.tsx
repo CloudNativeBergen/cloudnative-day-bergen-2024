@@ -2,10 +2,11 @@ import Image from 'next/image'
 
 import { Container } from '@/components/Container'
 import logoFortytwo from '@/images/logos/fortytwo.svg'
+import logoRedpill from '@/images/logos/redpill.svg'
 
 const sponsors = [
   { name: 'Fortytwo', logo: logoFortytwo, href: 'https://fortytwo.io' },
-  { name: 'TBD', logo: '' },
+  { name: 'Redpill Linpro', logo: logoRedpill, href: 'https://www.redpill-linpro.com' },
   { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
@@ -38,7 +39,7 @@ export function Sponsors() {
               )}
               {sponsor.name !== "TBD" && (
                 <a href={sponsor.href} className='hover:opacity-80'>
-                  <Image src={sponsor.logo} alt={sponsor.name} unoptimized />
+                  <Image src={sponsor.logo} alt={sponsor.name} className='h-20' unoptimized />
                 </a>
               )}
             </div>
