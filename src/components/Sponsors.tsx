@@ -1,10 +1,12 @@
 import Image from 'next/image'
 
 import { Container } from '@/components/Container'
+import logoTv2 from '@/images/logos/tv2.svg'
 import logoFortytwo from '@/images/logos/fortytwo.svg'
 import logoRedpill from '@/images/logos/redpill.svg'
 
 const sponsors = [
+  { name: 'TV 2', logo: logoTv2, href: 'https://tv2.no' },
   { name: 'Fortytwo', logo: logoFortytwo, href: 'https://fortytwo.io' },
   { name: 'Redpill Linpro', logo: logoRedpill, href: 'https://www.redpill-linpro.com' },
   { name: 'TBD', logo: '' },
