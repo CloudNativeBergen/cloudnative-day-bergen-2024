@@ -2,6 +2,9 @@ import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { GitHubIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from '@/components/SocialIcons'
+import config from '@/../next.config'
+
+const { publicRuntimeConfig: c } = config;
 
 export function Hero() {
   return (
@@ -20,7 +23,7 @@ export function Hero() {
               Our speakers will share their insights and experiences, covering topics such as containerization, orchestration, microservices, and more. Whether you&apos;re a beginner or an 10x&apos;er, there&apos;s something for everyone at CloudNative Day Bergen.
             </p>
           </div>
-          <Button href="#" className="mt-10 w-full sm:hidden">
+          <Button href={c?.registrationLink ?? '#'} className="mt-10 w-full sm:hidden">
             Get your tickets
           </Button>
           <dl className="mt-10 grid grid-cols-2 gap-x-10 gap-y-6 sm:mt-16 sm:gap-x-16 sm:gap-y-10 sm:text-center lg:auto-cols-auto lg:grid-flow-col lg:grid-cols-none lg:justify-start lg:text-left">

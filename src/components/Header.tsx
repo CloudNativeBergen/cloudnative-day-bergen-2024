@@ -7,6 +7,9 @@ import { Logo } from '@/components/Logo'
 import { GitHubIcon, LinkedInIcon } from '@/components/SocialIcons'
 import { useSession } from 'next-auth/react'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
+import config from '@/../next.config'
+
+const { publicRuntimeConfig: c } = config;
 
 export function Header() {
   const { data: session, status } = useSession();
@@ -29,7 +32,7 @@ export function Header() {
           </div>
         </div>
         <div className="hidden whitespace-nowrap sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
-          <Button href="#">Get your tickets</Button>
+          <Button href={c?.registrationLink ?? '#'}>Get your tickets</Button>
         </div>
         <div className="mt-10 sm:flex ml-10 lg:ml-4 lg:mt-0">
           <a href='/cfp/list'>
