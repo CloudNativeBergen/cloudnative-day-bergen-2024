@@ -22,6 +22,7 @@ const packages = [
       'Logo on event materials',
     ],
     mostPopular: false,
+    soldOut: false,
   },
   {
     name: 'Service',
@@ -37,6 +38,7 @@ const packages = [
       'Logo on conference badges',
     ],
     mostPopular: true,
+    soldOut: false,
   },
   {
     name: 'Ingress',
@@ -52,6 +54,7 @@ const packages = [
       'Logo on all the things',
     ],
     mostPopular: false,
+    soldOut: true,
   },
 ]
 
@@ -82,40 +85,41 @@ export default function Example() {
 
         <Container>
           <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {packages.map((spkg, spkgIdx) => (
+            {packages.map((sponsorPackage, index) => (
               <div
-                key={spkg.id}
+                key={sponsorPackage.id}
                 className={classNames(
-                  spkg.mostPopular ? 'lg:z-10 lg:rounded-b-none' : 'lg:mt-8',
-                  spkgIdx === 0 ? 'lg:rounded-r-none' : '',
-                  spkgIdx === packages.length - 1 ? 'lg:rounded-l-none' : '',
+                  sponsorPackage.mostPopular ? 'lg:z-10 lg:rounded-b-none' : 'lg:mt-8',
+                  sponsorPackage.soldOut ? 'lg:opacity-50' : '',
+                  index === 0 ? 'lg:rounded-r-none' : '',
+                  index === packages.length - 1 ? 'lg:rounded-l-none' : '',
                   'flex flex-col justify-between rounded-3xl bg-white p-8 ring-1 ring-gray-200 xl:p-10'
                 )}
               >
                 <div>
                   <div className="flex items-center justify-between gap-x-4">
                     <h3
-                      id={spkg.id}
+                      id={sponsorPackage.id}
                       className={classNames(
-                        spkg.mostPopular ? 'text-blue-600' : 'text-gray-900',
+                        sponsorPackage.mostPopular ? 'text-blue-600' : 'text-gray-900',
                         'text-xl font-semibold leading-8'
                       )}
                     >
-                      {spkg.name}
+                      {sponsorPackage.name}
                     </h3>
-                    {spkg.mostPopular ? (
+                    {sponsorPackage.mostPopular ? (
                       <p className="rounded-full bg-blue-600/10 px-2.5 py-1 text-sm font-semibold leading-5 text-blue-600">
                         Most popular
                       </p>
                     ) : null}
                   </div>
-                  <p className="mt-4 text-md leading-6 text-gray-600">{spkg.description}</p>
+                  <p className="mt-4 text-md leading-6 text-gray-600">{sponsorPackage.description}</p>
                   <p className="mt-6 flex items-baseline gap-x-1">
-                    <span className="text-3xl font-bold tracking-tight text-gray-900">{spkg.price}</span>
+                    <span className="text-3xl font-bold tracking-tight text-gray-900">{sponsorPackage.price}</span>
                     <span className="text-sm font-semibold leading-6 text-gray-600"></span>
                   </p>
                   <ul role="list" className="mt-8 space-y-3 text-md leading-6 text-gray-600">
-                    {spkg.features.map((feature) => (
+                    {sponsorPackage.features.map((feature) => (
                       <li key={feature} className="flex gap-x-3">
                         <CheckIcon className="h-6 w-5 flex-none text-blue-600" aria-hidden="true" />
                         {feature}
@@ -123,18 +127,24 @@ export default function Example() {
                     ))}
                   </ul>
                 </div>
-                <Button
-                  href={spkg.href}
-                  aria-describedby={spkg.id}
-                  className={classNames(
-                    spkg.mostPopular
-                      ? 'bg-blue-600 text-white shadow-sm hover:bg-blue-500'
-                      : 'text-blue-600 ring-1 ring-inset ring-blue-200 hover:ring-blue-300',
-                    'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
-                  )}
-                >
-                  Become a &apos;{spkg.name}&apos; sponsor
-                </Button>
+                {!sponsorPackage.soldOut ? (
+                  <Button
+                    href={sponsorPackage.href}
+                    aria-describedby={sponsorPackage.id}
+                    className={classNames(
+                      sponsorPackage.mostPopular
+                        ? 'bg-blue-600 text-white shadow-sm hover:bg-blue-500'
+                        : 'text-blue-600 ring-1 ring-inset ring-blue-200 hover:ring-blue-300',
+                      'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
+                    )}
+                  >
+                    Become a &apos;{sponsorPackage.name}&apos; sponsor
+                  </Button>
+                ) : (
+                  <p className="mt-8 text-center text-sm font-semibold leading-6 text-gray-600">
+                    Sold out
+                  </p>
+                )}
               </div>
             ))}
           </div>
