@@ -6,14 +6,15 @@ import logoDnb from '@/images/logos/dnb.svg'
 import logoFortytwo from '@/images/logos/fortytwo.svg'
 import logoRedpill from '@/images/logos/redpill.svg'
 import logoBekk from '@/images/logos/bekk.svg'
+import logoJavabin from '@/images/logos/javabin.svg'
 
 const sponsors = [
   { name: 'TV 2', logo: logoTv2, href: 'https://tv2.no' },
   { name: 'DNB', logo: logoDnb, href: 'https://dnb.no' },
   { name: 'Fortytwo', logo: logoFortytwo, href: 'https://fortytwo.io' },
   { name: 'Bekk', logo: logoBekk, href: 'https://bekk.no' },
+  { name: 'javaBin', logo: logoJavabin, href: 'https://java.no' },
   { name: 'Redpill Linpro', logo: logoRedpill, href: 'https://www.redpill-linpro.com' },
-  { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
 ]
