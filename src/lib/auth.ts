@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
+import LinkedIn from "next-auth/providers/linkedin"
 import type { NextAuthConfig, Session, User } from "next-auth"
 import { NextRequest } from "next/server";
 import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module.js";
@@ -14,6 +15,10 @@ export const config = {
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
+    }),
+    LinkedIn({
+      clientId: process.env.AUTH_LINKEDIN_ID,
+      clientSecret: process.env.AUTH_LINKEDIN_SECRET,
     }),
   ],
   secret: process.env.AUTH_SECRET,

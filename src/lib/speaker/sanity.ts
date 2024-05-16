@@ -7,34 +7,87 @@ export function providerAccount(provider: string, providerAccountId: string): st
   return `${provider}:${providerAccountId}`
 }
 
-export async function getOrCreateSpeaker(user: User, account: Account): Promise<{ speaker: Speaker; err: Error | null; }> {
+async function findSpeakerByProvider(id: string): Promise<{ speaker: Speaker; err: Error | null; }> {
   let speaker = {} as Speaker
   let err = null
 
-  const provider = providerAccount(account.provider, account.providerAccountId)
-
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && $provider in providers][0]{
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && $id in providers][0]{
       ...,
       "image": image.asset->url
-    }`, { provider }, { cache: "no-store" })
+    }`, { id }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
   }
 
-  if (!speaker?._id) {
-    speaker = {
-      _id: randomUUID(),
-      email: user.email,
-      name: user.name,
-      imageURL: user.image || "",
-      providers: [provider],
-    } as Speaker
+  return { speaker, err }
+}
+
+async function findSpeakerByEmail(email: string): Promise<{ speaker: Speaker; err: Error | null; }> {
+  let speaker = {} as Speaker
+  let err = null
+
+  try {
+    speaker = await clientRead.fetch(`*[ _type == "speaker" && email == $email][0]{
+      ...,
+      "image": image.asset->url
+    }`, { email }, { cache: "no-store" })
+  } catch (error) {
+    err = error as Error
+  }
+
+  return { speaker, err }
+}
+
+export async function getOrCreateSpeaker(user: User, account: Account): Promise<{ speaker: Speaker; err: Error | null; }> {
+  if (!user.email || !user.name) {
+    const err = new Error("Missing user email or name")
+    console.error(err)
+    return { speaker: {} as Speaker, err }
+  }
+
+  // Find speaker by provider
+  const providerAccountId = providerAccount(account.provider, account.providerAccountId)
+  var { speaker, err } = await findSpeakerByProvider(providerAccountId)
+  if (err) {
+    console.error("Error fetching speaker profile by account id", err)
+    return { speaker, err }
+  }
+
+  if (speaker?._id) {
+    return { speaker, err }
+  }
+
+  // Find speaker by email
+  var { speaker, err } = await findSpeakerByEmail(user.email)
+  if (err) {
+    console.error("Error fetching speaker profile by email", err)
+    return { speaker, err }
+  }
+
+  if (speaker?._id) {
+    speaker.providers = speaker.providers || []
+    speaker.providers.push(providerAccountId)
     try {
-      speaker = await clientWrite.create({ _type: "speaker", ...speaker }) as Speaker
+      await clientWrite.patch(speaker._id).set({ providers: speaker.providers }).commit()
     } catch (error) {
       err = error as Error
     }
+    return { speaker, err }
+  }
+
+  // Create new speaker
+  speaker = {
+    _id: randomUUID(),
+    email: user.email,
+    name: user.name,
+    imageURL: user.image || "",
+    providers: [providerAccountId],
+  } as Speaker
+  try {
+    speaker = await clientWrite.create({ _type: "speaker", ...speaker }) as Speaker
+  } catch (error) {
+    err = error as Error
   }
 
   return { speaker, err }
