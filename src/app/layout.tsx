@@ -1,6 +1,7 @@
 import { type Metadata } from 'next'
 import { DM_Sans, Inter } from 'next/font/google'
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import clsx from 'clsx'
 
 import '@/styles/tailwind.css'
@@ -61,6 +62,7 @@ export default async function RootLayout({
           </SessionProvider>
         </div>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
