@@ -10,7 +10,7 @@ import { getProposal, postProposal } from '@/lib/proposal/client'
 import { formats, languages, levels } from '@/lib/proposal/types'
 import { Input, Textarea, Dropdown, HelpText, Checkbox, LinkInput, ErrorText } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Speaker } from '@/lib/speaker/types'
+import { Flags, Speaker } from '@/lib/speaker/types'
 import { ProfileEmail, ProfileImageResponse } from '@/lib/profile/types'
 import { getEmails, getProfile, putProfile, postImage, putEmail } from '@/lib/profile/client'
 import config from '@/../next.config'
@@ -26,7 +26,7 @@ export default function Submit() {
 
   let [isLoading, setIsLoading] = useState(true)
   let [proposal, setProposal] = useState<Proposal>({ title: '', language: Language.norwegian, description: '', format: Format.lightning_10, level: Level.beginner, outline: '', tos: false });
-  let [speaker, setSpeaker] = useState<Speaker>({ name: '', is_local: false, is_first_time: false, is_diverse: false });
+  let [speaker, setSpeaker] = useState<Speaker>({ name: '', flags: [], links: [''] });
   let [emails, setEmails] = useState<ProfileEmail[]>([]);
   let [loadingError, setLoadingError] = useState({} as FormError);
 
@@ -275,15 +275,22 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
   const [speakerBio, setSpeakerBio] = useState(speaker?.bio ?? '')
   const [speakerEmail, setSpeakerEmail] = useState(speaker?.email ?? '')
   const [speakerImage, setSpeakerImage] = useState(speaker?.image ?? '')
-  const [speakerIsLocal, setSpeakerIsLocal] = useState(speaker?.is_local ?? false)
-  const [speakerIsFirstTime, setSpeakerIsFirstTime] = useState(speaker?.is_first_time ?? false)
-  const [speakerIsDiverse, setSpeakerIsDiverse] = useState(speaker?.is_diverse ?? false)
+  const [speakerFlags, setSpeakerFlags] = useState(speaker?.flags ?? [])
   const [speakerLinks, setSpeakerLinks] = useState(speaker?.links ?? [''])
 
   const [imageError, setImageError] = useState('')
   const [isUploading, setIsUploading] = useState(false);
 
   const emailOptions = new Map(emails.map(email => [email.email, email.email]));
+
+  function updateSpeakerFlag(flag: Flags, value: boolean) {
+    if (value) {
+      setSpeakerFlags([...speakerFlags, flag]);
+    } else {
+      setSpeakerFlags(speakerFlags.filter(f => f !== flag));
+    }
+    console.log(speakerFlags)
+  }
 
   function updateSpeakerLink(i: number, val: string) {
     setSpeakerLinks(speakerLinks.map((link, index) => index === i ? val : link))
@@ -333,12 +340,10 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
       name: speakerName,
       title: speakerTitle,
       bio: speakerBio,
-      is_local: speakerIsLocal,
-      is_first_time: speakerIsFirstTime,
-      is_diverse: speakerIsDiverse,
+      flags: speakerFlags,
       links,
     });
-  }, [speakerName, speakerTitle, speakerBio, speakerIsLocal, speakerIsFirstTime, speakerIsDiverse, speakerLinks]);
+  }, [speakerName, speakerTitle, speakerBio, speakerFlags, speakerLinks]);
 
   return (
     <div className="border-b border-gray-900/10 pb-12">
@@ -415,16 +420,20 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
           <fieldset>
             <legend className="text-sm font-semibold leading-6 text-gray-900">Speaker Details</legend>
             <div className="mt-6 space-y-6">
-              <Checkbox name="local" label="I am a local speaker" value={speakerIsLocal} setValue={setSpeakerIsLocal}>
+              <Checkbox name="local" label="I am a local speaker" value={speakerFlags.includes(Flags.localSpeaker)} setValue={(value: boolean) => updateSpeakerFlag(Flags.localSpeaker, value)}>
                 <HelpText>Please indicate if you are a local speaker to help us promote local talent.</HelpText>
               </Checkbox>
 
-              <Checkbox name="first-time" label="I am a first time speaker" value={speakerIsFirstTime} setValue={setSpeakerIsFirstTime}>
+              <Checkbox name="first-time" label="I am a first time speaker" value={speakerFlags.includes(Flags.firstTimeSpeaker)} setValue={(value: boolean) => updateSpeakerFlag(Flags.firstTimeSpeaker, value)}>
                 <HelpText>We encourage new speakers to submit to this conference and will provide support and guidance if needed.</HelpText>
               </Checkbox>
 
-              <Checkbox name="diversity" label="I am from an underrepresented group" value={speakerIsDiverse} setValue={setSpeakerIsDiverse}>
+              <Checkbox name="diverse" label="I am from an underrepresented group" value={speakerFlags.includes(Flags.diverseSpeaker)} setValue={(value: boolean) => updateSpeakerFlag(Flags.diverseSpeaker, value)}>
                 <HelpText>We are committed to increase diversity among our selected speakers.</HelpText>
+              </Checkbox>
+
+              <Checkbox name="requires-funding" label="I require funding to attend the conference" value={speakerFlags.includes(Flags.requiresTravelFunding)} setValue={(value: boolean) => updateSpeakerFlag(Flags.requiresTravelFunding, value)}>
+                <HelpText>If you require funding to attend the conference, please indicate it here.</HelpText>
               </Checkbox>
             </div>
           </fieldset>

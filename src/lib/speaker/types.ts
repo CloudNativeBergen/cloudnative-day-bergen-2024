@@ -1,5 +1,12 @@
 import { FormError } from "@/lib/proposal/types"
 
+export enum Flags {
+  localSpeaker = 'local',
+  firstTimeSpeaker = 'first-time',
+  diverseSpeaker = 'diverse',
+  requiresTravelFunding = 'requires-funding',
+}
+
 export interface Speaker {
   _id?: string
   _rev?: string
@@ -12,10 +19,8 @@ export interface Speaker {
   image?: string
   links?: string[]
   imageURL?: string
-  is_local: boolean
-  is_first_time: boolean
-  is_diverse: boolean
   providers?: string[]
+  flags?: Flags[]
 }
 
 export interface SpeakerResponse {

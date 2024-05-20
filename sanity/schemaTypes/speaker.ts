@@ -1,3 +1,4 @@
+import { Flags } from '../../src/lib/speaker/types'
 import { defineField, defineType } from 'sanity'
 
 export default defineType({
@@ -76,21 +77,45 @@ export default defineType({
       name: 'is_local',
       title: 'Is local speaker?',
       type: 'boolean',
+      deprecated: {
+        reason: 'Use the "Flags" field instead',
+      }
     }),
     defineField({
       name: 'is_first_time',
       title: 'Is first time speaker?',
       type: 'boolean',
+      deprecated: {
+        reason: 'Use the "Flags" field instead',
+      }
     }),
     defineField({
       name: 'is_diverse',
       title: 'Is from an underrepresented group?',
       type: 'boolean',
+      deprecated: {
+        reason: 'Use the "Flags" field instead',
+      }
     }),
     defineField({
       name: 'is_organizer',
       title: 'Is organizer?',
       type: 'boolean',
+    }),
+    defineField({
+      title: 'Flags',
+      description: 'Meta information about the speaker',
+      name: 'flags',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: 'Is Local Speaker', value: Flags.localSpeaker },
+          { title: 'Is First Time Speaker', value: Flags.firstTimeSpeaker },
+          { title: 'Is Diverse Speaker', value: Flags.diverseSpeaker },
+          { title: 'Requires Travel Funding', value: Flags.requiresTravelFunding },
+        ]
+      }
     }),
   ],
   preview: {
