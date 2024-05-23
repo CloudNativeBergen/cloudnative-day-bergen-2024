@@ -23,9 +23,14 @@ export function Hero() {
               Our speakers will share their insights and experiences, covering topics such as containerization, orchestration, microservices, and more. Whether you&apos;re a beginner or an 10x&apos;er, there&apos;s something for everyone at CloudNative Day Bergen.
             </p>
           </div>
-          <Button href={c?.registrationLink ?? '#'} className="mt-10 w-full sm:hidden">
-            Get your tickets
-          </Button>
+          <div className="flex flex-col md:flex-row justify-between">
+            <Button href={c?.registrationLink ?? '#'} className="mt-10 w-full md:w-1/2 md:mr-2">
+              Get your ticket
+            </Button>
+            <Button href="/cfp" className="mt-10 w-full md:w-1/2 md:ml-2 bg-teal-600 hover:bg-teal-500">
+              Submit to Speak
+            </Button>
+          </div>
           <dl className="mt-10 grid grid-cols-2 gap-x-10 gap-y-6 sm:mt-16 sm:gap-x-16 sm:gap-y-10 sm:text-center lg:auto-cols-auto lg:grid-flow-col lg:grid-cols-none lg:justify-start lg:text-left">
             {[
               ['Tracks', '3'],

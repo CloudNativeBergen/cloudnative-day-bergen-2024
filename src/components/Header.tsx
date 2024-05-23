@@ -32,7 +32,7 @@ export function Header() {
           </div>
         </div>
         <div className="hidden whitespace-nowrap sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
-          <Button href={c?.registrationLink ?? '#'}>Get your tickets</Button>
+          <Button href={c?.registrationLink ?? '#'}>Get your ticket</Button>
         </div>
         <div className="mt-10 sm:flex ml-10 lg:ml-4 lg:mt-0">
           <a href='/cfp/list'>
