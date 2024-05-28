@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import LinkedIn from "next-auth/providers/linkedin"
 import type { NextAuthConfig, Session, User } from "next-auth"
+import type { Provider } from "next-auth/providers"
 import { NextRequest } from "next/server";
 import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module.js";
 import { getOrCreateSpeaker } from "@/lib/speaker/sanity";
@@ -21,10 +22,19 @@ export const config = {
       clientSecret: process.env.AUTH_LINKEDIN_SECRET,
     }),
   ],
+
+  //pages: {
+  //  signIn: "/signin",
+  //  signOut: "/signout",
+  //  error: "/signin",
+  //},
+
   secret: process.env.AUTH_SECRET,
+
   session: {
     strategy: "jwt",
   },
+
   callbacks: {
     // This is exposed to the client
     async session({ session, token }) {
@@ -89,6 +99,15 @@ export const config = {
     }
   },
 } satisfies NextAuthConfig
+
+export const providerMap = config.providers.map((provider: any) => {
+  if (typeof provider === "function") {
+    const providerData = provider()
+    return { id: providerData.id, name: providerData.name, type: providerData.type }
+  } else {
+    return { id: provider.id, name: provider.name, type: provider.type }
+  }
+})
 
 export const { handlers, auth: _auth, signIn, signOut } = NextAuth(config)
 
