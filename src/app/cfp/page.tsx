@@ -81,7 +81,8 @@ export default async function CFP() {
                 <li>Best practices and case studies</li>
               </ul>
               <p>
-                The deadline for submissions is {formatDate(dates.cfpEnd)}. We will review all proposals and notify selected speakers by {formatDate(dates.cfpNotify)}.
+                The deadline for submissions is {formatDate(dates.cfpEnd)}, but <strong>we are reviewing proposals on a rolling basis</strong>, so we encourage you to submit early to increase your chances of being selected.
+                We will review all remaining proposals and notify selected speakers by {formatDate(dates.cfpNotify)}.
               </p>
             </div>
 
