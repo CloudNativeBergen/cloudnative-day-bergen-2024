@@ -9,40 +9,7 @@ import { listProposals } from '@/lib/proposal/client'
 import { CheckCircleIcon, ChevronRightIcon, XMarkIcon, PlusCircleIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { formatDate } from '@/lib/time'
 import { useSearchParams } from 'next/navigation'
-
-function ProposalStatus({ status }: { status?: string }) {
-  let text: string;
-  let color: string;
-
-  switch (status) {
-    case Status.submitted:
-      text = statuses.get(Status.submitted) ?? status;
-      color = 'bg-blue-100 text-blue-800';
-      break;
-    case Status.selected:
-      text = statuses.get(Status.selected) ?? status;
-      color = 'bg-indigo-100 text-indigo-800';
-      break;
-    case Status.accepted:
-      text = statuses.get(Status.accepted) ?? status;
-      color = 'bg-green-100 text-green-800';
-      break;
-    case Status.rejected:
-      text = statuses.get(Status.rejected) ?? status;
-      color = 'bg-red-100 text-red-800';
-      break;
-    default:
-      text = 'Unknown';
-      color = 'bg-gray-100 text-gray-800';
-      break;
-  }
-
-  return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${color}`}>
-      {text}
-    </span>
-  )
-}
+import { FormatStatus } from '@/lib/proposal/format'
 
 function ProposalList({ proposals }: { proposals: Proposal[] }) {
   return (
@@ -76,7 +43,7 @@ function ProposalList({ proposals }: { proposals: Proposal[] }) {
           <div className="flex shrink-0 items-center gap-x-4">
             <div className="hidden sm:flex sm:flex-col sm:items-end">
               <p className="text-sm leading-6 text-gray-900">
-                <ProposalStatus status={proposal.status} />
+                <FormatStatus status={proposal.status} />
               </p>
               {proposal._updatedAt ? (
                 <p className="mt-1 text-xs leading-5 text-gray-500">

@@ -21,6 +21,7 @@ export interface Speaker {
   imageURL?: string
   providers?: string[]
   flags?: Flags[]
+  is_organizer?: boolean
 }
 
 export interface SpeakerResponse {

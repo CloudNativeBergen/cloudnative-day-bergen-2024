@@ -18,6 +18,7 @@ export enum Format {
 }
 
 export enum Status {
+  draft = 'draft',         // draft by the speaker
   submitted = 'submitted', // submitted by the speaker
   selected = 'selected',   // selected by the organizers
   accepted = 'accepted',   // accepted by the speaker
@@ -67,6 +68,7 @@ export interface ProposalListResponse extends ProposalBaseResponse {
 }
 
 export const statuses = new Map([
+  [Status.draft, 'Draft'],
   [Status.submitted, 'Submitted'],
   [Status.selected, 'Selected'],
   [Status.accepted, 'Accepted'],

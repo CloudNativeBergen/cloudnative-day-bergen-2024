@@ -22,9 +22,11 @@ export async function getProposal(id: string, speakerId: string): Promise<{ prop
   return { proposal, err }
 }
 
-export async function getProposals(speakerId: string): Promise<{ proposals: Proposal[]; err: Error | null; }> {
+export async function getProposals(speakerId: string, returnAll: boolean = false): Promise<{ proposals: Proposal[]; err: Error | null; }> {
   let proposals: Proposal[] = []
   let err = null
+
+  const speakerFilter = returnAll ? `[ defined(status) && status != "${Status.draft}" ]` : "[ speaker._id == $speakerId ]"
 
   try {
     proposals = await clientRead.fetch(groq`*[ _type == "talk" ]{
@@ -32,7 +34,7 @@ export async function getProposals(speakerId: string): Promise<{ proposals: Prop
       speaker-> {
         _id, name, email, providers, "image": image.asset->url
       }
-    }[ speaker._id == $speakerId ]`, { speakerId }, { cache: "no-store" })
+    }${speakerFilter} | order(_createdAt desc)`, { speakerId }, { cache: "no-store" })
   } catch (error) {
     err = error as Error
   }

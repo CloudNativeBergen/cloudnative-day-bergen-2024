@@ -75,6 +75,7 @@ export default defineType({
       initialValue: Status.submitted,
       options: {
         list: [
+          { title: 'Draft', value: Status.draft },
           { title: 'Submitted', value: Status.submitted },
           { title: 'Selected', value: Status.selected },
           { title: 'Accepted', value: Status.accepted },

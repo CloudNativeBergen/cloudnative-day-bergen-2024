@@ -89,7 +89,7 @@ export const config = {
         }
 
         token.account = account
-        token.speaker = { _id: speaker._id }
+        token.speaker = { _id: speaker._id, is_organizer: speaker.is_organizer }
       }
 
       return token

@@ -10,6 +10,11 @@ export async function listProposals(): Promise<ProposalListResponse> {
   return await res.json() as ProposalListResponse
 }
 
+export async function listAllProposals(): Promise<ProposalListResponse> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal/all`, { cache: 'no-store', next: { revalidate: 0 } })
+  return await res.json() as ProposalListResponse
+}
+
 export async function getProposal(id?: string): Promise<ProposalResponse> {
   let url = `${process.env.NEXT_PUBLIC_URL}/api/proposal`
   if (id) {
