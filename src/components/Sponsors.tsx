@@ -20,9 +20,9 @@ const sponsors = [
   { name: 'Knowit', logo: logoKnowit, href: 'https://knowit.no' },
   { name: 'SopraSteria', logo: logoSopra, href: 'https://soprasteria.no' },
   { name: 'Eviny', logo: logoEviny, href: 'https://eviny.no' },
+  { name: 'Tietovery', logo: logoTietoevry, href: 'https://tietoevry.com' },
   { name: 'javaBin', logo: logoJavabin, href: 'https://java.no' },
   { name: 'Redpill Linpro', logo: logoRedpill, href: 'https://www.redpill-linpro.com' },
-  { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
 ]
