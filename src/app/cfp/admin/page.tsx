@@ -71,8 +71,8 @@ function ProposalTable({ proposals }: { proposals: Proposal[] }) {
                       <FormatStatus status={proposal.status} />
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                        View<span className="sr-only">, {proposal.title}</span>
+                      <a href={`https://cloudnativebergen.sanity.studio/studio/structure/talk;${proposal._id}`} className="text-indigo-600 hover:text-indigo-900">
+                        View in Sanity<span className="sr-only">, {proposal.title}</span>
                       </a>
                     </td>
                   </tr>
