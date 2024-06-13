@@ -20,9 +20,10 @@ export enum Format {
 export enum Status {
   draft = 'draft',         // draft by the speaker
   submitted = 'submitted', // submitted by the speaker
-  selected = 'selected',   // selected by the organizers
-  accepted = 'accepted',   // accepted by the speaker
+  accepted = 'accepted',   // accepted by the organizers
+  confirmed = 'confirmed', // confirmed by the speaker
   rejected = 'rejected',   // rejected by the organizers
+  withdrawn = 'withdrawn', // withdrawn by the speaker
 }
 
 export interface Proposal {
@@ -57,6 +58,11 @@ export interface FormValidationError {
   field: string
 }
 
+export interface ProposalActionResponse extends ProposalBaseResponse {
+  proposalStatus?: Status
+  error?: FormError
+}
+
 export interface ProposalResponse extends ProposalBaseResponse {
   proposal?: Proposal
   error?: FormError
@@ -70,9 +76,10 @@ export interface ProposalListResponse extends ProposalBaseResponse {
 export const statuses = new Map([
   [Status.draft, 'Draft'],
   [Status.submitted, 'Submitted'],
-  [Status.selected, 'Selected'],
   [Status.accepted, 'Accepted'],
   [Status.rejected, 'Rejected'],
+  [Status.confirmed, 'Confirmed'],
+  [Status.withdrawn, 'Withdrawn'],
 ])
 
 export const languages = new Map([

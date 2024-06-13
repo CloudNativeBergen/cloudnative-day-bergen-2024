@@ -3,6 +3,9 @@ import { jest } from '@jest/globals'
 import { NextAuthRequest } from "@/lib/auth";
 import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module";
 import { Account } from 'next-auth';
+import proposals from '../testdata/proposals';
+import speakers from '../testdata/speakers';
+import { Speaker } from '@/lib/speaker/types';
 
 export class AuthError extends Error {
 	type: string;
@@ -14,29 +17,39 @@ export class AuthError extends Error {
 
 const NextAuth = () => ({
 	auth: jest.fn((handler: AppRouteHandlerFn) => {
-		return (req: NextAuthRequest) => {
+		return (req: NextAuthRequest, ctx: any) => {
 			if (!req) req = {} as NextAuthRequest;
 
-			const account: Account = {
-				provider: 'github',
-				providerAccountId: '123',
-				access_token: 'abc',
-				type: 'oidc'
+			let user: Speaker | undefined;
+
+			if (req.headers && req.headers.get("x-test-auth-user")) {
+				user = speakers.find((speaker) => speaker._id === req.headers.get("x-test-auth-user"));
 			}
 
-			req.auth = {
-				expires: (Date.now() + 1000).toString(),
-				user: {
-					email: 'foo@bar.com',
-					name: 'Foo Bar',
-					picture: 'https://example.com/foo.jpg'
-				},
-				speaker: {
-					_id: '1',
-				},
-				account,
-			};
-			return handler(req, {});
+			if (user) {
+				const account: Account = {
+					provider: 'github',
+					providerAccountId: '123',
+					access_token: 'abc',
+					type: 'oidc'
+				}
+
+				req.auth = {
+					expires: (Date.now() + 1000).toString(),
+					user: {
+						email: user.email!,
+						name: user.name,
+						picture: 'https://example.com/foo.jpg',
+					},
+					speaker: {
+						_id: user._id!,
+						is_organizer: user.is_organizer === true,
+					},
+					account,
+				};
+			}
+
+			return handler(req, ctx);
 		}
 	}),
 	signIn: jest.fn(),

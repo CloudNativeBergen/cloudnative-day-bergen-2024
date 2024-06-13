@@ -103,16 +103,20 @@ export function FormatStatus({ status }: { status?: string }) {
       text = statuses.get(Status.submitted) ?? status;
       color = 'bg-blue-100 text-blue-800';
       break;
-    case Status.selected:
-      text = statuses.get(Status.selected) ?? status;
-      color = 'bg-indigo-100 text-indigo-800';
-      break;
     case Status.accepted:
       text = statuses.get(Status.accepted) ?? status;
       color = 'bg-green-100 text-green-800';
       break;
     case Status.rejected:
       text = statuses.get(Status.rejected) ?? status;
+      color = 'bg-red-100 text-red-800';
+      break;
+    case Status.confirmed:
+      text = statuses.get(Status.confirmed) ?? status;
+      color = 'bg-green-100 text-green-800';
+      break;
+    case Status.withdrawn:
+      text = statuses.get(Status.withdrawn) ?? status;
       color = 'bg-red-100 text-red-800';
       break;
     default:

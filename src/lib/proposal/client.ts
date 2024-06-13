@@ -1,5 +1,7 @@
+import { Action } from '@/app/api/proposal/[id]/action/route';
 import {
   Proposal,
+  ProposalActionResponse,
   ProposalListResponse,
   ProposalResponse,
 } from '@/lib/proposal/types';
@@ -46,4 +48,18 @@ export async function postProposal(proposal: Proposal, id?: string): Promise<Pro
   });
 
   return await res.json() as ProposalResponse
+}
+
+export async function postProposalAction(id: string, action: Action, notify: boolean, comment: string): Promise<ProposalActionResponse> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal/${id}/action`, {
+    next: { revalidate: 0 },
+    cache: 'no-store',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ action, notify, comment }),
+  });
+
+  return await res.json() as ProposalActionResponse
 }
