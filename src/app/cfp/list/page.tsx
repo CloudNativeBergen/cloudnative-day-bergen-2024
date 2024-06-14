@@ -22,17 +22,20 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function ActionLink({ action }: { action: ButtonAction }) {
   return (
     <a href={action.link} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 border border-transparent py-4 text-sm font-semibold text-gray-900">
       <action.icon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-      {action.label}
+      {capitalizeFirstLetter(action.label)}
     </a>
   )
 }
 
 function ActionButton({ action, isLoading }: { action: ButtonAction, isLoading: boolean }) {
-  console.log('action', action.label, 'isLoading', isLoading)
   return (
     <button
       disabled={isLoading}
@@ -40,16 +43,11 @@ function ActionButton({ action, isLoading }: { action: ButtonAction, isLoading: 
       className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 border border-transparent py-4 text-sm font-semibold text-gray-900"
     >
       {(isLoading) ? (
-        <>
-          <SpinnerIcon className="animate-spin -ml-1 mr-3 h-5 w-5 text-grey-400" />
-          {action.label}...
-        </>
+        <SpinnerIcon className="animate-spin h-5 w-5 text-grey-400" />
       ) : (
-        <>
-          <action.icon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-          {action.label}
-        </>
+        <action.icon className="h-5 w-5 text-gray-400" aria-hidden="true" />
       )}
+      {capitalizeFirstLetter(action.label)}
     </button>
   )
 }
