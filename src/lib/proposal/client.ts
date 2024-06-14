@@ -1,4 +1,4 @@
-import { Action } from '@/app/api/proposal/[id]/action/route';
+import { Action } from '@/lib/proposal/types'
 import {
   Proposal,
   ProposalActionResponse,

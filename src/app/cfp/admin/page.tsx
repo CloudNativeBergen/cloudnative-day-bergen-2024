@@ -3,12 +3,11 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { Proposal, ProposalActionResponse } from '@/lib/proposal/types'
+import { Proposal, ProposalActionResponse, Action } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
 import { listAllProposals, postProposalAction } from '@/lib/proposal/client'
 import { FormatFormat, FormatLanguage, FormatLevel, FormatStatus } from '@/lib/proposal/format'
 import { Dialog, DialogPanel, DialogTitle, Menu, MenuButton, MenuItem, MenuItems, Transition, TransitionChild } from '@headlessui/react'
-import { Action } from '@/app/api/proposal/[id]/action/route'
 import {
   ArchiveBoxXMarkIcon,
   ChevronDownIcon,
@@ -18,7 +17,6 @@ import {
   TrashIcon,
   XMarkIcon,
 } from '@heroicons/react/20/solid'
-import { set } from 'sanity'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')

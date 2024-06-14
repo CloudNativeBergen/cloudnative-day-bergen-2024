@@ -4,10 +4,10 @@
 import { jest, it, describe, expect, beforeAll } from '@jest/globals';
 import { testApiHandler } from 'next-test-api-route-handler';
 import * as appHandler from './route';
-import { actionStateMachine, Action } from './route';
+import { actionStateMachine } from '@/lib/proposal/states';
 import { clientReadUncached, clientWrite } from '@/lib/sanity/client';
 import proposals from '../../../../../../__tests__/testdata/proposals';
-import { Status } from '@/lib/proposal/types';
+import { Action, Status } from '@/lib/proposal/types';
 
 let proposal = proposals[0]!;
 let speaker = proposals[0].speaker!;

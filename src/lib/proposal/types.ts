@@ -26,6 +26,17 @@ export enum Status {
   withdrawn = 'withdrawn', // withdrawn by the speaker
 }
 
+// Action is an enum that represents the possible actions that can be taken on a proposal.
+export enum Action {
+  edit = 'edit',
+  submit = 'submit',
+  unsubmit = 'unsubmit',
+  accept = 'accept',
+  confirm = 'confirm',
+  reject = 'reject',
+  withdraw = 'withdraw'
+}
+
 export interface Proposal {
   _id?: string
   _rev?: string

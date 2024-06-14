@@ -3,66 +3,165 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { Proposal, Status, statuses } from '@/lib/proposal/types'
+import { Proposal, Status, Action } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
-import { listProposals } from '@/lib/proposal/client'
-import { CheckCircleIcon, ChevronRightIcon, XMarkIcon, PlusCircleIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import { formatDate } from '@/lib/time'
+import { listProposals, postProposalAction } from '@/lib/proposal/client'
 import { useSearchParams } from 'next/navigation'
 import { FormatStatus } from '@/lib/proposal/format'
+import { CheckCircleIcon, XMarkIcon, PlusCircleIcon, EnvelopeIcon, PencilIcon, UserCircleIcon } from '@heroicons/react/20/solid'
+import { SpinnerIcon } from '@/components/SocialIcons'
 
-function ProposalList({ proposals }: { proposals: Proposal[] }) {
+interface ButtonAction {
+  label: Action
+  icon: any
+  link?: string
+  onClick?: () => void
+}
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
+
+function ActionLink({ action }: { action: ButtonAction }) {
   return (
-    <ul
-      role="list"
-      className="divide-y divide-gray-100 overflow-hidden mx-auto max-w-2xl lg:max-w-4xl mt-12 bg-white shadow-sm ring-1 ring-gray-900/5 rounded-xl"
+    <a href={action.link} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 border border-transparent py-4 text-sm font-semibold text-gray-900">
+      <action.icon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+      {action.label}
+    </a>
+  )
+}
+
+function ActionButton({ action, isLoading }: { action: ButtonAction, isLoading: boolean }) {
+  console.log('action', action.label, 'isLoading', isLoading)
+  return (
+    <button
+      disabled={isLoading}
+      onClick={action.onClick}
+      className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 border border-transparent py-4 text-sm font-semibold text-gray-900"
     >
-      {proposals.map((proposal) => (
-        <li key={proposal._id} className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
-          <div className="flex min-w-0 gap-x-4">
-            {proposal.speaker?.image ? (
-              <img
-                className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                src={`${proposal.speaker.image}?w=96&h=96&fit=crop`}
-                alt="Speaker Image" />
-            ) : (
-              <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
-            )}
-            <div className="min-w-0 flex-auto">
-              <p className="text-sm font-semibold leading-6 text-gray-900">
-                <a href={`/cfp/submit?id=${proposal._id}`}>
-                  <span className="absolute inset-x-0 -top-px bottom-0" />
-                  {proposal.title}
-                </a>
-              </p>
-              <p className="mt-1 flex text-xs leading-5 text-gray-500">
-                {proposal.description}
-              </p>
-            </div>
-          </div>
-          <div className="flex shrink-0 items-center gap-x-4">
-            <div className="hidden sm:flex sm:flex-col sm:items-end">
-              <p className="text-sm leading-6 text-gray-900">
-                <FormatStatus status={proposal.status} />
-              </p>
-              {proposal._updatedAt ? (
-                <p className="mt-1 text-xs leading-5 text-gray-500">
-                  Submitted <time dateTime={proposal._updatedAt}>{formatDate(proposal._updatedAt)}</time>
-                </p>
-              ) : (
-                <div className="mt-1 flex items-center gap-x-1.5">
-                  <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  </div>
-                  <p className="text-xs leading-5 text-gray-500">Online</p>
+      {(isLoading) ? (
+        <>
+          <SpinnerIcon className="animate-spin -ml-1 mr-3 h-5 w-5 text-grey-400" />
+          {action.label}...
+        </>
+      ) : (
+        <>
+          <action.icon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          {action.label}
+        </>
+      )}
+    </button>
+  )
+}
+
+function ProposalCards({ proposals, action }: { proposals: Proposal[], action: (id: string, action: Action) => void }) {
+  const [loading, setLoading] = useState<{ id: string, action: string }>({ id: '', action: '' });
+  console.log(loading)
+
+  return (
+    <ul role="list" className="mt-6 mx-auto max-w-2xl lg:max-w-4xl grid grid-cols-1 gap-6 sm:grid-cols-2">
+      {proposals.map(proposal => {
+        const actions: ButtonAction[] = [];
+
+        if (proposal.status === Status.draft || proposal.status === Status.submitted) {
+          actions.push({
+            label: Action.edit,
+            icon: PencilIcon,
+            link: `/cfp/submit?id=${proposal._id}`,
+          })
+        }
+
+        if (proposal.status === Status.draft) {
+          actions.push({
+            label: Action.submit,
+            icon: EnvelopeIcon,
+            onClick: async () => {
+              setLoading({ id: proposal._id!, action: Action.submit })
+              action(proposal._id!, Action.submit)
+            }
+          })
+        }
+
+        if (proposal.status === Status.submitted) {
+          actions.push({
+            label: Action.unsubmit,
+            icon: XMarkIcon,
+            onClick: () => {
+              setLoading({ id: proposal._id!, action: Action.unsubmit })
+              action(proposal._id!, Action.unsubmit)
+            }
+          })
+        }
+
+        if (proposal.status === Status.confirmed || proposal.status === Status.accepted) {
+          actions.push({
+            label: Action.withdraw,
+            icon: XMarkIcon,
+            onClick: () => {
+              setLoading({ id: proposal._id!, action: 'Withdraw' })
+              action(proposal._id!, Action.withdraw)
+            }
+          })
+        }
+
+        if (proposal.status === Status.accepted) {
+          actions.push({
+            label: Action.confirm,
+            icon: CheckCircleIcon,
+            onClick: () => {
+              setLoading({ id: proposal._id!, action: 'Confirm' })
+              action(proposal._id!, Action.confirm)
+            }
+          })
+        }
+
+        return (
+          <li key={proposal._id} className={classNames(
+            proposal.status === Status.accepted ? 'border-green-500/50 border-2' : '',
+            'col-span-1 divide-y divide-gray-200 bg-white rounded-lg shadow'
+          )}>
+            <div className="flex w-full items-center justify-between space-x-6 p-6">
+              <div className="flex-1 truncate">
+                <div className="flex items-center space-x-3">
+                  <h3 className="truncate text-sm font-medium text-gray-900">{proposal.title}</h3>
+                  <FormatStatus status={proposal.status} />
                 </div>
+                <p className="mt-1 truncate text-sm text-gray-500">
+                  {proposal.status === Status.accepted ? (
+                    <>Your proposal has been accepted.</>
+                  ) : (
+                    <>{proposal.description}</>
+                  )}
+                </p>
+              </div>
+              {proposal.speaker?.image ? (
+                <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={proposal.speaker?.image} alt="" />
+              ) : (
+                <UserCircleIcon className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" aria-hidden="true" />
               )}
             </div>
-            <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-          </div>
-        </li>
-      ))}
-    </ul>
+            {(actions.length > 0) && (
+              <div>
+                <div className="-mt-px flex divide-x divide-gray-200">
+                  {(actions.map((action, i) => (
+                    <div key={`${proposal._id}-${action.label}`} className={classNames(
+                      i > 0 ? '-ml-px' : '',
+                      'relative inline-flex w-0 flex-1 flex'
+                    )}>
+                      {action.link ? (
+                        <ActionLink action={action} />
+                      ) : (
+                        <ActionButton action={action} isLoading={loading.id === proposal._id && loading.action === action.label} />
+                      )}
+                    </div>
+                  )))}
+                </div>
+              </div>
+            )}
+          </li>
+        )
+      })}
+    </ul >
   )
 }
 
@@ -112,6 +211,20 @@ export default function MyProposals() {
   const [error, setError] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(true);
+
+  async function actionHandler(id: string, action: Action) {
+    const res = await postProposalAction(id, action, false, '')
+    if (res.error) {
+      setError(res.error.message)
+    } else if (res.proposalStatus) {
+      setProposals(proposals.map(proposal => {
+        if (proposal._id === id) {
+          proposal.status = res.proposalStatus!
+        }
+        return proposal
+      }))
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -163,7 +276,9 @@ export default function MyProposals() {
                   <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit Proposal</a>
                 </div>
               ) : (
-                <ProposalList proposals={proposals} />
+                <>
+                  <ProposalCards proposals={proposals} action={actionHandler} />
+                </>
               )}
             </>
           )}
