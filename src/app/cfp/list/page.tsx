@@ -3,7 +3,7 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { Proposal, Status, Action } from '@/lib/proposal/types'
+import { ProposalExisting, Status, Action } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
 import { listProposals, postProposalAction } from '@/lib/proposal/client'
 import { useSearchParams } from 'next/navigation'
@@ -52,7 +52,7 @@ function ActionButton({ action, isLoading }: { action: ButtonAction, isLoading: 
   )
 }
 
-function ProposalCards({ proposals, action }: { proposals: Proposal[], action: (id: string, action: Action) => void }) {
+function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], action: (id: string, action: Action) => void }) {
   const [loading, setLoading] = useState<{ id: string, action: string }>({ id: '', action: '' });
   console.log(loading)
 
@@ -132,8 +132,8 @@ function ProposalCards({ proposals, action }: { proposals: Proposal[], action: (
                   )}
                 </p>
               </div>
-              {proposal.speaker?.image ? (
-                <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={proposal.speaker?.image} alt="" />
+              {proposal.speaker && 'image' in proposal.speaker ? (
+                <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={proposal.speaker.image} alt="" />
               ) : (
                 <UserCircleIcon className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" aria-hidden="true" />
               )}
@@ -180,7 +180,7 @@ function Success() {
               <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-green-800">Proposal submitted successfully.</p>
+              <p className="text-sm font-medium text-green-800">ProposalExisting submitted successfully.</p>
             </div>
             <div className="ml-auto pl-3">
               <div className="-mx-1.5 -my-1.5">
@@ -205,7 +205,7 @@ export default function MyProposals() {
   const searchParams = useSearchParams()
   const success = searchParams.get('success') ?? undefined
 
-  const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [proposals, setProposals] = useState<ProposalExisting[]>([]);
   const [error, setError] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -271,7 +271,7 @@ export default function MyProposals() {
                 <div className="flex flex-col items-center mx-auto p-6 mt-12 max-w-2xl lg:max-w-4xl lg:px-12 bg-white rounded-lg border-dashed border-2 border-blue-600">
                   <p className="text-lg font-semibold text-gray-900">You have no proposals yet.</p>
                   <p className="mt-2 text-sm text-gray-500">Submit a proposal to become a speaker.</p>
-                  <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit Proposal</a>
+                  <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit ProposalExisting</a>
                 </div>
               ) : (
                 <>

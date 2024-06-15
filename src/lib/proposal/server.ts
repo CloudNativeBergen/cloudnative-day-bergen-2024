@@ -1,4 +1,4 @@
-import { Proposal, ProposalListResponse, ProposalResponse, FormValidationError } from "@/lib/proposal/types"
+import { ProposalListResponse, ProposalResponse, FormValidationError, ProposalExisting } from "@/lib/proposal/types"
 import { NextResponse } from "next/server"
 
 export function proposalResponseError({ error, message, validationErrors, type = "server", status = 500 }: { error?: any, message: string, validationErrors?: FormValidationError[], type?: string, status?: number }) {
@@ -12,7 +12,7 @@ export function proposalResponseError({ error, message, validationErrors, type =
   return response
 }
 
-export function proposalResponse(proposal: Proposal) {
+export function proposalResponse(proposal: ProposalExisting) {
   const response = NextResponse.json({ proposal } as ProposalResponse)
   response.headers.set('cache-control', 'no-store')
   if (proposal._rev) response.headers.set('etag', proposal._rev)
@@ -29,7 +29,7 @@ export function proposalListResponseError(error: any, message: string, type = "s
   return response
 }
 
-export function proposalListResponse(proposals: Proposal[]) {
+export function proposalListResponse(proposals: ProposalExisting[]) {
   const response = NextResponse.json({ proposals } as ProposalListResponse)
   response.headers.set('cache-control', 'no-store')
   return response

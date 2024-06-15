@@ -1,12 +1,11 @@
-import { Proposal, Status } from "@/lib/proposal/types";
+import { ProposalExisting, ProposalInput, Status } from "@/lib/proposal/types";
 import { clientReadUncached as clientRead, clientWrite } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 import { groq } from "next-sanity";
-import speaker from "../../../sanity/schemaTypes/speaker";
 
-export async function getProposal(id: string, speakerId: string, isOrganizer = false): Promise<{ proposal: Proposal; err: Error | null; }> {
-  let proposal: Proposal = {} as Proposal
+export async function getProposal(id: string, speakerId: string, isOrganizer = false): Promise<{ proposal: ProposalExisting; err: Error | null; }> {
   let err = null
+  let proposal: ProposalExisting = {} as ProposalExisting
 
   const speakerFilter = isOrganizer ? "" : "[ speaker._id == $speakerId ]"
 
@@ -22,12 +21,13 @@ export async function getProposal(id: string, speakerId: string, isOrganizer = f
     err = error as Error
   }
 
+  // @TODO - Check if the proposal is not found and return an error
   return { proposal, err }
 }
 
-export async function getProposals(speakerId: string, returnAll: boolean = false): Promise<{ proposals: Proposal[]; err: Error | null; }> {
-  let proposals: Proposal[] = []
+export async function getProposals(speakerId: string, returnAll: boolean = false): Promise<{ proposals: ProposalExisting[]; err: Error | null; }> {
   let err = null
+  let proposals: ProposalExisting[] = []
 
   const speakerFilter = returnAll ? `[ defined(status) && status != "${Status.draft}" ]` : "[ speaker._id == $speakerId ]"
 
@@ -45,41 +45,35 @@ export async function getProposals(speakerId: string, returnAll: boolean = false
   return { proposals, err }
 }
 
-export async function updateProposal(proposalId: string, proposal: Proposal, speakerId: string): Promise<{ proposal: Proposal; err: Error | null; }> {
+export async function updateProposal(proposalId: string, proposal: ProposalInput, speakerId: string): Promise<{ proposal: ProposalExisting; err: Error | null; }> {
   let err = null
-
-  // Delete the speaker field from the proposal object before updating since it needs to be a reference and not an object
-  delete proposal.speaker
-  delete proposal.status
+  let updatedProposal: ProposalExisting = {} as ProposalExisting
 
   try {
-    proposal = await clientWrite.patch(proposalId).set({ ...proposal, ...{ speaker: { _type: "reference", _ref: speakerId } } }).commit()
+    updatedProposal = await clientWrite.patch(proposalId).set({ ...proposal }).commit()
   } catch (error) {
     err = error as Error
   }
 
-  return { proposal, err }
+  return { proposal: updatedProposal, err }
 }
 
-export async function updateProposalStatus(proposalId: string, status: Status): Promise<{ proposal: Proposal; err: Error | null; }> {
+export async function updateProposalStatus(proposalId: string, status: Status): Promise<{ proposal: ProposalExisting; err: Error | null; }> {
   let err = null
-  let proposal: Proposal = {} as Proposal
+  let updatedProposal: ProposalExisting = {} as ProposalExisting
 
   try {
-    proposal = await clientWrite.patch(proposalId).set({ status }).commit()
+    updatedProposal = await clientWrite.patch(proposalId).set({ status }).commit()
   } catch (error) {
     err = error as Error
   }
 
-  return { proposal, err }
+  return { proposal: updatedProposal, err }
 }
 
-export async function createProposal(proposal: Proposal, speakerId: string): Promise<{ proposal: Proposal; err: Error | null; }> {
+export async function createProposal(proposal: ProposalInput, speakerId: string): Promise<{ proposal: ProposalExisting; err: Error | null; }> {
   let err = null
-
-  // Delete the speaker field from the proposal object before creating since it needs to be a reference and not an object
-  delete proposal._id
-  delete proposal.speaker
+  let createdProposal: ProposalExisting = {} as ProposalExisting
 
   const _type = 'talk'
   const _id = randomUUID().toString()
@@ -87,10 +81,10 @@ export async function createProposal(proposal: Proposal, speakerId: string): Pro
   const speaker = { _type: 'reference', _ref: speakerId }
 
   try {
-    proposal = await clientWrite.create({ _type, _id, status, speaker, ...proposal }) as Proposal
+    createdProposal = await clientWrite.create({ ...proposal, _type, _id, status, speaker }) as ProposalExisting
   } catch (error) {
     err = error as Error
   }
 
-  return { proposal, err }
+  return { proposal: createdProposal, err }
 }

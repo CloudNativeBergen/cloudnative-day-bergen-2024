@@ -3,7 +3,7 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { Proposal, ProposalActionResponse, Action } from '@/lib/proposal/types'
+import { ProposalExisting, ProposalActionResponse, Action } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
 import { listAllProposals, postProposalAction } from '@/lib/proposal/client'
 import { FormatFormat, FormatLanguage, FormatLevel, FormatStatus } from '@/lib/proposal/format'
@@ -17,12 +17,13 @@ import {
   TrashIcon,
   XMarkIcon,
 } from '@heroicons/react/20/solid'
+import { Speaker } from '@/lib/speaker/types'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-function Modal({ open, close, proposal, action, submit }: { open: boolean, close: () => void, proposal: Proposal, action: Action, submit: (proposal: Proposal, action: Action, notify: boolean, comment: string) => Promise<ProposalActionResponse> }) {
+function Modal({ open, close, proposal, action, submit }: { open: boolean, close: () => void, proposal: ProposalExisting, action: Action, submit: (proposal: ProposalExisting, action: Action, notify: boolean, comment: string) => Promise<ProposalActionResponse> }) {
   const [error, setError] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [notify, setNotify] = useState<boolean>(false)
@@ -95,7 +96,7 @@ function Modal({ open, close, proposal, action, submit }: { open: boolean, close
                         Server error: &quote;{error}&quote;
                       </p>}
                       <p className="text-sm text-gray-500">
-                        Are you sure you want to {action === Action.accept ? 'accept' : 'reject'} the proposal <span className="font-semibold">{proposal.title}</span> by <span className="font-semibold">{proposal.speaker?.name ?? 'Unknown author'}</span>?
+                        Are you sure you want to {action === Action.accept ? 'accept' : 'reject'} the proposal <span className="font-semibold">{proposal.title}</span> by <span className="font-semibold">{proposal.speaker && 'name' in proposal.speaker ? (proposal.speaker as Speaker).name : 'Unknown author'}</span>?
                       </p>
                       <div className="mt-4">
                         <label className="flex items-center">
@@ -157,7 +158,7 @@ function Modal({ open, close, proposal, action, submit }: { open: boolean, close
   )
 }
 
-function Dropdown({ proposal, acceptRejectHandler }: { proposal: Proposal, acceptRejectHandler: (proposal: Proposal, action: Action) => void }) {
+function Dropdown({ proposal, acceptRejectHandler }: { proposal: ProposalExisting, acceptRejectHandler: (proposal: ProposalExisting, action: Action) => void }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -254,7 +255,7 @@ function Dropdown({ proposal, acceptRejectHandler }: { proposal: Proposal, accep
   )
 }
 
-function ProposalTable({ proposals, acceptRejectHandler }: { proposals: Proposal[], acceptRejectHandler: (proposal: Proposal, action: Action) => void }) {
+function ProposalTable({ proposals, acceptRejectHandler }: { proposals: ProposalExisting[], acceptRejectHandler: (proposal: ProposalExisting, action: Action) => void }) {
   return (
     <div className="px-4 sm:px-6 lg:px-8 ">
       <div className="sm:flex sm:items-center">
@@ -302,7 +303,7 @@ function ProposalTable({ proposals, acceptRejectHandler }: { proposals: Proposal
                       {proposal.title}
                     </td>
                     <td className="whitespace-normal px-3 py-4 text-sm text-gray-500">
-                      {proposal.speaker?.name}
+                      {proposal.speaker && 'name' in proposal.speaker ? (proposal.speaker as Speaker).name : 'Unknown author'}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <FormatFormat format={proposal.format} />
@@ -332,15 +333,15 @@ function ProposalTable({ proposals, acceptRejectHandler }: { proposals: Proposal
 
 export default function AllProposals() {
   const [actionOpen, setActionOpen] = useState(false)
-  const [actionProposal, setActionProposal] = useState<Proposal>({} as Proposal)
+  const [actionProposal, setActionProposal] = useState<ProposalExisting>({} as ProposalExisting)
   const [actionAction, setActionAction] = useState<Action>(Action.accept)
 
-  const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [proposals, setProposals] = useState<ProposalExisting[]>([]);
   const [error, setError] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  function acceptRejectClickHandler(proposal: Proposal, action: Action) {
+  function acceptRejectClickHandler(proposal: ProposalExisting, action: Action) {
     setActionProposal(proposal)
     setActionAction(action)
     setActionOpen(true)
@@ -348,17 +349,17 @@ export default function AllProposals() {
 
   function modalCloseHandler() {
     setActionOpen(false)
-    setActionProposal({} as Proposal)
+    setActionProposal({} as ProposalExisting)
     setActionAction(Action.accept)
   }
 
-  async function modalSubmitHandler(proposal: Proposal, action: Action, notify: boolean, comment: string): Promise<ProposalActionResponse> {
+  async function modalSubmitHandler(proposal: ProposalExisting, action: Action, notify: boolean, comment: string): Promise<ProposalActionResponse> {
     const res = await postProposalAction(proposal._id!, action, notify, comment)
 
     if (res.proposalStatus) {
       const updatedProposals = proposals.map((p) => {
         if (p._id === proposal._id) {
-          return { ...p, status: res.proposalStatus }
+          return { ...p, status: res.proposalStatus! }
         }
         return p
       })

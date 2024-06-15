@@ -1,4 +1,4 @@
-import { Speaker } from "@/lib/speaker/types"
+import { Speaker, SpeakerRef } from "@/lib/speaker/types"
 
 export enum Language {
   norwegian = 'norwegian',
@@ -37,11 +37,7 @@ export enum Action {
   withdraw = 'withdraw'
 }
 
-export interface Proposal {
-  _id?: string
-  _rev?: string
-  _createdAt?: string
-  _updatedAt?: string
+interface Proposal {
   title: string
   description: string
   language: Language
@@ -50,8 +46,18 @@ export interface Proposal {
   outline: string
   tags?: string[]
   tos: boolean
-  status?: Status
-  speaker?: Speaker
+}
+
+export interface ProposalInput extends Proposal { }
+
+export interface ProposalExisting extends Proposal {
+  _id: string
+  _rev: string
+  _type: string
+  _createdAt: string
+  _updatedAt: string
+  status: Status
+  speaker?: Speaker | SpeakerRef
 }
 
 export interface ProposalBaseResponse {
@@ -75,12 +81,12 @@ export interface ProposalActionResponse extends ProposalBaseResponse {
 }
 
 export interface ProposalResponse extends ProposalBaseResponse {
-  proposal?: Proposal
+  proposal?: ProposalExisting
   error?: FormError
 }
 
 export interface ProposalListResponse extends ProposalBaseResponse {
-  proposals?: Proposal[]
+  proposals?: ProposalExisting[]
   error?: FormError
 }
 

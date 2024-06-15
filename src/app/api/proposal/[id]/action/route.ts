@@ -23,17 +23,19 @@ export const POST = auth(async (req: NextAuthRequest, { params }: { params: Reco
     return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
+  // Check if the action is valid for the current status
   const { status, isValidAction } = actionStateMachine(proposal.status, action, req.auth.speaker.is_organizer)
   if (!isValidAction) {
     console.error(`Invalid action ${action} for status ${proposal.status}`)
     return proposalResponseError({ message: "Invalid action", type: "invalid_action", status: 400 })
   }
 
-  const { err } = await updateProposalStatus(id, status)
+  // Update the proposal status in the database
+  const { proposal: updatedProposal, err } = await updateProposalStatus(id, status)
   if (err) {
     console.error(err)
     return proposalResponseError({ message: err.message, type: "update_error", status: 500 })
   }
 
-  return new NextResponse(JSON.stringify({ proposalStatus: status, status: 200 } as ProposalActionResponse), { status: 200 })
+  return new NextResponse(JSON.stringify({ proposalStatus: updatedProposal.status, status: 200 } as ProposalActionResponse), { status: 200 })
 }) as any;

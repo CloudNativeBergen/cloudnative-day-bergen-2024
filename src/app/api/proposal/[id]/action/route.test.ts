@@ -8,9 +8,10 @@ import { actionStateMachine } from '@/lib/proposal/states';
 import { clientReadUncached, clientWrite } from '@/lib/sanity/client';
 import proposals from '../../../../../../__tests__/testdata/proposals';
 import { Action, Status } from '@/lib/proposal/types';
+import { Speaker } from '@/lib/speaker/types';
 
 let proposal = proposals[0]!;
-let speaker = proposals[0].speaker!;
+let speaker = proposals[0].speaker! as Speaker;
 
 beforeAll(async () => {
   try {

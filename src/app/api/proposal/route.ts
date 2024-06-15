@@ -1,4 +1,4 @@
-import { Proposal } from "@/lib/proposal/types";
+import { ProposalInput } from "@/lib/proposal/types";
 import { convertJsonToProposal, validateProposal } from "@/lib/proposal/validation";
 import { NextAuthRequest, auth } from "@/lib/auth";
 import { proposalListResponse, proposalListResponseError, proposalResponse, proposalResponseError } from "@/lib/proposal/server";
@@ -24,7 +24,7 @@ export const POST = auth(async (req: NextAuthRequest) => {
     return proposalResponseError({ message: "Unauthorized", type: "authentication", status: 401 })
   }
 
-  const data = await req.json() as Proposal
+  const data = await req.json() as ProposalInput
   const proposal = convertJsonToProposal(data)
 
   const validationErrors = validateProposal(proposal)

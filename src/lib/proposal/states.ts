@@ -1,4 +1,4 @@
-import { Action, Status } from "./types";
+import { Action, Status } from "@/lib/proposal/types";
 
 // actionStateMachine is a finite state machine that determines the next status of a proposal based on the current status and the action to be taken.
 export function actionStateMachine(currentStatus: Status | undefined, action: Action, isOrganizer: boolean): { status: Status, isValidAction: boolean } {
