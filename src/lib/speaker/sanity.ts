@@ -1,4 +1,4 @@
-import { Speaker } from "@/lib/speaker/types";
+import { Speaker, SpeakerInput } from "@/lib/speaker/types";
 import { clientReadUncached as clientRead, clientWrite, clientReadCached } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 import { Account, User } from "next-auth";
@@ -109,16 +109,17 @@ export async function getSpeaker(speakerId: string): Promise<{ speaker: Speaker;
   return { speaker, err }
 }
 
-export async function updateSpeaker(spekaerId: string, speaker: Speaker): Promise<{ speaker: Speaker; err: Error | null; }> {
+export async function updateSpeaker(spekaerId: string, speaker: SpeakerInput): Promise<{ speaker: Speaker; err: Error | null; }> {
   let err = null
+  let updatedSpeaker: Speaker = {} as Speaker
 
   try {
-    speaker = await clientWrite.patch(spekaerId).set(speaker).commit()
+    updatedSpeaker = await clientWrite.patch(spekaerId).set(speaker).commit()
   } catch (error) {
     err = error as Error
   }
 
-  return { speaker, err }
+  return { speaker: updatedSpeaker, err }
 }
 
 export async function getOrganizers(): Promise<{ organizers: Speaker[]; err: Error | null; }> {

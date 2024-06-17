@@ -1,7 +1,7 @@
 import { FormValidationError } from "@/lib/proposal/types"
-import { Speaker } from "@/lib/speaker/types"
+import { SpeakerInput } from "@/lib/speaker/types"
 
-export function convertJsonToSpeaker(json: any): Speaker {
+export function convertJsonToSpeaker(json: any): SpeakerInput {
   return {
     name: json.name as string,
     title: json.title as string,
@@ -11,7 +11,7 @@ export function convertJsonToSpeaker(json: any): Speaker {
   }
 }
 
-export function validateSpeaker(speaker: Speaker): FormValidationError[] {
+export function validateSpeaker(speaker: SpeakerInput): FormValidationError[] {
   const validationErrors = []
 
   if (!speaker.name) {

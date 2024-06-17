@@ -54,7 +54,6 @@ function ActionButton({ action, isLoading }: { action: ButtonAction, isLoading: 
 
 function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], action: (id: string, action: Action) => void }) {
   const [loading, setLoading] = useState<{ id: string, action: string }>({ id: '', action: '' });
-  console.log(loading)
 
   return (
     <ul role="list" className="mt-6 mx-auto max-w-2xl lg:max-w-4xl grid grid-cols-1 gap-6 sm:grid-cols-2">

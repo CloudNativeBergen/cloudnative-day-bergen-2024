@@ -26,3 +26,6 @@ const speakers: Speaker[] = [
 ] as Speaker[];
 
 export default speakers;
+export const speaker1 = speakers[0];
+export const speaker2 = speakers[1];
+export const organizer = speakers[2];

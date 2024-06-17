@@ -7,12 +7,13 @@ import { clientReadUncached } from '@/lib/sanity/client';
 import proposals from '../../../../__tests__/testdata/proposals';
 import { describe } from 'node:test';
 import { testApiHandler } from 'next-test-api-route-handler';
+import { Speaker } from '@/lib/speaker/types';
 
-const speaker = proposals[0].speaker!;
+const speaker = proposals[0].speaker! as Speaker;
 
 beforeEach(() => {
   clientReadUncached.fetch = jest.fn<() => Promise<any>>().mockResolvedValue(
-    proposals.filter((p) => p.speaker?._id === speaker._id)
+    proposals.filter((p) => p.speaker && '_id' in p.speaker && p.speaker._id === speaker._id)
   );
 });
 
@@ -28,7 +29,7 @@ describe('GET /api/proposal', () => {
         expect(res.status).toBe(200);
 
         const body = await res.json();
-        expect(body.proposals).toHaveLength(3);
+        expect(body.proposals).toHaveLength(4);
         expect(body.proposals.every((p: any) => p.speaker._id === speaker._id)).toBe(true);
       }
     });

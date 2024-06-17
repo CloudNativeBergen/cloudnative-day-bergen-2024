@@ -7,7 +7,7 @@ const proposals: ProposalExisting[] = [{
   _type: 'talk',
   _createdAt: '2021-06-01T00:00:00.000Z',
   _updatedAt: '2021-06-01T00:00:00.000Z',
-  title: 'Proposal 1',
+  title: 'Draft Proposal',
   description: 'Description 1',
   language: Language.english,
   format: Format.lightning_10,
@@ -23,14 +23,15 @@ const proposals: ProposalExisting[] = [{
   _type: 'talk',
   _createdAt: '2021-06-01T00:00:00.000Z',
   _updatedAt: '2021-06-01T00:00:00.000Z',
-  title: 'Proposal 2',
+  title: 'Submitted Proposal',
   description: 'Description 2',
   language: Language.english,
   format: Format.lightning_10,
   level: Level.beginner,
+  status: Status.submitted,
   outline: '',
   tos: true,
-  speaker: speakers[1],
+  speaker: speakers[0],
 },
 {
   _id: '7915e7a0-d312-4225-af28-9a9efb00903f',
@@ -109,3 +110,5 @@ const proposals: ProposalExisting[] = [{
 }] as ProposalExisting[];
 
 export default proposals;
+export const draftProposal = proposals[0];
+export const submittedProposal = proposals[1];

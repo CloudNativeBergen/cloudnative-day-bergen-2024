@@ -3,7 +3,6 @@ import { jest } from '@jest/globals'
 import { NextAuthRequest } from "@/lib/auth";
 import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module";
 import { Account } from 'next-auth';
-import proposals from '../testdata/proposals';
 import speakers from '../testdata/speakers';
 import { Speaker } from '@/lib/speaker/types';
 

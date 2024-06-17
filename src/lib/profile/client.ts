@@ -1,5 +1,6 @@
 import {
   Speaker,
+  SpeakerInput,
   SpeakerResponse,
 } from '@/lib/speaker/types';
 import { ProfileEmailResponse, ProfileImageResponse } from './types';
@@ -34,7 +35,7 @@ export async function getProfile(): Promise<SpeakerResponse> {
   return await res.json() as SpeakerResponse
 }
 
-export async function putProfile(speaker: Speaker): Promise<SpeakerResponse> {
+export async function putProfile(speaker: SpeakerInput): Promise<SpeakerResponse> {
   let url = `${process.env.NEXT_PUBLIC_URL}/api/profile`
 
   const res = await fetch(url, {

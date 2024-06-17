@@ -10,7 +10,7 @@ import { getProposal, postProposal } from '@/lib/proposal/client'
 import { formats, languages, levels } from '@/lib/proposal/types'
 import { Input, Textarea, Dropdown, HelpText, Checkbox, LinkInput, ErrorText } from '@/components/Form'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Flags, Speaker } from '@/lib/speaker/types'
+import { Flags, Speaker, SpeakerInput } from '@/lib/speaker/types'
 import { ProfileEmail } from '@/lib/profile/types'
 import { getEmails, getProfile, putProfile, postImage, putEmail } from '@/lib/profile/client'
 import config from '@/../next.config'
@@ -26,7 +26,8 @@ export default function Submit() {
 
   let [isLoading, setIsLoading] = useState(true)
   let [proposal, setProposal] = useState<ProposalInput>({ title: '', language: Language.norwegian, description: '', format: Format.lightning_10, level: Level.beginner, outline: '', tos: false });
-  let [speaker, setSpeaker] = useState<Speaker>({ name: '', flags: [], links: [''] });
+  let [speaker, setSpeaker] = useState<SpeakerInput>({ name: '' });
+  let [email, setEmail] = useState('' as string);
   let [emails, setEmails] = useState<ProfileEmail[]>([]);
   let [loadingError, setLoadingError] = useState({} as FormError);
 
@@ -72,6 +73,7 @@ export default function Submit() {
 
     if (speaker.speaker) {
       setSpeaker(speaker.speaker);
+      setEmail(speaker.speaker.email);
       setEmails(emails.emails);
       setIsLoading(false);
     }
@@ -121,7 +123,7 @@ export default function Submit() {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
               </div>
             ) : (
-              <Form proposal={proposal} setProposal={setProposal} speaker={speaker} setSpeaker={setSpeaker} id={id} emails={emails} />
+              <Form proposal={proposal} setProposal={setProposal} speaker={speaker} setSpeaker={setSpeaker} id={id} email={email} emails={emails} />
             )}
           </div>
         </Container>
@@ -130,7 +132,7 @@ export default function Submit() {
   )
 }
 
-function Form({ proposal, setProposal, speaker, setSpeaker, id, emails }: { proposal: ProposalInput, setProposal: any, speaker: Speaker, setSpeaker: any, id?: string, emails: ProfileEmail[] }) {
+function Form({ proposal, setProposal, speaker, setSpeaker, id, email, emails }: { proposal: ProposalInput, setProposal: any, speaker: SpeakerInput, setSpeaker: any, id?: string, email: string, emails: ProfileEmail[] }) {
   const buttonPrimary = id ? 'Update' : 'Submit';
   const buttonPrimaryLoading = id ? 'Updating...' : 'Submitting...';
 
@@ -188,7 +190,7 @@ function Form({ proposal, setProposal, speaker, setSpeaker, id, emails }: { prop
           </div>
         )}
         <ProposalForm proposal={proposal} setProposal={setProposal} />
-        <SpeakerProfileForm speaker={speaker} setSpeaker={setSpeaker} emails={emails} />
+        <SpeakerProfileForm speaker={speaker} setSpeaker={setSpeaker} email={email} emails={emails} />
       </div>
 
       <div className="mt-6">
@@ -271,11 +273,11 @@ function ProposalForm({ proposal, setProposal }: { proposal: ProposalInput, setP
   )
 }
 
-function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker, setSpeaker: any, emails: ProfileEmail[] }) {
+function SpeakerProfileForm({ speaker, setSpeaker, email, emails }: { speaker: SpeakerInput, setSpeaker: any, email: string, emails: ProfileEmail[] }) {
   const [speakerName, setSpeakerName] = useState(speaker?.name ?? '')
   const [speakerTitle, setSpeakerTitle] = useState(speaker?.title ?? '')
   const [speakerBio, setSpeakerBio] = useState(speaker?.bio ?? '')
-  const [speakerEmail, setSpeakerEmail] = useState(speaker?.email ?? '')
+  const [speakerEmail, setSpeakerEmail] = useState(email)
   const [speakerImage, setSpeakerImage] = useState(speaker?.image ?? '')
   const [speakerFlags, setSpeakerFlags] = useState(speaker?.flags ?? [])
   const [speakerLinks, setSpeakerLinks] = useState(speaker?.links ?? [''])
@@ -291,7 +293,6 @@ function SpeakerProfileForm({ speaker, setSpeaker, emails }: { speaker: Speaker,
     } else {
       setSpeakerFlags(speakerFlags.filter(f => f !== flag));
     }
-    console.log(speakerFlags)
   }
 
   function updateSpeakerLink(i: number, val: string) {

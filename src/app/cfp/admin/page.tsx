@@ -26,7 +26,7 @@ function classNames(...classes: string[]) {
 function Modal({ open, close, proposal, action, submit }: { open: boolean, close: () => void, proposal: ProposalExisting, action: Action, submit: (proposal: ProposalExisting, action: Action, notify: boolean, comment: string) => Promise<ProposalActionResponse> }) {
   const [error, setError] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [notify, setNotify] = useState<boolean>(false)
+  const [notify, setNotify] = useState<boolean>(true)
   const [comment, setComment] = useState<string>('')
 
   async function submitHandler() {

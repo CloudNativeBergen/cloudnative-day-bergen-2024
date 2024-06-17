@@ -1,25 +1,31 @@
 /**
  * @jest-environment node
  */
-import { jest, it, describe, expect, beforeAll } from '@jest/globals';
+import { jest, it, describe, expect, beforeAll, afterEach } from '@jest/globals';
 import { testApiHandler } from 'next-test-api-route-handler';
 import * as appHandler from './route';
 import { actionStateMachine } from '@/lib/proposal/states';
 import { clientReadUncached, clientWrite } from '@/lib/sanity/client';
-import proposals from '../../../../../../__tests__/testdata/proposals';
+import { draftProposal, submittedProposal } from '../../../../../../__tests__/testdata/proposals';
+import { speaker1 as speaker, organizer } from '../../../../../../__tests__/testdata/speakers';
 import { Action, Status } from '@/lib/proposal/types';
-import { Speaker } from '@/lib/speaker/types';
-
-let proposal = proposals[0]!;
-let speaker = proposals[0].speaker! as Speaker;
+import sgMail from '@sendgrid/mail';
+import { ClientResponse } from '@sendgrid/mail';
 
 beforeAll(async () => {
   try {
-    ({ ...speaker, _type: 'speaker', _id: speaker._id! })
-    clientWrite.createOrReplace({ ...proposal, _type: 'talk', _id: proposal._id!, speaker: { _type: 'reference', _ref: speaker._id! } })
+    await Promise.all([
+      clientWrite.createOrReplace({ ...speaker, _type: 'speaker', _id: speaker._id! }),
+      clientWrite.createOrReplace({ ...draftProposal, _type: 'talk', _id: draftProposal._id!, speaker: { _type: 'reference', _ref: speaker._id! } }),
+      clientWrite.createOrReplace({ ...submittedProposal, _type: 'talk', _id: submittedProposal._id!, speaker: { _type: 'reference', _ref: speaker._id! } })
+    ]);
   } catch (error) {
     expect(error).toBeNull();
   }
+});
+
+afterEach(async () => {
+  jest.restoreAllMocks();
 });
 
 describe('actionStateMachine', () => {
@@ -48,7 +54,7 @@ describe('POST /api/proposal/[id]/action', () => {
   it('requires authentication', async () => {
     await testApiHandler({
       appHandler,
-      params: { id: proposal._id! },
+      params: { id: draftProposal._id! },
       async test({ fetch }) {
         const res = await fetch({ method: 'POST', body: '{"action": "foo"}' });
         expect(res.status).toBe(401);
@@ -59,12 +65,12 @@ describe('POST /api/proposal/[id]/action', () => {
   it('requires a valid action', async () => {
     // Sanity is caching stuff, so let's mock the fetch to return the proposal
     clientReadUncached.fetch = jest.fn<() => Promise<any>>().mockResolvedValue(
-      { ...proposal, _type: 'talk', _id: proposal._id!, speaker: { _type: 'reference', _ref: speaker._id! } }
+      { ...draftProposal, _type: 'talk', _id: draftProposal._id! }
     );
 
     await testApiHandler({
       appHandler,
-      params: { id: proposal._id! },
+      params: { id: draftProposal._id! },
       requestPatcher(request) {
         request.headers.set('x-test-auth-user', speaker._id!);
       },
@@ -73,9 +79,65 @@ describe('POST /api/proposal/[id]/action', () => {
         expect(res.status).toBe(200);
         expect(await res.json()).toEqual({ proposalStatus: Status.submitted, status: 200 });
 
-        const doc = await clientWrite.getDocument(proposal._id!);
+        const doc = await clientWrite.getDocument(draftProposal._id!);
         expect(doc).not.toBeNull();
         expect(doc!.status).toBe(Status.submitted);
+      }
+    });
+  });
+
+  it('sends an email notification when the action is accept', async () => {
+    const sendMock = jest.spyOn(sgMail, 'send').mockImplementation((emailMsg): any => {
+      expect(emailMsg).toBeDefined()
+      return Promise.resolve([{
+        statusCode: 202,
+        body: 'Accepted',
+        headers: {}
+      } as unknown as ClientResponse, {}]);
+    })
+
+    // Rest of your test code..
+    // Sanity is caching stuff, so let's mock the fetch to return the proposal
+    clientReadUncached.fetch = jest.fn<() => Promise<any>>().mockResolvedValue(
+      { ...submittedProposal, _type: 'talk', _id: submittedProposal._id! }
+    );
+
+    await testApiHandler({
+      appHandler,
+      params: { id: submittedProposal._id! },
+      requestPatcher(request) {
+        request.headers.set('x-test-auth-user', organizer._id!);
+      },
+      async test({ fetch }) {
+        const res = await fetch({ method: 'POST', body: `{"action": "${Action.accept}", "notify": true}` });
+        expect(res.status).toBe(200);
+        expect(await res.json()).toEqual({ proposalStatus: Status.accepted, status: 200 });
+
+        const doc = await clientWrite.getDocument(submittedProposal._id!);
+        expect(doc).not.toBeNull();
+        expect(doc!.status).toBe(Status.accepted);
+
+        expect(sendMock).toHaveBeenCalledWith(
+          {
+            to: speaker.email,
+            from: process.env.SENDGRID_FROM_EMAIL,
+            templateId: process.env.SENDGRID_TEMPALTE_ID_CFP_ACCEPT,
+            dynamicTemplateData: {
+              speaker: {
+                name: speaker.name,
+              },
+              proposal: {
+                title: submittedProposal.title,
+                confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list`,
+              },
+              event: {
+                location: 'Bergen, Norway',
+                date: '23 October 2024',
+                name: 'CloudNative Day Bergen 2024'
+              }
+            },
+          }
+        );
       }
     });
   });

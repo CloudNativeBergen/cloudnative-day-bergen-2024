@@ -37,6 +37,12 @@ export enum Action {
   withdraw = 'withdraw'
 }
 
+export interface ActionInput {
+  action: Action
+  notify?: boolean
+  comment?: string
+}
+
 interface Proposal {
   title: string
   description: string
