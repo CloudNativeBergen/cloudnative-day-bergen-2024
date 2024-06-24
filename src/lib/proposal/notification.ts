@@ -39,7 +39,7 @@ export async function sendAcceptNotification({ speaker, proposal }: { speaker: S
       },
       proposal: {
         title: proposal.title,
-        confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list`,
+        confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list?accept=${proposal._id}`,
       },
       event: {
         location: c?.event.location,

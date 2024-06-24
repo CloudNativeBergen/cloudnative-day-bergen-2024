@@ -96,7 +96,6 @@ describe('POST /api/proposal/[id]/action', () => {
       } as unknown as ClientResponse, {}]);
     })
 
-    // Rest of your test code..
     // Sanity is caching stuff, so let's mock the fetch to return the proposal
     clientReadUncached.fetch = jest.fn<() => Promise<any>>().mockResolvedValue(
       { ...submittedProposal, _type: 'talk', _id: submittedProposal._id! }
@@ -128,7 +127,7 @@ describe('POST /api/proposal/[id]/action', () => {
               },
               proposal: {
                 title: submittedProposal.title,
-                confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list`,
+                confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list?accept=${submittedProposal._id}`,
               },
               event: {
                 location: 'Bergen, Norway',

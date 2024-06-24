@@ -5,11 +5,12 @@ import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
 import { ProposalExisting, Status, Action } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
-import { listProposals, postProposalAction } from '@/lib/proposal/client'
+import { listProposals } from '@/lib/proposal/client'
 import { useSearchParams } from 'next/navigation'
 import { FormatStatus } from '@/lib/proposal/format'
 import { CheckCircleIcon, XMarkIcon, PlusCircleIcon, EnvelopeIcon, PencilIcon, UserCircleIcon } from '@heroicons/react/20/solid'
 import { SpinnerIcon } from '@/components/SocialIcons'
+import { ProposalActionModal } from '@/components/ProposalActionModal'
 
 interface ButtonAction {
   label: Action
@@ -52,9 +53,7 @@ function ActionButton({ action, isLoading }: { action: ButtonAction, isLoading: 
   )
 }
 
-function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], action: (id: string, action: Action) => void }) {
-  const [loading, setLoading] = useState<{ id: string, action: string }>({ id: '', action: '' });
-
+function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], action: (proposal: ProposalExisting, action: Action) => void }) {
   return (
     <ul role="list" className="mt-6 mx-auto max-w-2xl lg:max-w-4xl grid grid-cols-1 gap-6 sm:grid-cols-2">
       {proposals.map(proposal => {
@@ -73,8 +72,7 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
             label: Action.submit,
             icon: EnvelopeIcon,
             onClick: async () => {
-              setLoading({ id: proposal._id!, action: Action.submit })
-              action(proposal._id!, Action.submit)
+              action(proposal, Action.submit)
             }
           })
         }
@@ -84,8 +82,7 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
             label: Action.unsubmit,
             icon: XMarkIcon,
             onClick: () => {
-              setLoading({ id: proposal._id!, action: Action.unsubmit })
-              action(proposal._id!, Action.unsubmit)
+              action(proposal, Action.unsubmit)
             }
           })
         }
@@ -95,8 +92,7 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
             label: Action.withdraw,
             icon: XMarkIcon,
             onClick: () => {
-              setLoading({ id: proposal._id!, action: 'Withdraw' })
-              action(proposal._id!, Action.withdraw)
+              action(proposal, Action.withdraw)
             }
           })
         }
@@ -106,8 +102,7 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
             label: Action.confirm,
             icon: CheckCircleIcon,
             onClick: () => {
-              setLoading({ id: proposal._id!, action: 'Confirm' })
-              action(proposal._id!, Action.confirm)
+              action(proposal, Action.confirm)
             }
           })
         }
@@ -148,7 +143,7 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
                       {action.link ? (
                         <ActionLink action={action} />
                       ) : (
-                        <ActionButton action={action} isLoading={loading.id === proposal._id && loading.action === action.label} />
+                        <ActionButton action={action} isLoading={false} />
                       )}
                     </div>
                   )))}
@@ -179,7 +174,7 @@ function Success() {
               <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-green-800">ProposalExisting submitted successfully.</p>
+              <p className="text-sm font-medium text-green-800">Proposal submitted successfully.</p>
             </div>
             <div className="ml-auto pl-3">
               <div className="-mx-1.5 -my-1.5">
@@ -203,25 +198,46 @@ function Success() {
 export default function MyProposals() {
   const searchParams = useSearchParams()
   const success = searchParams.get('success') ?? undefined
+  const confirm = searchParams.get('confirm') ?? ''
+
+  const [actionOpen, setActionOpen] = useState<boolean>(false)
+  const [actionProposal, setActionProposal] = useState<ProposalExisting>({} as ProposalExisting)
+  const [actionAction, setActionAction] = useState<Action>(Action.submit)
 
   const [proposals, setProposals] = useState<ProposalExisting[]>([]);
   const [error, setError] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  async function actionHandler(id: string, action: Action) {
-    const res = await postProposalAction(id, action, false, '')
-    if (res.error) {
-      setError(res.error.message)
-    } else if (res.proposalStatus) {
-      setProposals(proposals.map(proposal => {
-        if (proposal._id === id) {
-          proposal.status = res.proposalStatus!
-        }
-        return proposal
-      }))
-    }
+  function actionCloseHandler() {
+    setActionOpen(false)
+    // Wait for the modal to close before resetting the action and proposal.
+    setTimeout(() => {
+      setActionProposal({} as ProposalExisting)
+      setActionAction(Action.submit)
+    }, 400);
   }
+
+  // actionUpdateHandler updates the status of a proposal in the list
+  // of proposals without making a request to the server.
+  function actionUpdateHandler(id: string, status: Status) {
+    setProposals(proposals.map(p => { if (p._id === id) { p.status = status } return p }))
+  }
+
+  async function actionHandler(proposal: ProposalExisting, action: Action) {
+    setActionAction(action)
+    setActionProposal(proposal)
+    setActionOpen(true)
+  }
+
+  useEffect(() => {
+    if (confirm) {
+      const proposal = proposals.find(p => p._id === confirm)
+      if (proposal && proposal.status === Status.accepted) {
+        actionHandler(proposal, Action.confirm)
+      }
+    }
+  }, [confirm, proposals])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -270,10 +286,11 @@ export default function MyProposals() {
                 <div className="flex flex-col items-center mx-auto p-6 mt-12 max-w-2xl lg:max-w-4xl lg:px-12 bg-white rounded-lg border-dashed border-2 border-blue-600">
                   <p className="text-lg font-semibold text-gray-900">You have no proposals yet.</p>
                   <p className="mt-2 text-sm text-gray-500">Submit a proposal to become a speaker.</p>
-                  <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit ProposalExisting</a>
+                  <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit Proposal</a>
                 </div>
               ) : (
                 <>
+                  <ProposalActionModal open={actionOpen} action={actionAction} close={actionCloseHandler} proposal={actionProposal} onAction={actionUpdateHandler} />
                   <ProposalCards proposals={proposals} action={actionHandler} />
                 </>
               )}
