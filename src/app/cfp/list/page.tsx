@@ -228,6 +228,7 @@ export default function MyProposals() {
   // of proposals without making a request to the server.
   function actionUpdateHandler(id: string, status: Status) {
     setProposals(proposals.map(p => { if (p._id === id) { p.status = status } return p }))
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 
   async function actionHandler(proposal: ProposalExisting, action: Action) {
