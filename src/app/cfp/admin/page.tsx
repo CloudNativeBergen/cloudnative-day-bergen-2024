@@ -3,11 +3,11 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { ProposalExisting, ProposalActionResponse, Action } from '@/lib/proposal/types'
+import { ProposalExisting, Action, Status } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
-import { listAllProposals, postProposalAction } from '@/lib/proposal/client'
+import { listAllProposals } from '@/lib/proposal/client'
 import { FormatFormat, FormatLanguage, FormatLevel, FormatStatus } from '@/lib/proposal/format'
-import { Dialog, DialogPanel, DialogTitle, Menu, MenuButton, MenuItem, MenuItems, Transition, TransitionChild } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import {
   ArchiveBoxXMarkIcon,
   ChevronDownIcon,
@@ -15,147 +15,12 @@ import {
   MagnifyingGlassIcon,
   PencilSquareIcon,
   TrashIcon,
-  XMarkIcon,
 } from '@heroicons/react/20/solid'
 import { Speaker } from '@/lib/speaker/types'
+import { ProposalActionModal } from '@/components/ProposalActionModal'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
-}
-
-function Modal({ open, close, proposal, action, submit }: { open: boolean, close: () => void, proposal: ProposalExisting, action: Action, submit: (proposal: ProposalExisting, action: Action, notify: boolean, comment: string) => Promise<ProposalActionResponse> }) {
-  const [error, setError] = useState<string>('')
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [notify, setNotify] = useState<boolean>(true)
-  const [comment, setComment] = useState<string>('')
-
-  async function submitHandler() {
-    setIsSubmitting(true)
-    const res = await submit(proposal, action, notify, comment)
-
-    if (res.error) {
-      setError(res.error.message)
-    } else {
-      close()
-    }
-
-    setIsSubmitting(false)
-  }
-
-  return (
-    <Transition show={open}>
-      <Dialog className="relative z-10" onClose={close}>
-        <TransitionChild
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </TransitionChild>
-
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <TransitionChild
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
-                  <button
-                    type="button"
-                    className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => close()}
-                  >
-                    <span className="sr-only">Close</span>
-                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </div>
-                <div className="sm:flex sm:items-start">
-                  <div className={classNames(
-                    action === Action.accept ? 'bg-green-100' : 'bg-red-100',
-                    "mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10"
-                  )}>
-                    {action === Action.accept ?
-                      <HeartIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                      : <ArchiveBoxXMarkIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
-                    }
-                  </div>
-                  <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <DialogTitle as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                      {action === Action.accept ? 'Accept proposal' : 'Reject proposal'}
-                    </DialogTitle>
-                    <div className="mt-2">
-                      {error && <p className="mb-2 text-sm text-red-500">
-                        Server error: &quote;{error}&quote;
-                      </p>}
-                      <p className="text-sm text-gray-500">
-                        Are you sure you want to {action === Action.accept ? 'accept' : 'reject'} the proposal <span className="font-semibold">{proposal.title}</span> by <span className="font-semibold">{proposal.speaker && 'name' in proposal.speaker ? (proposal.speaker as Speaker).name : 'Unknown author'}</span>?
-                      </p>
-                      <div className="mt-4">
-                        <label className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={notify}
-                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            onChange={() => setNotify(!notify)}
-                          />
-                          <span className="ml-2 text-sm text-gray-700">Notify the speaker via email</span>
-                        </label>
-                      </div>
-                      <div className="mt-4">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Comment
-                        </label>
-                        <textarea
-                          className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          rows={3}
-                          placeholder="Add a comment..."
-                          onChange={(e) => setComment(e.target.value)}
-                        ></textarea>
-                        <p className="mt-2 text-sm text-gray-500">Your comment will be included in the email to the speaker.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="button"
-                    disabled={isSubmitting}
-                    className={classNames(
-                      action === Action.accept ? 'bg-green-600 hover:bg-green-500' : 'bg-red-600 hover:bg-red-500',
-                      isSubmitting ? 'cursor-not-allowed' : 'cursor-pointer',
-                      'inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto'
-                    )}
-                    onClick={() => submitHandler()}
-                  >
-                    {action === Action.accept ?
-                      (isSubmitting ? 'Accepting...' : 'Accept')
-                      :
-                      (isSubmitting ? 'Rejecting...' : 'Reject')
-                    }
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => close()}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
-        </div>
-      </Dialog>
-    </Transition >
-  )
 }
 
 function Dropdown({ proposal, acceptRejectHandler }: { proposal: ProposalExisting, acceptRejectHandler: (proposal: ProposalExisting, action: Action) => void }) {
@@ -353,20 +218,14 @@ export default function AllProposals() {
     setActionAction(Action.accept)
   }
 
-  async function modalSubmitHandler(proposal: ProposalExisting, action: Action, notify: boolean, comment: string): Promise<ProposalActionResponse> {
-    const res = await postProposalAction(proposal._id!, action, notify, comment)
-
-    if (res.proposalStatus) {
-      const updatedProposals = proposals.map((p) => {
-        if (p._id === proposal._id) {
-          return { ...p, status: res.proposalStatus! }
-        }
-        return p
-      })
-      setProposals(updatedProposals)
-    }
-
-    return res
+  function modalActionHandler(id: string, status: Status) {
+    const updatedProposals = proposals.map((p) => {
+      if (p._id === id) {
+        return { ...p, status }
+      }
+      return p
+    })
+    setProposals(updatedProposals)
   }
 
   useEffect(() => {
@@ -387,7 +246,7 @@ export default function AllProposals() {
 
   return (
     <Layout>
-      <Modal open={actionOpen} close={modalCloseHandler} submit={modalSubmitHandler} proposal={actionProposal} action={actionAction} />
+      <ProposalActionModal open={actionOpen} close={modalCloseHandler} onAction={modalActionHandler} proposal={actionProposal} action={actionAction} adminUI={true} />
       <div className="relative py-20 sm:pb-24 sm:pt-36">
         <BackgroundImage className="-bottom-14 -top-36" />
         <Container className="relative">
