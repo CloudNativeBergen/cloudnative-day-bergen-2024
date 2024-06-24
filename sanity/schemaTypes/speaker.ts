@@ -74,32 +74,13 @@ export default defineType({
       type: 'text',
     }),
     defineField({
-      name: 'is_local',
-      title: 'Is local speaker?',
-      type: 'boolean',
-      deprecated: {
-        reason: 'Use the "Flags" field instead',
-      }
-    }),
-    defineField({
-      name: 'is_first_time',
-      title: 'Is first time speaker?',
-      type: 'boolean',
-      deprecated: {
-        reason: 'Use the "Flags" field instead',
-      }
-    }),
-    defineField({
-      name: 'is_diverse',
-      title: 'Is from an underrepresented group?',
-      type: 'boolean',
-      deprecated: {
-        reason: 'Use the "Flags" field instead',
-      }
-    }),
-    defineField({
       name: 'is_organizer',
-      title: 'Is organizer?',
+      title: 'Is this a organizer?',
+      type: 'boolean',
+    }),
+    defineField({
+      name: 'is_featured',
+      title: 'Is this as featured speaker?',
       type: 'boolean',
     }),
     defineField({

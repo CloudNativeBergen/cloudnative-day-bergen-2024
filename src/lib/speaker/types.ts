@@ -34,6 +34,7 @@ export interface Speaker extends SpeakerBase {
   providers?: string[]
   imageURL?: string
   is_organizer?: boolean
+  is_featured?: boolean
 }
 
 export interface SpeakerResponse {
