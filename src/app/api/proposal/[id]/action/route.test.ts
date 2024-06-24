@@ -131,7 +131,7 @@ describe('POST /api/proposal/[id]/action', () => {
               },
               event: {
                 location: 'Bergen, Norway',
-                date: '23 October 2024',
+                date: '30 October 2024',
                 name: 'CloudNative Day Bergen 2024'
               }
             },
