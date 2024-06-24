@@ -7,20 +7,32 @@ export enum Flags {
   requiresTravelFunding = 'requires-funding',
 }
 
-export interface Speaker {
-  _id?: string
-  _rev?: string
-  _createdAt?: string
-  _updatedAt?: string
+export interface SpeakerRef {
+  _type: string
+  _ref: string
+}
+
+interface SpeakerBase {
   name: string
   title?: string
   bio?: string
-  email?: string
   image?: string
   links?: string[]
-  imageURL?: string
-  providers?: string[]
   flags?: Flags[]
+}
+
+export interface SpeakerInput extends SpeakerBase {
+
+}
+
+export interface Speaker extends SpeakerBase {
+  _id: string
+  _rev: string
+  _createdAt: string
+  _updatedAt: string
+  email: string
+  providers?: string[]
+  imageURL?: string
   is_organizer?: boolean
 }
 

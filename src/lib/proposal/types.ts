@@ -1,4 +1,4 @@
-import { Speaker } from "@/lib/speaker/types"
+import { Speaker, SpeakerRef } from "@/lib/speaker/types"
 
 export enum Language {
   norwegian = 'norwegian',
@@ -20,16 +20,31 @@ export enum Format {
 export enum Status {
   draft = 'draft',         // draft by the speaker
   submitted = 'submitted', // submitted by the speaker
-  selected = 'selected',   // selected by the organizers
-  accepted = 'accepted',   // accepted by the speaker
+  accepted = 'accepted',   // accepted by the organizers
+  confirmed = 'confirmed', // confirmed by the speaker
   rejected = 'rejected',   // rejected by the organizers
+  withdrawn = 'withdrawn', // withdrawn by the speaker
 }
 
-export interface Proposal {
-  _id?: string
-  _rev?: string
-  _createdAt?: string
-  _updatedAt?: string
+// Action is an enum that represents the possible actions that can be taken on a proposal.
+export enum Action {
+  view = 'view',
+  edit = 'edit',
+  submit = 'submit',
+  unsubmit = 'unsubmit',
+  accept = 'accept',
+  confirm = 'confirm',
+  reject = 'reject',
+  withdraw = 'withdraw'
+}
+
+export interface ActionInput {
+  action: Action
+  notify?: boolean
+  comment?: string
+}
+
+interface Proposal {
   title: string
   description: string
   language: Language
@@ -38,8 +53,18 @@ export interface Proposal {
   outline: string
   tags?: string[]
   tos: boolean
-  status?: Status
-  speaker?: Speaker
+}
+
+export interface ProposalInput extends Proposal { }
+
+export interface ProposalExisting extends Proposal {
+  _id: string
+  _rev: string
+  _type: string
+  _createdAt: string
+  _updatedAt: string
+  status: Status
+  speaker?: Speaker | SpeakerRef
 }
 
 export interface ProposalBaseResponse {
@@ -57,22 +82,28 @@ export interface FormValidationError {
   field: string
 }
 
+export interface ProposalActionResponse extends ProposalBaseResponse {
+  proposalStatus?: Status
+  error?: FormError
+}
+
 export interface ProposalResponse extends ProposalBaseResponse {
-  proposal?: Proposal
+  proposal?: ProposalExisting
   error?: FormError
 }
 
 export interface ProposalListResponse extends ProposalBaseResponse {
-  proposals?: Proposal[]
+  proposals?: ProposalExisting[]
   error?: FormError
 }
 
 export const statuses = new Map([
   [Status.draft, 'Draft'],
   [Status.submitted, 'Submitted'],
-  [Status.selected, 'Selected'],
   [Status.accepted, 'Accepted'],
   [Status.rejected, 'Rejected'],
+  [Status.confirmed, 'Confirmed'],
+  [Status.withdrawn, 'Withdrawn'],
 ])
 
 export const languages = new Map([

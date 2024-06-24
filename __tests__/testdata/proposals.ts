@@ -1,30 +1,44 @@
-import { Format, Language, Level, Proposal } from "@/lib/proposal/types";
+import { Format, Language, Level, ProposalExisting, Status } from "@/lib/proposal/types";
 import speakers from "./speakers";
 
-const proposals: Proposal[] = [{
-  _id: '1',
-  title: 'Proposal 1',
+const proposals: ProposalExisting[] = [{
+  _id: '738f3c5c-61f2-4073-bd02-3ca0c35ed142',
+  _rev: '1',
+  _type: 'talk',
+  _createdAt: '2021-06-01T00:00:00.000Z',
+  _updatedAt: '2021-06-01T00:00:00.000Z',
+  title: 'Draft Proposal',
   description: 'Description 1',
   language: Language.english,
   format: Format.lightning_10,
   level: Level.beginner,
+  status: Status.draft,
   outline: '',
   tos: true,
   speaker: speakers[0],
 },
 {
-  _id: '2',
-  title: 'Proposal 2',
+  _id: '6e57c550-2c6f-45bc-bf9b-65e8be5f02ee',
+  _rev: '1',
+  _type: 'talk',
+  _createdAt: '2021-06-01T00:00:00.000Z',
+  _updatedAt: '2021-06-01T00:00:00.000Z',
+  title: 'Submitted Proposal',
   description: 'Description 2',
   language: Language.english,
   format: Format.lightning_10,
   level: Level.beginner,
+  status: Status.submitted,
   outline: '',
   tos: true,
-  speaker: speakers[1],
+  speaker: speakers[0],
 },
 {
-  _id: '3',
+  _id: '7915e7a0-d312-4225-af28-9a9efb00903f',
+  _rev: '1',
+  _type: 'talk',
+  _createdAt: '2021-06-01T00:00:00.000Z',
+  _updatedAt: '2021-06-01T00:00:00.000Z',
   title: 'Proposal 3',
   description: 'Description 3',
   language: Language.english,
@@ -35,7 +49,11 @@ const proposals: Proposal[] = [{
   speaker: speakers[1],
 },
 {
-  _id: '4',
+  _id: '35a99161-1754-474d-840e-3d1c4f5b6c07',
+  _rev: '1',
+  _type: 'talk',
+  _createdAt: '2021-06-01T00:00:00.000Z',
+  _updatedAt: '2021-06-01T00:00:00.000Z',
   title: 'Proposal 4',
   description: 'Description 4',
   language: Language.english,
@@ -46,7 +64,11 @@ const proposals: Proposal[] = [{
   speaker: speakers[1],
 },
 {
-  _id: '5',
+  _id: '7e5e24ab-5290-4d38-b10b-ce65482562b2',
+  _rev: '',
+  _type: '',
+  _createdAt: '',
+  _updatedAt: '',
   title: 'Proposal 5',
   description: 'Description 5',
   language: Language.english,
@@ -57,7 +79,11 @@ const proposals: Proposal[] = [{
   speaker: speakers[0],
 },
 {
-  _id: '6',
+  _id: '0a5f4493-53e3-4542-a2de-64825cb29c13',
+  _rev: '',
+  _type: '',
+  _createdAt: '',
+  _updatedAt: '',
   title: 'Proposal 6',
   description: 'Description 6',
   language: Language.english,
@@ -68,7 +94,11 @@ const proposals: Proposal[] = [{
   speaker: speakers[0],
 },
 {
-  _id: '7',
+  _id: '68da5b0c-ea76-4e3a-afa2-3407007ef022',
+  _rev: '',
+  _type: '',
+  _createdAt: '',
+  _updatedAt: '',
   title: 'Proposal 7',
   description: 'Description 7',
   language: Language.english,
@@ -77,6 +107,8 @@ const proposals: Proposal[] = [{
   outline: '',
   tos: true,
   speaker: speakers[1],
-}] as Proposal[];
+}] as ProposalExisting[];
 
 export default proposals;
+export const draftProposal = proposals[0];
+export const submittedProposal = proposals[1];

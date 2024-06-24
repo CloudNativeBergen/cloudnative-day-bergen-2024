@@ -12,12 +12,6 @@ const config: Config = {
   testMatch: ['**/__tests__/**/*.test.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
-    '@/lib/auth': '<rootDir>/__tests__/mocks/lib/auth.ts',
-    '@/lib/proposal/sanity': '<rootDir>/__tests__/mocks/lib/proposal/sanity.ts',
-    '@/lib/speaker/sanity': '<rootDir>/__tests__/mocks/lib/speaker/sanity.ts',
-    '@/lib/sanity/client': '<rootDir>/__tests__/mocks/lib/sanity/client.ts',
-    '@/lib/profile/github': '<rootDir>/__tests__/mocks/lib/profile/github.ts',
-    'next-auth/providers/credentials': '<rootDir>/__tests__/mocks/next-auth-providers-credentials.ts',
     'next-auth': '<rootDir>/__tests__/mocks/next-auth.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
   },

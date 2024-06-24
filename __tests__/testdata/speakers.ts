@@ -1,24 +1,31 @@
-import { Speaker } from "@/lib/speaker/types";
+import { Flags, Speaker } from "@/lib/speaker/types";
 
-const spekaers = [
+const speakers: Speaker[] = [
   {
-    _id: '1',
+    _id: '92a2ad7c-d831-48e2-aff1-ff81f9561388',
     name: 'John Doe',
     title: 'Acme Inc.',
     email: 'john@acme.com',
-    is_diverse: false,
-    is_first_time: true,
-    is_local: true
+    flags: [Flags.localSpeaker, Flags.firstTimeSpeaker]
   },
   {
-    _id: '2',
+    _id: 'c3a7f9e0-9e8d-4e4b-9e8f-2a4b6d8f9e8d',
+    name: 'Alice Smith',
+    title: 'XYZ Corp.',
+    email: 'alice@xyz.com',
+    flags: []
+  },
+  {
+    _id: '08913fe1-4e52-43b9-8b27-6d5febf95dbd',
     name: 'Jane Doe',
     title: 'Acme Inc.',
     email: 'jane@acme.com',
-    is_diverse: true,
-    is_first_time: false,
-    is_local: false
+    flags: [Flags.diverseSpeaker, Flags.requiresTravelFunding],
+    is_organizer: true
   }
 ] as Speaker[];
 
-export default spekaers;
+export default speakers;
+export const speaker1 = speakers[0];
+export const speaker2 = speakers[1];
+export const organizer = speakers[2];

@@ -1,9 +1,10 @@
 import {
-  Proposal,
+  Action,
+  ProposalInput,
+  ProposalActionResponse,
   ProposalListResponse,
   ProposalResponse,
 } from '@/lib/proposal/types';
-
 
 export async function listProposals(): Promise<ProposalListResponse> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal`, { cache: 'no-store', next: { revalidate: 0 } })
@@ -25,7 +26,7 @@ export async function getProposal(id?: string): Promise<ProposalResponse> {
   return await res.json() as ProposalResponse
 }
 
-export async function postProposal(proposal: Proposal, id?: string): Promise<ProposalResponse> {
+export async function postProposal(proposal: ProposalInput, id?: string): Promise<ProposalResponse> {
   if (id === 'new') id = undefined
 
   let url = `${process.env.NEXT_PUBLIC_URL}/api/proposal`
@@ -46,4 +47,18 @@ export async function postProposal(proposal: Proposal, id?: string): Promise<Pro
   });
 
   return await res.json() as ProposalResponse
+}
+
+export async function postProposalAction(id: string, action: Action, notify: boolean, comment: string): Promise<ProposalActionResponse> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal/${id}/action`, {
+    next: { revalidate: 0 },
+    cache: 'no-store',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ action, notify, comment }),
+  });
+
+  return await res.json() as ProposalActionResponse
 }

@@ -1,6 +1,5 @@
-import { Format, Language, Level, Status } from '../../src/lib/proposal/types';
+import { Status, statuses, languages, levels, formats } from '../../src/lib/proposal/types';
 import { defineField, defineType } from 'sanity'
-import { form } from 'sanity/structure';
 
 export default defineType({
   name: 'talk',
@@ -22,10 +21,7 @@ export default defineType({
       title: 'Language',
       type: 'string',
       options: {
-        list: [
-          { title: 'English', value: Language.english },
-          { title: 'Norwegian', value: Language.norwegian },
-        ],
+        list: Array.from(languages).map(([value, title]) => ({ value, title })),
       }
     }),
     defineField({
@@ -33,11 +29,7 @@ export default defineType({
       title: 'Format',
       type: 'string',
       options: {
-        list: [
-          { title: 'Lightning Talk (10 min)', value: Format.lightning_10 },
-          { title: 'Presentation (25 min)', value: Format.presentation_25 },
-          { title: 'Presentation (45 min)', value: Format.presentation_45 },
-        ],
+        list: Array.from(formats).map(([value, title]) => ({ value, title })),
       }
     }),
     defineField({
@@ -45,11 +37,7 @@ export default defineType({
       title: 'Level',
       type: 'string',
       options: {
-        list: [
-          { title: 'Beginner', value: Level.beginner },
-          { title: 'Intermediate', value: Level.intermediate },
-          { title: 'Advanced', value: Level.advanced },
-        ],
+        list: Array.from(levels).map(([value, title]) => ({ value, title })),
       }
     }),
     defineField({
@@ -72,15 +60,9 @@ export default defineType({
       name: 'status',
       title: 'Status',
       type: 'string',
-      initialValue: Status.submitted,
+      initialValue: Status.draft,
       options: {
-        list: [
-          { title: 'Draft', value: Status.draft },
-          { title: 'Submitted', value: Status.submitted },
-          { title: 'Selected', value: Status.selected },
-          { title: 'Accepted', value: Status.accepted },
-          { title: 'Rejected', value: Status.rejected },
-        ],
+        list: Array.from(statuses).map(([value, title]) => ({ value, title })),
       }
     }),
     defineField({

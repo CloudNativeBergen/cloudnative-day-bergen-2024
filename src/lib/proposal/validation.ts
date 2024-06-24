@@ -1,8 +1,8 @@
-import { Format, Language, Level, Proposal, FormValidationError } from "@/lib/proposal/types"
+import { Format, Language, Level, FormValidationError, ProposalInput } from "@/lib/proposal/types"
 
 // This function converts a JSON object to a Proposal object. This is useful when we receive a Proposal object from the API and we want to convert it to a Proposal object that we can use in our application.
 // This function omits fields that should not be set by the user, such as the ID of the Proposal and the status of the Proposal.
-export function convertJsonToProposal(json: any): Proposal {
+export function convertJsonToProposal(json: any): ProposalInput {
   return {
     title: json.title as string,
     description: json.description as string,
@@ -12,10 +12,10 @@ export function convertJsonToProposal(json: any): Proposal {
     tags: json.tags || [],
     tos: json.tos as boolean,
     outline: json.outline as string,
-  }
+  } as ProposalInput
 }
 
-export function validateProposal(proposal: Proposal): FormValidationError[] {
+export function validateProposal(proposal: ProposalInput): FormValidationError[] {
   const validationErrors = []
 
   if (!proposal.title) {

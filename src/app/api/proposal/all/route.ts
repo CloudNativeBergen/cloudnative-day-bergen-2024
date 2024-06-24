@@ -1,8 +1,6 @@
-import { Proposal } from "@/lib/proposal/types";
-import { convertJsonToProposal, validateProposal } from "@/lib/proposal/validation";
 import { NextAuthRequest, auth } from "@/lib/auth";
 import { proposalListResponse, proposalListResponseError, proposalResponse, proposalResponseError } from "@/lib/proposal/server";
-import { createProposal, getProposals } from "@/lib/proposal/sanity";
+import { getProposals } from "@/lib/proposal/sanity";
 
 export const dynamic = 'force-dynamic'
 

@@ -2,7 +2,6 @@ import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import LinkedIn from "next-auth/providers/linkedin"
 import type { NextAuthConfig, Session, User } from "next-auth"
-import type { Provider } from "next-auth/providers"
 import { NextRequest } from "next/server";
 import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module.js";
 import { getOrCreateSpeaker } from "@/lib/speaker/sanity";
