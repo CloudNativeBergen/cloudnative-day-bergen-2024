@@ -127,7 +127,7 @@ describe('POST /api/proposal/[id]/action', () => {
               },
               proposal: {
                 title: submittedProposal.title,
-                confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list?accept=${submittedProposal._id}`,
+                confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list?confirm=${submittedProposal._id}`,
               },
               event: {
                 location: 'Bergen, Norway',
