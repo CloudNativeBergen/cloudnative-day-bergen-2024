@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'
 import { listProposals } from '@/lib/proposal/client'
 import { useSearchParams } from 'next/navigation'
 import { FormatStatus } from '@/lib/proposal/format'
-import { CheckCircleIcon, XMarkIcon, PlusCircleIcon, EnvelopeIcon, PencilIcon, UserCircleIcon } from '@heroicons/react/20/solid'
+import { CheckCircleIcon, XMarkIcon, PlusCircleIcon, EnvelopeIcon, BookOpenIcon, PencilIcon, UserCircleIcon } from '@heroicons/react/20/solid'
 import { SpinnerIcon } from '@/components/SocialIcons'
 import { ProposalActionModal } from '@/components/ProposalActionModal'
 
@@ -63,6 +63,12 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
           actions.push({
             label: Action.edit,
             icon: PencilIcon,
+            link: `/cfp/submit?id=${proposal._id}`,
+          })
+        } else {
+          actions.push({
+            label: Action.view,
+            icon: BookOpenIcon,
             link: `/cfp/submit?id=${proposal._id}`,
           })
         }

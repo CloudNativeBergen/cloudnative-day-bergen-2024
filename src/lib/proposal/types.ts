@@ -28,6 +28,7 @@ export enum Status {
 
 // Action is an enum that represents the possible actions that can be taken on a proposal.
 export enum Action {
+  view = 'view',
   edit = 'edit',
   submit = 'submit',
   unsubmit = 'unsubmit',
