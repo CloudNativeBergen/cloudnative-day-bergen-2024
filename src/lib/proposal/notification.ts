@@ -15,14 +15,11 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
 
 const fromEmail = process.env.SENDGRID_FROM_EMAIL as string
 const templateAccept = process.env.SENDGRID_TEMPALTE_ID_CFP_ACCEPT as string
-const templateReject = process.env.SENDGRID_TEMPALTE_ID_CFP_REJECT as string
 
 function getTemplate(status: string) {
   switch (status) {
     case 'accepted':
       return templateAccept
-    case 'rejected':
-      return templateReject
     default:
       return ''
   }
