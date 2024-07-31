@@ -10,7 +10,7 @@ const nextConfig = {
     cocLink: 'https://github.com/cncf/foundation/blob/main/code-of-conduct.md#community-code-of-conduct',
     dates: {
       cfpStart: '2024-05-20',
-      cfpEnd: '2024-08-01',
+      cfpEnd: '2024-08-09',
       cfpNotify: '2024-08-20',
       program: '2024-09-01',
       conference: '2024-10-30',
