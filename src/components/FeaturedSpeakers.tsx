@@ -1,4 +1,4 @@
-import { getOrganizers } from "@/lib/speaker/sanity"
+import { getFeatured } from "@/lib/speaker/sanity"
 import { Container } from "@/components/Container"
 import { GitHubIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from "@/components/SocialIcons"
 import { GlobeAltIcon } from "@heroicons/react/24/solid"
@@ -49,8 +49,8 @@ function renderLink(link: string) {
   }
 }
 
-export async function Organizers() {
-  const data = await getOrganizers()
+export async function FeaturedSpeakers() {
+  const data = await getFeatured()
 
   return (
     <section
@@ -77,7 +77,7 @@ export async function Organizers() {
               role="list"
               className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 text-center"
             >
-              {data.organizers.map((person) => (
+              {data.speakers.map((person) => (
                 <li key={person.name}>
                   <img className="mx-auto h-56 w-56 rounded-full" src={person.image} alt="" />
                   <h3 className="mt-6 text-2xl font-semibold leading-7 tracking-tight text-gray-900">{person.name}</h3>

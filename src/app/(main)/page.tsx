@@ -1,6 +1,6 @@
 import { Hero } from '@/components/Hero'
 import { Newsletter } from '@/components/Newsletter'
-import { Organizers } from '@/components/Organizers'
+import { FeaturedSpeakers } from '@/components/FeaturedSpeakers'
 import { Schedule } from '@/components/Schedule'
 import { Speakers } from '@/components/Speakers'
 import { Sponsors } from '@/components/Sponsors'
@@ -20,7 +20,7 @@ export default async function Home() {
   return (
     <>
       <Hero />
-      <Organizers />
+      <FeaturedSpeakers />
       {/* <Speakers tracks={tracks} /> */}
       <Schedule tracks={tracks} />
       <Sponsors />

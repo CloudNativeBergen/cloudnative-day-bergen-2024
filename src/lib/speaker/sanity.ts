@@ -122,17 +122,17 @@ export async function updateSpeaker(spekaerId: string, speaker: SpeakerInput): P
   return { speaker: updatedSpeaker, err }
 }
 
-export async function getOrganizers(): Promise<{ organizers: Speaker[]; err: Error | null; }> {
-  let organizers: Speaker[] = []
+export async function getFeatured(): Promise<{ speakers: Speaker[]; err: Error | null; }> {
+  let speakers: Speaker[] = []
   let err = null
 
   try {
-    organizers = await clientReadCached.fetch(`*[ _type == "speaker" && is_featured == true ]{
+    speakers = await clientReadCached.fetch(`*[ _type == "speaker" && is_featured == true ]{
       name, title, links, "image": image.asset->url
     }`)
   } catch (error) {
     err = error as Error
   }
 
-  return { organizers, err }
+  return { speakers, err }
 }
