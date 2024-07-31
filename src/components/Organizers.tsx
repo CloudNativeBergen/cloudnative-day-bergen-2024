@@ -66,10 +66,10 @@ export async function Organizers() {
               id="speakers-title"
               className="font-display text-4xl font-medium tracking-tighter text-blue-600 sm:text-5xl"
             >
-              Meet the Organizers
+              Some of our speakers
             </h2>
             <p className="mt-4 font-display text-2xl tracking-tight text-blue-900">
-              Meet the amazing team of experienced organizers who are making this event possible!
+              Meet some of our amazing speakers that will be joining us at the conference and sharing their knowledge with you.
             </p>
           </div>
           <div className="mx-auto max-w-7xl px-6 lg:px-8">

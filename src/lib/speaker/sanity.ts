@@ -127,7 +127,7 @@ export async function getOrganizers(): Promise<{ organizers: Speaker[]; err: Err
   let err = null
 
   try {
-    organizers = await clientReadCached.fetch(`*[ _type == "speaker" && is_organizer == true ]{
+    organizers = await clientReadCached.fetch(`*[ _type == "speaker" && is_featured == true ]{
       name, title, links, "image": image.asset->url
     }`)
   } catch (error) {
