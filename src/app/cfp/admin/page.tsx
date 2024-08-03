@@ -121,6 +121,13 @@ function Dropdown({ proposal, acceptRejectHandler }: { proposal: ProposalExistin
 }
 
 function ProposalTable({ proposals, acceptRejectHandler }: { proposals: ProposalExisting[], acceptRejectHandler: (proposal: ProposalExisting, action: Action) => void }) {
+
+  const total = proposals.length
+  const speakers = Array.from(new Set(proposals.map((proposal) => proposal.speaker && 'name' in proposal.speaker ? (proposal.speaker as Speaker).name : 'Unknown author')));
+  const accepted = proposals.filter((p) => p.status === Status.accepted).length
+  const confirmed = proposals.filter((p) => p.status === Status.confirmed).length
+  const rejected = proposals.filter((p) => p.status === Status.rejected).length
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 ">
       <div className="sm:flex sm:items-center">
@@ -129,6 +136,28 @@ function ProposalTable({ proposals, acceptRejectHandler }: { proposals: Proposal
           <p className="mt-2 text-sm text-gray-700">
             A list of all proposals submitted by speakers (drafts are not shown)
           </p>
+        </div>
+        <div className="flex gap-4">
+          <div className="flex flex-col items-center">
+            <p className="text-3xl font-semibold text-gray-900">{total}</p>
+            <p className="text-sm text-gray-500">Total</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-3xl font-semibold text-gray-900">{speakers.length}</p>
+            <p className="text-sm text-gray-500">Speakers</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-3xl font-semibold text-green-500">{accepted}</p>
+            <p className="text-sm text-gray-500">Accepted</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-3xl font-semibold text-blue-500">{confirmed}</p>
+            <p className="text-sm text-gray-500">Confirmed</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-3xl font-semibold text-red-500">{rejected}</p>
+            <p className="text-sm text-gray-500">Rejected</p>
+          </div>
         </div>
       </div>
       <div className="mt-8 flow-root">
