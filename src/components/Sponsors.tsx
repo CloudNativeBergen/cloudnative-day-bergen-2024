@@ -11,6 +11,7 @@ import logoKnowit from '@/images/logos/knowit.svg'
 import logoSopra from '@/images/logos/sopra.svg'
 import logoEviny from '@/images/logos/eviny.svg'
 import logoTietoevry from '@/images/logos/tietoevry.svg'
+import logoStacc from '@/images/logos/stacc.svg'
 
 const sponsors = [
   { name: 'TV 2', logo: logoTv2, href: 'https://tv2.no' },
@@ -21,9 +22,9 @@ const sponsors = [
   { name: 'SopraSteria', logo: logoSopra, href: 'https://soprasteria.no' },
   { name: 'Eviny', logo: logoEviny, href: 'https://eviny.no' },
   { name: 'Tietovery', logo: logoTietoevry, href: 'https://tietoevry.com' },
+  { name: 'Stacc', logo: logoStacc, href: 'https://stacc.no' },
   { name: 'javaBin', logo: logoJavabin, href: 'https://java.no' },
   { name: 'Redpill Linpro', logo: logoRedpill, href: 'https://www.redpill-linpro.com' },
-  { name: 'TBD', logo: '' },
   { name: 'TBD', logo: '' },
 ]
 
