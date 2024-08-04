@@ -35,7 +35,7 @@ export async function getProposals(speakerId: string, returnAll: boolean = false
     proposals = await clientRead.fetch(groq`*[ _type == "talk" ]{
       ...,
       speaker-> {
-        _id, name, email, providers, "image": image.asset->url
+        _id, name, email, providers, "image": image.asset->url, flags
       }
     }${speakerFilter} | order(_createdAt desc)`, { speakerId }, { cache: "no-store" })
   } catch (error) {

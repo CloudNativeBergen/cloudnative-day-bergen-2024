@@ -15,8 +15,9 @@ import {
   MagnifyingGlassIcon,
   PencilSquareIcon,
   TrashIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/20/solid'
-import { Speaker } from '@/lib/speaker/types'
+import { Flags, Speaker } from '@/lib/speaker/types'
 import { ProposalActionModal } from '@/components/ProposalActionModal'
 
 function classNames(...classes: string[]) {
@@ -198,6 +199,13 @@ function ProposalTable({ proposals, acceptRejectHandler }: { proposals: Proposal
                     </td>
                     <td className="whitespace-normal px-3 py-4 text-sm text-gray-500">
                       {proposal.speaker && 'name' in proposal.speaker ? (proposal.speaker as Speaker).name : 'Unknown author'}
+                      {proposal.speaker && 'flags' in proposal.speaker && proposal.speaker.flags && proposal.speaker.flags.includes(Flags.requiresTravelFunding) && (
+                        <span className='has-tooltip'>
+                          <span className='tooltip rounded shadow-lg p-1 bg-red-600 text-white text-xs'>Requires travel funding</span>
+
+                          <ExclamationTriangleIcon className="h-4 w-4 text-red-500 inline-block align-middle" />
+                        </span>
+                      )}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <FormatFormat format={proposal.format} />
