@@ -40,7 +40,7 @@ export const POST = auth(async (req: NextAuthRequest, { params }: { params: Reco
   }
 
   if (notify && action === Action.accept) {
-    const [res, _] = await sendAcceptNotification({ speaker: proposal.speaker as Speaker, proposal: proposal })
+    const [res, _] = await sendAcceptNotification({ speaker: proposal.speaker as Speaker, proposal: proposal, comment: comment || '' })
     console.log(res.statusCode, res.body)
   }
 

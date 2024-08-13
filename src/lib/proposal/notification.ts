@@ -25,7 +25,7 @@ function getTemplate(status: string) {
   }
 }
 
-export async function sendAcceptNotification({ speaker, proposal }: { speaker: Speaker, proposal: ProposalExisting }): Promise<[sgMail.ClientResponse, {}]> {
+export async function sendAcceptNotification({ speaker, proposal, comment = '' }: { speaker: Speaker, proposal: ProposalExisting, comment: string }): Promise<[sgMail.ClientResponse, {}]> {
   const msg = {
     to: speaker.email,
     from: fromEmail,
@@ -37,6 +37,7 @@ export async function sendAcceptNotification({ speaker, proposal }: { speaker: S
       proposal: {
         title: proposal.title,
         confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list?confirm=${proposal._id}`,
+        comment,
       },
       event: {
         location: c?.event.location,

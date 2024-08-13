@@ -108,7 +108,7 @@ describe('POST /api/proposal/[id]/action', () => {
         request.headers.set('x-test-auth-user', organizer._id!);
       },
       async test({ fetch }) {
-        const res = await fetch({ method: 'POST', body: `{"action": "${Action.accept}", "notify": true}` });
+        const res = await fetch({ method: 'POST', body: `{"action": "${Action.accept}", "notify": true, "comment": "this is the comment"}` });
         expect(res.status).toBe(200);
         expect(await res.json()).toEqual({ proposalStatus: Status.accepted, status: 200 });
 
@@ -128,6 +128,7 @@ describe('POST /api/proposal/[id]/action', () => {
               proposal: {
                 title: submittedProposal.title,
                 confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list?confirm=${submittedProposal._id}`,
+                comment: 'this is the comment',
               },
               event: {
                 location: 'Bergen, Norway',
