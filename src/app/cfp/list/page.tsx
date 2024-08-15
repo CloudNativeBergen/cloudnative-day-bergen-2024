@@ -11,6 +11,9 @@ import { FormatStatus } from '@/lib/proposal/format'
 import { CheckCircleIcon, XMarkIcon, PlusCircleIcon, EnvelopeIcon, BookOpenIcon, PencilIcon, UserCircleIcon } from '@heroicons/react/20/solid'
 import { SpinnerIcon } from '@/components/SocialIcons'
 import { ProposalActionModal } from '@/components/ProposalActionModal'
+import config from '@/../next.config'
+
+const { publicRuntimeConfig: c } = config;
 
 interface ButtonAction {
   label: Action
@@ -270,9 +273,11 @@ export default function MyProposals() {
           <div className="mx-auto max-w-2xl lg:max-w-4xl lg:px-12">
             <h1 className="font-display text-5xl font-bold tracking-tighter text-blue-600 sm:text-7xl">
               Speaker Dashboard
-              <a href='/cfp/submit'>
-                <PlusCircleIcon className="h-14 w-14 inline-block ml-8 text-blue-600 hover:text-blue-500" />
-              </a>
+              {c?.cfpOpen && (
+                <a href='/cfp/submit'>
+                  <PlusCircleIcon className="h-14 w-14 inline-block ml-8 text-blue-600 hover:text-blue-500" />
+                </a>
+              )}
             </h1>
             <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
               <p>
@@ -292,8 +297,12 @@ export default function MyProposals() {
               {proposals.length === 0 ? (
                 <div className="flex flex-col items-center mx-auto p-6 mt-12 max-w-2xl lg:max-w-4xl lg:px-12 bg-white rounded-lg border-dashed border-2 border-blue-600">
                   <p className="text-lg font-semibold text-gray-900">You have no proposals yet.</p>
-                  <p className="mt-2 text-sm text-gray-500">Submit a proposal to become a speaker.</p>
-                  <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit Proposal</a>
+                  {c?.cfpOpen && (
+                    <>
+                      <p className="mt-2 text-sm text-gray-500">Submit a proposal to become a speaker.</p>
+                      <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit Proposal</a>
+                    </>
+                  )}
                 </div>
               ) : (
                 <>

@@ -8,6 +8,7 @@ const nextConfig = {
     },
     registrationLink: 'https://app.checkin.no/event/73442/cloudnative-day-bergen-2024',
     cocLink: 'https://github.com/cncf/foundation/blob/main/code-of-conduct.md#community-code-of-conduct',
+    cfpOpen: false,
     dates: {
       cfpStart: '2024-05-20',
       cfpEnd: '2024-08-09',

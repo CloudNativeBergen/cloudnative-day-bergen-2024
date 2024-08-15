@@ -6,6 +6,10 @@ import config from '@/../next.config'
 
 const { publicRuntimeConfig: c } = config;
 
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
+
 export function Hero() {
   return (
     <div className="relative py-20 sm:pb-24 sm:pt-36">
@@ -24,17 +28,33 @@ export function Hero() {
             </p>
           </div>
           <div className="flex flex-col md:flex-row justify-between">
-            <Button href={c?.registrationLink ?? '#'} className="mt-10 w-full md:w-1/2 md:mr-2">
-              Get your ticket
-            </Button>
-            <Button href="/cfp" className="mt-10 w-full md:w-1/2 md:ml-2 bg-teal-600 hover:bg-teal-500">
-              Submit to Speak
-            </Button>
+            {c?.registrationLink && (
+              <Button
+                href={c.registrationLink}
+                className={classNames(
+                  "mt-10 w-full",
+                  c?.cfpOpen ? 'md:w-1/2 md:mr-2' : ''
+                )}
+              >
+                Get your ticket
+              </Button>
+            )}
+            {c?.cfpOpen && (
+              <Button
+                href="/cfp"
+                className={classNames(
+                  "mt-10 w-full bg-teal-600 hover:bg-teal-500",
+                  c?.registrationLink ? 'md:w-1/2 md:ml-2' : ''
+                )}
+              >
+                Submit to Speak
+              </Button>
+            )}
           </div>
           <dl className="mt-10 grid grid-cols-2 gap-x-10 gap-y-6 sm:mt-16 sm:gap-x-16 sm:gap-y-10 sm:text-center lg:auto-cols-auto lg:grid-flow-col lg:grid-cols-none lg:justify-start lg:text-left">
             {[
               ['Tracks', '3'],
-              ['Speakers', '~20'],
+              ['Speakers', '~30'],
               ['Attendees', '150+'],
               ['Location', 'Bergen, Norway'],
             ].map(([name, value]) => (
@@ -61,7 +81,7 @@ export function Hero() {
             </a>
           </div>
         </div>
-      </Container>
-    </div>
+      </Container >
+    </div >
   )
 }
