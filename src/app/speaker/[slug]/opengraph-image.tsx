@@ -1,12 +1,8 @@
 import React from 'react';
 import { ImageResponse } from '@vercel/og';
 import { getPublicSpeaker } from '@/lib/speaker/sanity';
-import path from 'path';
-import fs from 'fs';
 
-export const config = {
-  runtime: 'edge',
-};
+export const runtime = "edge"
 
 export const alt = 'Cloud Native Day Bergen 2024';
 export const size = {
