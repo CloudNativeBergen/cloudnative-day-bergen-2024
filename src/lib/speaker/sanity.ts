@@ -1,6 +1,6 @@
 import { Speaker, SpeakerInput } from "@/lib/speaker/types";
 import { clientReadUncached as clientRead, clientWrite, clientReadCached } from "@/lib/sanity/client";
-import { randomUUID } from "crypto";
+import { v4 as randomUUID } from 'uuid';
 import { Account, User } from "next-auth";
 import { ProposalExisting } from "../proposal/types";
 

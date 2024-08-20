@@ -1,6 +1,6 @@
 import { ProposalExisting, ProposalInput, Status } from "@/lib/proposal/types";
 import { clientReadUncached as clientRead, clientWrite } from "@/lib/sanity/client";
-import { randomUUID } from "crypto";
+import { v4 as randomUUID } from 'uuid';
 import { groq } from "next-sanity";
 
 export async function getProposal(id: string, speakerId: string, isOrganizer = false): Promise<{ proposal: ProposalExisting; err: Error | null; }> {
