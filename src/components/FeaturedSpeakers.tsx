@@ -1,53 +1,6 @@
 import { getFeatured } from "@/lib/speaker/sanity"
 import { Container } from "@/components/Container"
-import { GitHubIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from "@/components/SocialIcons"
-import { GlobeAltIcon } from "@heroicons/react/24/solid"
-
-function renderLink(link: string) {
-  const hostname = new URL(link).hostname
-
-  switch (hostname) {
-    case 'twitter.com':
-    case 'www.twitter.com':
-      return (
-        <>
-          <span className="sr-only">Twitter</span>
-          <TwitterIcon className="h-10 w-10" fill="currentColor" />
-        </>
-      )
-    case 'linkedin.com':
-    case 'www.linkedin.com':
-      return (
-        <>
-          <span className="sr-only">LinkedIn</span>
-          <LinkedInIcon className="h-10 w-10" fill="currentColor" />
-        </>
-      )
-    case 'github.com':
-    case 'www.github.com':
-      return (
-        <>
-          <span className="sr-only">GitHub</span>
-          <GitHubIcon className="h-10 w-10" fill="currentColor" />
-        </>
-      )
-    case 'instagram.com':
-    case 'www.instagram.com':
-      return (
-        <>
-          <span className="sr-only">Instagram</span>
-          <InstagramIcon className="h-10 w-10" fill="currentColor" />
-        </>
-      )
-    default:
-      return (
-        <>
-          <span className="sr-only">Link</span>
-          <GlobeAltIcon className="h-10 w-10" fill="currentColor" />
-        </>
-      )
-  }
-}
+import { iconForLink } from "@/components/SocialIcons"
 
 export async function FeaturedSpeakers() {
   const data = await getFeatured()
@@ -79,14 +32,16 @@ export async function FeaturedSpeakers() {
             >
               {data.speakers.map((person) => (
                 <li key={person.name}>
-                  <img className="mx-auto h-56 w-56 rounded-full" src={person.image} alt="" />
-                  <h3 className="mt-6 text-2xl font-semibold leading-7 tracking-tight text-gray-900">{person.name}</h3>
+                  <a href={`/speaker/${person.slug}`}>
+                    <img className="mx-auto h-56 w-56 rounded-full" src={person.image} alt="" />
+                    <h3 className="mt-6 text-2xl font-semibold leading-7 tracking-tight text-gray-900">{person.name}</h3>
+                  </a>
                   <p className="text-l leading-6 text-gray-600">{person.title}</p>
                   <ul role="list" className="mt-6 flex justify-center gap-x-6">
                     {person.links?.map((link) => (
                       <li key={person.name}>
                         <a href={link} className="text-gray-400 hover:text-gray-500">
-                          {renderLink(link)}
+                          {iconForLink(link)}
                         </a>
                       </li>
                     ))}

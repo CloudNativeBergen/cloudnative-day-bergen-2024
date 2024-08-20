@@ -2,6 +2,7 @@ import { Speaker, SpeakerInput } from "@/lib/speaker/types";
 import { clientReadUncached as clientRead, clientWrite, clientReadCached } from "@/lib/sanity/client";
 import { randomUUID } from "crypto";
 import { Account, User } from "next-auth";
+import { ProposalExisting } from "../proposal/types";
 
 export function providerAccount(provider: string, providerAccountId: string): string {
   return `${provider}:${providerAccountId}`
@@ -109,6 +110,27 @@ export async function getSpeaker(speakerId: string): Promise<{ speaker: Speaker;
   return { speaker, err }
 }
 
+export async function getPublicSpeaker(speakerSlug: string) {
+  let data = {}
+  let err = null
+
+  try {
+    data = await clientReadCached.fetch(`*[ _type == "speaker" && slug.current == $speakerSlug][0]{
+      name, title, bio, links, flags, "image": image.asset->url,
+      "talks": *[_type == "talk" && references(^._id) && status == "confirmed"]{
+        _id, title, description, tags, language, level, format
+      }
+    }`, { speakerSlug })
+  } catch (error) {
+    err = error as Error
+  }
+
+  const talks = 'talks' in data ? data.talks as ProposalExisting[] : []
+  const speaker = data as Speaker
+
+  return { speaker, talks, err }
+}
+
 export async function updateSpeaker(spekaerId: string, speaker: SpeakerInput): Promise<{ speaker: Speaker; err: Error | null; }> {
   let err = null
   let updatedSpeaker: Speaker = {} as Speaker
@@ -128,7 +150,7 @@ export async function getFeatured(): Promise<{ speakers: Speaker[]; err: Error |
 
   try {
     speakers = await clientReadCached.fetch(`*[ _type == "speaker" && is_featured == true ]{
-      name, title, links, "image": image.asset->url
+      name, "slug": slug.current, title, links, "image": image.asset->url
     }`)
   } catch (error) {
     err = error as Error

@@ -1,3 +1,54 @@
+import { GlobeAltIcon } from "@heroicons/react/24/solid"
+
+export function iconForLink(link: string, className = "h-10 w-10") {
+  let hostname = '';
+
+  try {
+    hostname = new URL(link).hostname;
+  } catch (error) { }
+
+  switch (hostname) {
+    case 'twitter.com':
+    case 'www.twitter.com':
+      return (
+        <>
+          <span className="sr-only">Twitter</span>
+          <TwitterIcon className={className} fill="currentColor" />
+        </>
+      )
+    case 'linkedin.com':
+    case 'www.linkedin.com':
+      return (
+        <>
+          <span className="sr-only">LinkedIn</span>
+          <LinkedInIcon className={className} fill="currentColor" />
+        </>
+      )
+    case 'github.com':
+    case 'www.github.com':
+      return (
+        <>
+          <span className="sr-only">GitHub</span>
+          <GitHubIcon className={className} fill="currentColor" />
+        </>
+      )
+    case 'instagram.com':
+    case 'www.instagram.com':
+      return (
+        <>
+          <span className="sr-only">Instagram</span>
+          <InstagramIcon className={className} fill="currentColor" />
+        </>
+      )
+    default:
+      return (
+        <>
+          <span className="sr-only">Link</span>
+          <GlobeAltIcon className={className} fill="currentColor" />
+        </>
+      )
+  }
+}
 export function TwitterIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>

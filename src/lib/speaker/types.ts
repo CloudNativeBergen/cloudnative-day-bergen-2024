@@ -7,6 +7,13 @@ export enum Flags {
   requiresTravelFunding = 'requires-funding',
 }
 
+export const flags = new Map([
+  [Flags.localSpeaker, 'Local Speaker'],
+  [Flags.firstTimeSpeaker, 'First Time Speaker'],
+  [Flags.diverseSpeaker, 'Diverse Speaker'],
+  [Flags.requiresTravelFunding, 'Requires Travel Funding'],
+])
+
 export interface SpeakerRef {
   _type: string
   _ref: string
@@ -14,6 +21,7 @@ export interface SpeakerRef {
 
 interface SpeakerBase {
   name: string
+  slug?: string
   title?: string
   bio?: string
   image?: string
