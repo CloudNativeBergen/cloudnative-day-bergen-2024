@@ -18,7 +18,31 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default async function Profile({ params }: { params: { slug: string } }) {
+type Props = {
+  params: {
+    slug: string
+  }
+}
+
+export async function generateMetadata({ params }: Props) {
+  const { speaker, talks, err } = await getPublicSpeaker(params.slug);
+
+  if (err || !speaker || !talks || talks.length === 0) {
+    return {
+      title: 'Speaker not found',
+      description: 'Sorry, we couldn’t find the speaker you’re looking for.',
+      image: 'https://via.placeholder.com/1200',
+    }
+  }
+
+  return {
+    title: `${speaker.name} - ${talks[0].title}`,
+    description: talks[0].description,
+    image: speaker.image || 'https://via.placeholder.com/1200',
+  }
+}
+
+export default async function Profile({ params }: Props) {
   const { speaker, talks, err } = await getPublicSpeaker(params.slug);
 
   if (err || !speaker || !talks || talks.length === 0) {
