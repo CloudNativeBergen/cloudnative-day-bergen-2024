@@ -38,9 +38,9 @@ export default async function Image({ params }: { params: { slug: string } }) {
         overflowWrap: 'break-word',
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', marginRight: 40, alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', marginRight: 0, alignItems: 'center' }}>
         <div>{speaker.name}</div>
-        <div style={{ fontSize: 35 }}>{speaker.title}</div>
+        <div style={{ fontSize: 35, maxWidth: '70%' }}>{speaker.title}</div>
       </div>
       <div style={{ display: 'flex' }}>
         <img
