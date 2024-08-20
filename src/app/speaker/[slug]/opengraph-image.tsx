@@ -4,7 +4,7 @@ import { getPublicSpeaker } from '@/lib/speaker/sanity';
 
 export const runtime = "edge"
 
-export const alt = 'Cloud Native Day Bergen 2024';
+export const alt = 'Cloud Native Day Bergen 2024 Speaker Profile'
 export const size = {
   width: 1290,
   height: 676,

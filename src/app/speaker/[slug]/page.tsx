@@ -4,19 +4,10 @@ import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
 import { formats, languages, levels } from '@/lib/proposal/types';
 import { flags, Flags } from '@/lib/speaker/types';
-import getConfig from 'next/config';
 import Image from 'next/image'
 import * as social from '@/components/SocialIcons';
-import { GlobeAltIcon } from '@heroicons/react/24/solid';
 import { getPublicSpeaker } from '@/lib/speaker/sanity';
 import { Button } from '@/components/Button';
-
-const { publicRuntimeConfig } = getConfig();
-const { cocLink, dates } = publicRuntimeConfig;
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
 
 type Props = {
   params: {
@@ -37,7 +28,7 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: `${speaker.name} - ${talks[0].title}`,
-    description: talks[0].description,
+    description: talks[0].description.slice(0, 200),
     image: speaker.image || 'https://via.placeholder.com/1200',
   }
 }
