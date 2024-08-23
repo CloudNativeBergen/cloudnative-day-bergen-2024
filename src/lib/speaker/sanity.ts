@@ -136,6 +136,21 @@ export async function getPublicSpeaker(speakerSlug: string) {
   return { speaker, talks, err }
 }
 
+export async function getPublicSpeakers() {
+  let speakers: Speaker[] = []
+  let err = null
+
+  try {
+    speakers = await clientReadCached.fetch(`*[ _type == "speaker" && count(*[_type == "talk" && references(^._id) && status == "confirmed"]) > 0]{
+      _id, name, slug, title, bio, links, flags, "image": image.asset->url
+    }`)
+  } catch (error) {
+    err = error as Error
+  }
+
+  return { speakers, err }
+}
+
 export async function updateSpeaker(spekaerId: string, speaker: SpeakerInput): Promise<{ speaker: Speaker; err: Error | null; }> {
   let err = null
   let updatedSpeaker: Speaker = {} as Speaker

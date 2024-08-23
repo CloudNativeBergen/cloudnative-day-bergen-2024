@@ -41,7 +41,6 @@ export const POST = auth(async (req: NextAuthRequest, { params }: { params: Reco
 
   if (notify && action === Action.accept) {
     const [res, _] = await sendAcceptNotification({ speaker: proposal.speaker as Speaker, proposal: proposal, comment: comment || '' })
-    console.log(res.statusCode, res.body)
   }
 
   return new NextResponse(JSON.stringify({ proposalStatus: updatedProposal.status, status: 200 } as ProposalActionResponse), { status: 200 })
