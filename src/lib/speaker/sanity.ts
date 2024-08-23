@@ -142,7 +142,7 @@ export async function getPublicSpeakers() {
 
   try {
     speakers = await clientReadCached.fetch(`*[ _type == "speaker" && count(*[_type == "talk" && references(^._id) && status == "confirmed"]) > 0]{
-      _id, name, slug, title, bio, links, flags, "image": image.asset->url
+      _id, name, "slug": slug.current, title, bio, links, flags, "image": image.asset->url
     }`)
   } catch (error) {
     err = error as Error

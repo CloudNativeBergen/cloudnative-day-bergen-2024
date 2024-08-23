@@ -26,7 +26,7 @@ export default async function Speakers() {
             >
               {speakers.map((speaker) => (
                 <li key={speaker._id}>
-                  <a href={`/speaker/${speaker.slug.current}`} className="block">
+                  <a href={`/speaker/${speaker.slug}`} className="block">
                     <Image alt="" src={`${speaker.image || 'https://via.placeholder.com/300'}?h=300&w=300&auto=format&fit=crop`} width={300} height={300} className="mx-auto h-30 w-30 rounded-full" />
                     <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900">{speaker.name}</h3>
                     <p className="text-sm leading-6 text-gray-600">{speaker.title}</p>
