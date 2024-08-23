@@ -1,4 +1,5 @@
 import { Speaker, SpeakerRef } from "@/lib/speaker/types"
+import { Schedule } from "@/lib/schedule"
 
 export enum Language {
   norwegian = 'norwegian',
@@ -53,6 +54,7 @@ interface Proposal {
   outline: string
   tags?: string[]
   tos: boolean
+  schedule?: Schedule
 }
 
 export interface ProposalInput extends Proposal { }

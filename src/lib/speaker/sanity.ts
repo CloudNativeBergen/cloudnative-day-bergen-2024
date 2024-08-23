@@ -118,7 +118,12 @@ export async function getPublicSpeaker(speakerSlug: string) {
     data = await clientReadCached.fetch(`*[ _type == "speaker" && slug.current == $speakerSlug][0]{
       name, title, bio, links, flags, "image": image.asset->url,
       "talks": *[_type == "talk" && references(^._id) && status == "confirmed"]{
-        _id, title, description, tags, language, level, format
+        _id, title, description, tags, language, level, format,
+        "schedule": *[_type == "schedule" && references(^._id)]{
+          date, time_start, time_end, track->{
+            number, title
+          }
+        }[0]
       }
     }`, { speakerSlug })
   } catch (error) {

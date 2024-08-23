@@ -169,15 +169,17 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
                           className="absolute inset-0 bg-indigo-50"
                           style={{ clipPath: `url(#${id}-${speakerIndex % 3})` }}
                         >
-                          <Image
-                            className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-110"
-                            src={speaker.image ? `${speaker.image}?h=300` : "https://via.placeholder.com/300"}
-                            width={300}
-                            height={300}
-                            alt=""
-                            priority
-                            sizes="(min-width: 1280px) 17.5rem, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
-                          />
+                          <a href={`/speaker/${speaker.slug}`} className="absolute inset-0" >
+                            <Image
+                              className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-110"
+                              src={speaker.image ? `${speaker.image}?h=300` : "https://via.placeholder.com/300"}
+                              width={300}
+                              height={300}
+                              alt=""
+                              priority
+                              sizes="(min-width: 1280px) 17.5rem, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+                            />
+                          </a>
                         </div>
                       </div>
                       <h3 className="mt-8 font-display text-xl font-bold tracking-tight text-slate-900">
@@ -194,6 +196,6 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
           </Tab.Group>
         )}
       </Container>
-    </section>
+    </section >
   )
 }

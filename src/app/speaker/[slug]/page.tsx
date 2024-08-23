@@ -8,6 +8,7 @@ import Image from 'next/image'
 import * as social from '@/components/SocialIcons';
 import { getPublicSpeaker } from '@/lib/speaker/sanity';
 import { Button } from '@/components/Button';
+import { CalendarIcon } from '@heroicons/react/24/solid';
 
 type Props = {
   params: {
@@ -76,6 +77,14 @@ export default async function Profile({ params }: Props) {
                   {talk.tags && talk.tags.map((tag) => (
                     <span key={tag} className="inline-block mt-2 mr-2 px-3 py-1 text-sm font-semibold text-blue-100 bg-blue-900 rounded-full">{tag}</span>
                   ))}
+                  {talk.schedule && (
+                    <div className="mt-2 py-1">
+                      <p className="text-lg">
+                        <CalendarIcon className="inline-block w-6 h-6 mr-2" />
+                        Scheduled: {talk.schedule.time_start} - {talk.schedule.time_end}, Track {talk.schedule.track.number}
+                      </p>
+                    </div>
+                  )}
                   {talk.description.split('\n\n').map((paragraph, index) => (
                     <p key={`desc-${index}`} className="mt-4 text-xl text-blue-900">{paragraph}</p>
                   ))}

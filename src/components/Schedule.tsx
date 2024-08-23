@@ -104,16 +104,20 @@ function PlaceholderTimeSlot({ track, talk }: { track: ScheduleTrack, talk: Sche
 function TalkTimeSlot({ track, talk }: { track: ScheduleTrack, talk: ScheduleTalk }) {
   return (
     <div className="relative block">
-      <h4 className="text-lg font-semibold tracking-tight text-blue-900">
-        {talk.speaker?.name || talk.title}
-      </h4>
-      {
-        talk.title && talk.speaker && (
+      {!talk.speaker ? (
+        <h4 className="text-lg font-semibold tracking-tight text-blue-900">
+          {talk.title}
+        </h4>
+      ) : (
+        <a href={`/speaker/${talk.speaker.slug}`} className="block">
+          <h4 className="text-lg font-semibold tracking-tight text-blue-900">
+            {talk.speaker.name}
+          </h4>
           <p className="mt-1 tracking-tight text-blue-900">
             {talk.title}
           </p>
-        )
-      }
+        </a>
+      )}
       <TimeSlotTime date={track.date} start={talk.start} end={talk.end} />
     </div>
   )

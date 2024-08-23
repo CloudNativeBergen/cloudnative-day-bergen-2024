@@ -13,6 +13,7 @@ export type Schedule = {
     description?: string
     speaker?: {
       name: string
+      slug: string
       title: string
       image?: string
     }
@@ -39,6 +40,7 @@ export type ScheduleTalk = {
 
 export type ScheduleSpeaker = {
   name: string
+  slug: string
   title: string
   image?: string
 }
@@ -55,7 +57,7 @@ export function scheduleToTracks(schedule: Schedule[]): ScheduleTrack[] {
       tracks.push({
         date: scheduleItem.date,
         number: scheduleItem.track.number,
-        name: `ScheduleTrack ${scheduleItem.track.number}`,
+        name: `Track ${scheduleItem.track.number}`,
         title: scheduleItem.track.title,
         description: scheduleItem.track.description,
         speakers: [],
