@@ -142,13 +142,11 @@ describe('POST /api/proposal/[id]/action', () => {
 
   it('requires a valid action', async () => {
     // Sanity is caching stuff, so let's mock the fetch to return the proposal
-    clientReadUncached.fetch = jest
-      .fn<() => Promise<any>>()
-      .mockResolvedValue({
-        ...draftProposal,
-        _type: 'talk',
-        _id: draftProposal._id!,
-      })
+    clientReadUncached.fetch = jest.fn<() => Promise<any>>().mockResolvedValue({
+      ...draftProposal,
+      _type: 'talk',
+      _id: draftProposal._id!,
+    })
 
     await testApiHandler({
       appHandler,
@@ -190,13 +188,11 @@ describe('POST /api/proposal/[id]/action', () => {
       })
 
     // Sanity is caching stuff, so let's mock the fetch to return the proposal
-    clientReadUncached.fetch = jest
-      .fn<() => Promise<any>>()
-      .mockResolvedValue({
-        ...submittedProposal,
-        _type: 'talk',
-        _id: submittedProposal._id!,
-      })
+    clientReadUncached.fetch = jest.fn<() => Promise<any>>().mockResolvedValue({
+      ...submittedProposal,
+      _type: 'talk',
+      _id: submittedProposal._id!,
+    })
 
     await testApiHandler({
       appHandler,

@@ -52,7 +52,7 @@ export function Newsletter() {
                   required
                   placeholder="Email address"
                   aria-label="Email address"
-                  className="-my-2.5 flex-auto bg-transparent pl-6 pr-2.5 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none border-none focus:ring-0"
+                  className="-my-2.5 flex-auto border-none bg-transparent pl-6 pr-2.5 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-0"
                 />
                 <Button type="submit">
                   <span className="sr-only sm:not-sr-only">Sign up today</span>
