@@ -122,7 +122,7 @@ export default async function CFP() {
                 CloudNative Day Bergen is committed to creating a diverse and inclusive event that welcomes speakers and attendees of all backgrounds and identities. We believe that diversity is a strength and that everyone has something valuable to contribute.
               </p>
               <p>
-                We are enforcing a strict code of conduct to ensure that CloudNative Day Bergen is a safe and welcoming environment for everyone. We do not tolerate harassment or discrimination of any kind, and we will take appropriate action against anyone who violates our <a href={cocLink} className='text-indigo-500 hover:text-indigo-700 underline'>
+                We are enforcing a strict code of conduct to ensure that CloudNative Day Bergen is a safe and welcoming environment for everyone. We do not tolerate harassment or discrimination of any kind, and we will take appropriate action against anyone who violates our <a href={cocLink} className='text-indigo-500 hover:text-indigo-700 underline' target="_blank">
                   code of conduct
                 </a>.
               </p>
