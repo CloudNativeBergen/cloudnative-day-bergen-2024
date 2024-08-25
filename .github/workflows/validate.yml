@@ -1,0 +1,35 @@
+name: Validate PRs
+
+# Run on `pull_request_target` to gain access to repository secrets needed for tests
+on: pull_request_target
+
+jobs:
+  tests:
+    name: Run tests
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Run unit tests
+        run: npm test
+
+  check-format:
+    name: Check code formatting
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Check code formatting
+        run: npm run format:check
