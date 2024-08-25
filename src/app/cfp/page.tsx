@@ -170,15 +170,7 @@ export default async function CFP() {
                 strength and that everyone has something valuable to contribute.
               </p>
               <p>
-                We are enforcing a strict code of conduct to ensure that
-                CloudNative Day Bergen is a safe and welcoming environment for
-                everyone. We do not tolerate harassment or discrimination of any
-                kind, and we will take appropriate action against anyone who
-                violates our{' '}
-                <a
-                  href={cocLink}
-                  className="text-indigo-500 underline hover:text-indigo-700"
-                >
+                We are enforcing a strict code of conduct to ensure that CloudNative Day Bergen is a safe and welcoming environment for everyone. We do not tolerate harassment or discrimination of any kind, and we will take appropriate action against anyone who violates our <a href={cocLink} className='text-indigo-500 hover:text-indigo-700 underline' target="_blank">
                   code of conduct
                 </a>
                 .
