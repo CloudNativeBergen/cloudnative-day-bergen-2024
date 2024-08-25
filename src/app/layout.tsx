@@ -1,7 +1,7 @@
 import { type Metadata } from 'next'
 import { DM_Sans, Inter } from 'next/font/google'
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import clsx from 'clsx'
 
 import '@/styles/tailwind.css'
@@ -24,7 +24,8 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: {
     template: '%s - CloudNative Day Bergen',
-    default: 'CloudNative Day Bergen - A community-driven Kubernetes and Cloud conference',
+    default:
+      'CloudNative Day Bergen - A community-driven Kubernetes and Cloud conference',
   },
   description:
     'At CloudNative Day Bergen, we bring together the community to share knowledge and experience on Kubernetes, Cloud Native, and related technologies.',
@@ -57,9 +58,7 @@ export default async function RootLayout({
     >
       <body className="flex min-h-full">
         <div className="flex w-full flex-col">
-          <SessionProvider session={session}>
-            {children}
-          </SessionProvider>
+          <SessionProvider session={session}>{children}</SessionProvider>
         </div>
         <Analytics />
         <SpeedInsights />

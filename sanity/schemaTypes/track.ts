@@ -29,12 +29,12 @@ export default defineType({
       description: 'description',
     },
     prepare(selection) {
-      const { number, title, description } = selection;
+      const { number, title, description } = selection
       return {
         ...selection,
         title: `Track ${number}: ${title}`,
         subtitle: description,
-      };
+      }
     },
   },
 })

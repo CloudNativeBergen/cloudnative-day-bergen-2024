@@ -1,14 +1,13 @@
-
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { formats, languages, levels } from '@/lib/proposal/types';
-import { flags, Flags } from '@/lib/speaker/types';
+import { formats, languages, levels } from '@/lib/proposal/types'
+import { flags, Flags } from '@/lib/speaker/types'
 import Image from 'next/image'
-import * as social from '@/components/SocialIcons';
-import { getPublicSpeaker } from '@/lib/speaker/sanity';
-import { Button } from '@/components/Button';
-import { CalendarIcon } from '@heroicons/react/24/solid';
+import * as social from '@/components/SocialIcons'
+import { getPublicSpeaker } from '@/lib/speaker/sanity'
+import { Button } from '@/components/Button'
+import { CalendarIcon } from '@heroicons/react/24/solid'
 
 type Props = {
   params: {
@@ -17,7 +16,7 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const { speaker, talks, err } = await getPublicSpeaker(params.slug);
+  const { speaker, talks, err } = await getPublicSpeaker(params.slug)
 
   if (err || !speaker || !talks || talks.length === 0) {
     return {
@@ -35,7 +34,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function Profile({ params }: Props) {
-  const { speaker, talks, err } = await getPublicSpeaker(params.slug);
+  const { speaker, talks, err } = await getPublicSpeaker(params.slug)
 
   if (err || !speaker || !talks || talks.length === 0) {
     return (
@@ -67,29 +66,46 @@ export default async function Profile({ params }: Props) {
         <BackgroundImage className="-bottom-14 -top-36" />
         <Container className="relative">
           <div className="mx-auto w-full max-w-7xl grow lg:flex xl:px-2">
-            <div className="flex-1 xl:flex px-4 py-6 sm:px-6 lg:pl-8 xl:pl-6">
+            <div className="flex-1 px-4 py-6 sm:px-6 lg:pl-8 xl:flex xl:pl-6">
               {/* proposal details */}
               {talks.map((talk) => (
                 <div key={talk._id} className="block">
                   <h2 className="text-3xl font-bold text-blue-900">
                     {talk.title} - {formats.get(talk.format)}
                   </h2>
-                  {talk.tags && talk.tags.map((tag) => (
-                    <span key={tag} className="inline-block mt-2 mr-2 px-3 py-1 text-sm font-semibold text-blue-100 bg-blue-900 rounded-full">{tag}</span>
-                  ))}
+                  {talk.tags &&
+                    talk.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="mr-2 mt-2 inline-block rounded-full bg-blue-900 px-3 py-1 text-sm font-semibold text-blue-100"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   {talk.schedule && (
                     <div className="mt-2 py-1">
                       <p className="text-lg">
-                        <CalendarIcon className="inline-block w-6 h-6 mr-2" />
-                        Scheduled: {talk.schedule.time_start} - {talk.schedule.time_end}, Track {talk.schedule.track.number}
+                        <CalendarIcon className="mr-2 inline-block h-6 w-6" />
+                        Scheduled: {talk.schedule.time_start} -{' '}
+                        {talk.schedule.time_end}, Track{' '}
+                        {talk.schedule.track.number}
                       </p>
                     </div>
                   )}
                   {talk.description.split('\n\n').map((paragraph, index) => (
-                    <p key={`desc-${index}`} className="mt-4 text-xl text-blue-900">{paragraph}</p>
+                    <p
+                      key={`desc-${index}`}
+                      className="mt-4 text-xl text-blue-900"
+                    >
+                      {paragraph}
+                    </p>
                   ))}
-                  <p className="mt-4 text-lg">Language: {languages.get(talk.language)}</p>
-                  <p className="mt-2 text-lg">Level: {levels.get(talk.level)}</p>
+                  <p className="mt-4 text-lg">
+                    Language: {languages.get(talk.language)}
+                  </p>
+                  <p className="mt-2 text-lg">
+                    Level: {levels.get(talk.level)}
+                  </p>
                 </div>
               ))}
             </div>
@@ -97,7 +113,7 @@ export default async function Profile({ params }: Props) {
             <div className="shrink-0 px-4 py-6 sm:px-6 lg:w-96 lg:pr-8 xl:pr-6">
               {/* speaker details */}
               <div className="flex flex-col items-center">
-                <div className="w-150 h-150 rounded-full overflow-hidden">
+                <div className="w-150 h-150 overflow-hidden rounded-full">
                   <Image
                     src={speaker.image || 'https://via.placeholder.com/150'}
                     alt={speaker.name}
@@ -109,31 +125,38 @@ export default async function Profile({ params }: Props) {
                 <h2 className="mt-4 text-2xl font-bold">{speaker.name}</h2>
                 <p className="mt-2 text-gray-500">{speaker.title}</p>
                 <div className="mt-2">
-                  {speaker.flags && speaker.flags.includes(Flags.localSpeaker) && (
-                    <span className="inline-block mt-2 mr-2 px-3 py-1 text-sm font-semibold text-blue-100 bg-blue-900 rounded-full">{flags.get(Flags.localSpeaker)}</span>
-                  )}
+                  {speaker.flags &&
+                    speaker.flags.includes(Flags.localSpeaker) && (
+                      <span className="mr-2 mt-2 inline-block rounded-full bg-blue-900 px-3 py-1 text-sm font-semibold text-blue-100">
+                        {flags.get(Flags.localSpeaker)}
+                      </span>
+                    )}
                 </div>
-                {speaker.bio && speaker.bio.split('\n\n').map((paragraph, index) => (
-                  <p key={`bio-${index}`} className="mt-4 text-lg">{paragraph}</p>
-                ))}
-                <div className="mt-4 flex space-x-2">
-                  {speaker.links && speaker.links.map((link) => (
-                    <a
-                      key={link}
-                      href={link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mr-2 text-blue-500 hover:text-blue-700"
-                    >
-                      {social.iconForLink(link)}
-                    </a>
+                {speaker.bio &&
+                  speaker.bio.split('\n\n').map((paragraph, index) => (
+                    <p key={`bio-${index}`} className="mt-4 text-lg">
+                      {paragraph}
+                    </p>
                   ))}
+                <div className="mt-4 flex space-x-2">
+                  {speaker.links &&
+                    speaker.links.map((link) => (
+                      <a
+                        key={link}
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mr-2 text-blue-500 hover:text-blue-700"
+                      >
+                        {social.iconForLink(link)}
+                      </a>
+                    ))}
                 </div>
               </div>
             </div>
           </div>
         </Container>
-      </div >
-    </Layout >
+      </div>
+    </Layout>
   )
 }

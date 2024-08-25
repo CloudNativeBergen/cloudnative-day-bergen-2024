@@ -6,8 +6,10 @@ const nextConfig = {
       name: 'CloudNative Day Bergen 2024',
       location: 'Bergen, Norway',
     },
-    registrationLink: 'https://app.checkin.no/event/73442/cloudnative-day-bergen-2024',
-    cocLink: 'https://github.com/cncf/foundation/blob/main/code-of-conduct.md#community-code-of-conduct',
+    registrationLink:
+      'https://app.checkin.no/event/73442/cloudnative-day-bergen-2024',
+    cocLink:
+      'https://github.com/cncf/foundation/blob/main/code-of-conduct.md#community-code-of-conduct',
     cfpOpen: false,
     dates: {
       cfpStart: '2024-05-20',
@@ -15,7 +17,7 @@ const nextConfig = {
       cfpNotify: '2024-08-20',
       program: '2024-09-01',
       conference: '2024-10-30',
-    }
+    },
   },
   images: {
     remotePatterns: [
@@ -30,7 +32,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'media.licdn.com',
-      }
+      },
     ],
   },
 }

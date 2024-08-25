@@ -31,20 +31,21 @@ function ImageClipPaths({
 }
 
 function SubmitToSpeakLi() {
-  return (<li
-    key="submit-to-speak-1"
-    className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center"
-  >
-    <a
-      type="button"
-      href="/cfp"
-      className="relative block w-full rounded-lg sm:gap-y-16 border-2 border-dashed border-gray-300 p-10 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+  return (
+    <li
+      key="submit-to-speak-1"
+      className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center"
     >
-      <p className="mt-1 font-mono text-sm text-slate-500">
-        Become a speaker
-      </p>
-    </a>
-  </li>
+      <a
+        type="button"
+        href="/cfp"
+        className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-10 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:gap-y-16"
+      >
+        <p className="mt-1 font-mono text-sm text-slate-500">
+          Become a speaker
+        </p>
+      </a>
+    </li>
   )
 }
 export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
@@ -73,7 +74,6 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
       aria-labelledby="speakers-title"
       className="py-20 sm:py-32"
     >
-
       <ImageClipPaths id={id} />
       <Container>
         <div className="mx-auto max-w-2xl lg:mx-0">
@@ -84,10 +84,14 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
             Our Speakers
           </h2>
           <p className="mt-4 font-display text-2xl tracking-tight text-blue-900">
-            Learn from yaml-experts and cloud-native nerds from Bergen and around the world at CloudNative Day Bergen.
+            Learn from yaml-experts and cloud-native nerds from Bergen and
+            around the world at CloudNative Day Bergen.
           </p>
           {!hasSpeakers && (
-            <ul role="list" className="grid grid-cols-2 gap-6 mt-8 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3">
+            <ul
+              role="list"
+              className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3"
+            >
               <SubmitToSpeakLi />
               <SubmitToSpeakLi />
               <SubmitToSpeakLi />
@@ -167,12 +171,21 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
                         />
                         <div
                           className="absolute inset-0 bg-indigo-50"
-                          style={{ clipPath: `url(#${id}-${speakerIndex % 3})` }}
+                          style={{
+                            clipPath: `url(#${id}-${speakerIndex % 3})`,
+                          }}
                         >
-                          <a href={`/speaker/${speaker.slug}`} className="absolute inset-0" >
+                          <a
+                            href={`/speaker/${speaker.slug}`}
+                            className="absolute inset-0"
+                          >
                             <Image
                               className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-110"
-                              src={speaker.image ? `${speaker.image}?h=300` : "https://via.placeholder.com/300"}
+                              src={
+                                speaker.image
+                                  ? `${speaker.image}?h=300`
+                                  : 'https://via.placeholder.com/300'
+                              }
                               width={300}
                               height={300}
                               alt=""
@@ -196,6 +209,6 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
           </Tab.Group>
         )}
       </Container>
-    </section >
+    </section>
   )
 }

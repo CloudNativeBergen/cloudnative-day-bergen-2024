@@ -1,15 +1,18 @@
 import sgMail from '@sendgrid/mail'
 import assert from 'assert'
 import config from '@/../next.config'
-import { formatDate } from '@/lib/time';
-import { ProposalExisting } from '@/lib/proposal/types';
-import { Speaker } from '@/lib/speaker/types';
+import { formatDate } from '@/lib/time'
+import { ProposalExisting } from '@/lib/proposal/types'
+import { Speaker } from '@/lib/speaker/types'
 
-const { publicRuntimeConfig: c } = config;
+const { publicRuntimeConfig: c } = config
 
 assert(process.env.SENDGRID_API_KEY, 'SENDGRID_API_KEY is not set')
 assert(process.env.SENDGRID_FROM_EMAIL, 'SENDGRID_FROM_EMAIL is not set')
-assert(process.env.SENDGRID_TEMPALTE_ID_CFP_ACCEPT, 'SENDGRID_TEMPALTE_ID_CFP_ACCEPT is not set')
+assert(
+  process.env.SENDGRID_TEMPALTE_ID_CFP_ACCEPT,
+  'SENDGRID_TEMPALTE_ID_CFP_ACCEPT is not set',
+)
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
 
@@ -25,7 +28,15 @@ function getTemplate(status: string) {
   }
 }
 
-export async function sendAcceptNotification({ speaker, proposal, comment = '' }: { speaker: Speaker, proposal: ProposalExisting, comment: string }): Promise<[sgMail.ClientResponse, {}]> {
+export async function sendAcceptNotification({
+  speaker,
+  proposal,
+  comment = '',
+}: {
+  speaker: Speaker
+  proposal: ProposalExisting
+  comment: string
+}): Promise<[sgMail.ClientResponse, {}]> {
   const msg = {
     to: speaker.email,
     from: fromEmail,
@@ -42,8 +53,8 @@ export async function sendAcceptNotification({ speaker, proposal, comment = '' }
       event: {
         location: c?.event.location,
         date: formatDate(c?.dates.conference),
-        name: c?.event.name
-      }
+        name: c?.event.name,
+      },
     },
   }
 

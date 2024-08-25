@@ -1,9 +1,9 @@
-import type { Config } from 'jest';
-import nextJest from 'next/jest.js';
+import type { Config } from 'jest'
+import nextJest from 'next/jest.js'
 
 const createJestConfig = nextJest({
   dir: './',
-});
+})
 
 const config: Config = {
   coverageProvider: 'v8',
@@ -15,6 +15,6 @@ const config: Config = {
     'next-auth': '<rootDir>/__tests__/mocks/next-auth.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-};
+}
 
-export default createJestConfig(config);
+export default createJestConfig(config)

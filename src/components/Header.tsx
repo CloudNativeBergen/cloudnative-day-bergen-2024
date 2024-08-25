@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
@@ -9,10 +9,10 @@ import { useSession } from 'next-auth/react'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
 import config from '@/../next.config'
 
-const { publicRuntimeConfig: c } = config;
+const { publicRuntimeConfig: c } = config
 
 export function Header() {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession()
 
   return (
     <header className="relative z-50 flex-none lg:pt-11">
@@ -34,12 +34,16 @@ export function Header() {
         <div className="hidden whitespace-nowrap sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
           <Button href={c?.registrationLink ?? '#'}>Get your ticket</Button>
         </div>
-        <div className="mt-10 sm:flex ml-10 lg:ml-4 lg:mt-0">
-          <a href='/cfp/list'>
+        <div className="ml-10 mt-10 sm:flex lg:ml-4 lg:mt-0">
+          <a href="/cfp/list">
             {session ? (
-              <img src={session.user.picture} alt={session.user.name} className="w-12 h-12 rounded-full" />
+              <img
+                src={session.user.picture}
+                alt={session.user.name}
+                className="h-12 w-12 rounded-full"
+              />
             ) : (
-              <UserCircleIcon className="w-12 h-12 text-slate-900" />
+              <UserCircleIcon className="h-12 w-12 text-slate-900" />
             )}
           </a>
         </div>

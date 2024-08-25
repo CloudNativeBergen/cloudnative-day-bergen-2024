@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity';
+import { defineField, defineType } from 'sanity'
 
 export default defineType({
   name: 'schedule',
@@ -44,12 +44,12 @@ export default defineType({
       speaker: 'talk.speaker.name',
     },
     prepare(selection) {
-      const { date, time_start, end_time, track, speaker, talk } = selection;
+      const { date, time_start, end_time, track, speaker, talk } = selection
       return {
         ...selection,
         title: `${date} - Track ${track} - ${time_start} - ${end_time}`,
         subtitle: `${talk} - ${speaker}`,
-      };
+      }
     },
   },
-});
+})

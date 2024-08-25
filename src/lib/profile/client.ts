@@ -1,15 +1,11 @@
-import {
-  Speaker,
-  SpeakerInput,
-  SpeakerResponse,
-} from '@/lib/speaker/types';
-import { ProfileEmailResponse, ProfileImageResponse } from './types';
+import { Speaker, SpeakerInput, SpeakerResponse } from '@/lib/speaker/types'
+import { ProfileEmailResponse, ProfileImageResponse } from './types'
 
 export async function getEmails(): Promise<ProfileEmailResponse> {
   let url = `${process.env.NEXT_PUBLIC_URL}/api/profile/emails`
 
   const res = await fetch(url)
-  return await res.json() as ProfileEmailResponse
+  return (await res.json()) as ProfileEmailResponse
 }
 
 export async function putEmail(email: string): Promise<ProfileEmailResponse> {
@@ -23,19 +19,21 @@ export async function putEmail(email: string): Promise<ProfileEmailResponse> {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email }),
-  });
+  })
 
-  return await res.json() as ProfileEmailResponse
+  return (await res.json()) as ProfileEmailResponse
 }
 
 export async function getProfile(): Promise<SpeakerResponse> {
   let url = `${process.env.NEXT_PUBLIC_URL}/api/profile`
 
   const res = await fetch(url, { cache: 'no-store', next: { revalidate: 0 } })
-  return await res.json() as SpeakerResponse
+  return (await res.json()) as SpeakerResponse
 }
 
-export async function putProfile(speaker: SpeakerInput): Promise<SpeakerResponse> {
+export async function putProfile(
+  speaker: SpeakerInput,
+): Promise<SpeakerResponse> {
   let url = `${process.env.NEXT_PUBLIC_URL}/api/profile`
 
   const res = await fetch(url, {
@@ -46,9 +44,9 @@ export async function putProfile(speaker: SpeakerInput): Promise<SpeakerResponse
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(speaker),
-  });
+  })
 
-  return await res.json() as SpeakerResponse
+  return (await res.json()) as SpeakerResponse
 }
 
 export async function postImage(file: File): Promise<ProfileImageResponse> {
@@ -63,16 +61,17 @@ export async function postImage(file: File): Promise<ProfileImageResponse> {
       cache: 'no-store',
       method: 'POST',
       body: formData,
-    });
-    return await res.json() as ProfileImageResponse;
+    })
+    return (await res.json()) as ProfileImageResponse
   } catch (error) {
-    console.error("Image upload failed", error);
+    console.error('Image upload failed', error)
 
     return {
-      status: 500, error: {
+      status: 500,
+      error: {
         message: 'Failed to upload image',
         type: 'upload',
       },
-    } as ProfileImageResponse;
+    } as ProfileImageResponse
   }
 }

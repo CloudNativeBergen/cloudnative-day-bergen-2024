@@ -1,4 +1,10 @@
-import { Status, statuses, languages, levels, formats } from '../../src/lib/proposal/types';
+import {
+  Status,
+  statuses,
+  languages,
+  levels,
+  formats,
+} from '../../src/lib/proposal/types'
 import { defineField, defineType } from 'sanity'
 
 export default defineType({
@@ -22,7 +28,7 @@ export default defineType({
       type: 'string',
       options: {
         list: Array.from(languages).map(([value, title]) => ({ value, title })),
-      }
+      },
     }),
     defineField({
       name: 'format',
@@ -30,7 +36,7 @@ export default defineType({
       type: 'string',
       options: {
         list: Array.from(formats).map(([value, title]) => ({ value, title })),
-      }
+      },
     }),
     defineField({
       name: 'level',
@@ -38,7 +44,7 @@ export default defineType({
       type: 'string',
       options: {
         list: Array.from(levels).map(([value, title]) => ({ value, title })),
-      }
+      },
     }),
     defineField({
       name: 'outline',
@@ -63,7 +69,7 @@ export default defineType({
       initialValue: Status.draft,
       options: {
         list: Array.from(statuses).map(([value, title]) => ({ value, title })),
-      }
+      },
     }),
     defineField({
       name: 'speaker',
@@ -79,11 +85,11 @@ export default defineType({
       speaker: 'speaker.name',
     },
     prepare(selection) {
-      const { title, speaker } = selection;
+      const { title, speaker } = selection
       return {
         ...selection,
         title: `${title} (${speaker})`,
-      };
+      }
     },
   },
 })

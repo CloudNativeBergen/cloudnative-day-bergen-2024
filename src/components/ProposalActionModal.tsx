@@ -1,18 +1,34 @@
-'use client';
+'use client'
 
-import React, { useState } from "react";
-import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
-import { ProposalExisting, Action, ProposalActionResponse, Status } from '@/lib/proposal/types'
-import { ArchiveBoxXMarkIcon, EnvelopeIcon, HeartIcon, XMarkIcon } from "@heroicons/react/20/solid";
-import { Speaker } from "@/lib/speaker/types";
-import { postProposalAction } from "@/lib/proposal/client";
+import React, { useState } from 'react'
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react'
+import {
+  ProposalExisting,
+  Action,
+  ProposalActionResponse,
+  Status,
+} from '@/lib/proposal/types'
+import {
+  ArchiveBoxXMarkIcon,
+  EnvelopeIcon,
+  HeartIcon,
+  XMarkIcon,
+} from '@heroicons/react/20/solid'
+import { Speaker } from '@/lib/speaker/types'
+import { postProposalAction } from '@/lib/proposal/client'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 function colorForAction(action: Action): [string, string, string] {
@@ -21,7 +37,11 @@ function colorForAction(action: Action): [string, string, string] {
       return ['bg-blue-100', 'text-blue-600', 'bg-blue-600 hover:bg-blue-500']
     case Action.accept:
     case Action.confirm:
-      return ['bg-green-100', 'text-green-600', 'bg-green-600 hover:bg-green-500']
+      return [
+        'bg-green-100',
+        'text-green-600',
+        'bg-green-600 hover:bg-green-500',
+      ]
     case Action.reject:
     case Action.withdraw:
       return ['bg-red-100', 'text-red-600', 'bg-red-600 hover:bg-red-500']
@@ -30,7 +50,9 @@ function colorForAction(action: Action): [string, string, string] {
   return ['bg-gray-100', 'text-gray-600', 'bg-gray-600 hover:bg-gray-500']
 }
 
-function iconForAction(action: Action): React.FunctionComponent<React.SVGProps<SVGSVGElement>> {
+function iconForAction(
+  action: Action,
+): React.FunctionComponent<React.SVGProps<SVGSVGElement>> {
   switch (action) {
     case Action.submit:
       return EnvelopeIcon
@@ -54,13 +76,12 @@ export function ProposalActionModal({
   adminUI,
   onAction,
 }: {
-  open: boolean,
-  close: () => void,
-  proposal: ProposalExisting,
-  action: Action,
-  adminUI?: boolean,
+  open: boolean
+  close: () => void
+  proposal: ProposalExisting
+  action: Action
+  adminUI?: boolean
   onAction: (id: string, status: Status) => void
-
 }) {
   const [error, setError] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -122,14 +143,22 @@ export function ProposalActionModal({
                   </button>
                 </div>
                 <div className="sm:flex sm:items-start">
-                  <div className={classNames(
-                    iconBgColor,
-                    "mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10"
-                  )}>
-                    <ActionIcon className={classNames(iconTextColor, "h-6 w-6")} aria-hidden="true" />
+                  <div
+                    className={classNames(
+                      iconBgColor,
+                      'mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10',
+                    )}
+                  >
+                    <ActionIcon
+                      className={classNames(iconTextColor, 'h-6 w-6')}
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <DialogTitle as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                    <DialogTitle
+                      as="h3"
+                      className="text-base font-semibold leading-6 text-gray-900"
+                    >
                       {capitalizeFirstLetter(action)} proposal
                     </DialogTitle>
                     {error && (
@@ -142,7 +171,17 @@ export function ProposalActionModal({
                     {adminUI ? (
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Are you sure you want to {action} the proposal <span className="font-semibold">{proposal.title}</span> by <span className="font-semibold">{proposal.speaker && 'name' in proposal.speaker ? (proposal.speaker as Speaker).name : 'Unknown author'}</span>?
+                          Are you sure you want to {action} the proposal{' '}
+                          <span className="font-semibold">
+                            {proposal.title}
+                          </span>{' '}
+                          by{' '}
+                          <span className="font-semibold">
+                            {proposal.speaker && 'name' in proposal.speaker
+                              ? (proposal.speaker as Speaker).name
+                              : 'Unknown author'}
+                          </span>
+                          ?
                         </p>
                         <div className="mt-4">
                           <label className="flex items-center">
@@ -152,7 +191,9 @@ export function ProposalActionModal({
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                               onChange={() => setNotify(!notify)}
                             />
-                            <span className="ml-2 text-sm text-gray-700">Notify the speaker via email</span>
+                            <span className="ml-2 text-sm text-gray-700">
+                              Notify the speaker via email
+                            </span>
                           </label>
                         </div>
                         <div className="mt-4">
@@ -160,18 +201,25 @@ export function ProposalActionModal({
                             Comment
                           </label>
                           <textarea
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             rows={3}
                             placeholder="Add a comment..."
                             onChange={(e) => setComment(e.target.value)}
                           ></textarea>
-                          <p className="mt-2 text-sm text-gray-500">Your comment will be included in the email to the speaker.</p>
+                          <p className="mt-2 text-sm text-gray-500">
+                            Your comment will be included in the email to the
+                            speaker.
+                          </p>
                         </div>
                       </div>
                     ) : (
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Are you sure you want to {action} the proposal <span className="font-semibold">{proposal.title}</span>?
+                          Are you sure you want to {action} the proposal{' '}
+                          <span className="font-semibold">
+                            {proposal.title}
+                          </span>
+                          ?
                         </p>
                       </div>
                     )}
@@ -184,11 +232,13 @@ export function ProposalActionModal({
                     className={classNames(
                       buttonColor,
                       isSubmitting ? 'cursor-not-allowed' : 'cursor-pointer',
-                      'inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto'
+                      'inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto',
                     )}
                     onClick={() => submitHandler()}
                   >
-                    {isSubmitting ? `${capitalizeFirstLetter(action)}...` : capitalizeFirstLetter(action)}
+                    {isSubmitting
+                      ? `${capitalizeFirstLetter(action)}...`
+                      : capitalizeFirstLetter(action)}
                   </button>
                   <button
                     type="button"
@@ -203,6 +253,6 @@ export function ProposalActionModal({
           </div>
         </div>
       </Dialog>
-    </Transition >
+    </Transition>
   )
 }

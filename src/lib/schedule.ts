@@ -76,7 +76,11 @@ export function scheduleToTracks(schedule: Schedule[]): ScheduleTrack[] {
       })
 
       if (scheduleItem.talk.speaker) {
-        if (!track.speakers.find((speaker) => speaker.name === scheduleItem.talk!.speaker!.name)) {
+        if (
+          !track.speakers.find(
+            (speaker) => speaker.name === scheduleItem.talk!.speaker!.name,
+          )
+        ) {
           track.speakers.push(scheduleItem.talk.speaker)
         }
       }

@@ -9,7 +9,9 @@
     "lint": "next lint",
     "test": "jest --silent",
     "test:debug": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "format:check": "prettier --check .",
+    "format": "prettier --write ."
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {

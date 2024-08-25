@@ -10,7 +10,9 @@ import { Schedule as ScheduleType, scheduleToTracks } from '@/lib/schedule'
 export const revalidate = 3600
 
 async function getData() {
-  return await clientRead.fetch<ScheduleType[]>(`*[_type == "schedule"]{date, time_start, time_end, track->{number, title, description}, talk->{title, speaker->{name, "slug": slug.current, title, "image": image.asset->url}}} | order(track.number asc, time_start asc)`)
+  return await clientRead.fetch<ScheduleType[]>(
+    `*[_type == "schedule"]{date, time_start, time_end, track->{number, title, description}, talk->{title, speaker->{name, "slug": slug.current, title, "image": image.asset->url}}} | order(track.number asc, time_start asc)`,
+  )
 }
 
 export default async function Home() {

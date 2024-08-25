@@ -1,22 +1,35 @@
-import { Speaker, SpeakerInput } from "@/lib/speaker/types";
-import { clientReadUncached as clientRead, clientWrite, clientReadCached } from "@/lib/sanity/client";
-import { v4 as randomUUID } from 'uuid';
-import { Account, User } from "next-auth";
-import { ProposalExisting } from "../proposal/types";
+import { Speaker, SpeakerInput } from '@/lib/speaker/types'
+import {
+  clientReadUncached as clientRead,
+  clientWrite,
+  clientReadCached,
+} from '@/lib/sanity/client'
+import { v4 as randomUUID } from 'uuid'
+import { Account, User } from 'next-auth'
+import { ProposalExisting } from '../proposal/types'
 
-export function providerAccount(provider: string, providerAccountId: string): string {
+export function providerAccount(
+  provider: string,
+  providerAccountId: string,
+): string {
   return `${provider}:${providerAccountId}`
 }
 
-async function findSpeakerByProvider(id: string): Promise<{ speaker: Speaker; err: Error | null; }> {
+async function findSpeakerByProvider(
+  id: string,
+): Promise<{ speaker: Speaker; err: Error | null }> {
   let speaker = {} as Speaker
   let err = null
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && $id in providers][0]{
+    speaker = await clientRead.fetch(
+      `*[ _type == "speaker" && $id in providers][0]{
       ...,
       "image": image.asset->url
-    }`, { id }, { cache: "no-store" })
+    }`,
+      { id },
+      { cache: 'no-store' },
+    )
   } catch (error) {
     err = error as Error
   }
@@ -24,15 +37,21 @@ async function findSpeakerByProvider(id: string): Promise<{ speaker: Speaker; er
   return { speaker, err }
 }
 
-async function findSpeakerByEmail(email: string): Promise<{ speaker: Speaker; err: Error | null; }> {
+async function findSpeakerByEmail(
+  email: string,
+): Promise<{ speaker: Speaker; err: Error | null }> {
   let speaker = {} as Speaker
   let err = null
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && email == $email][0]{
+    speaker = await clientRead.fetch(
+      `*[ _type == "speaker" && email == $email][0]{
       ...,
       "image": image.asset->url
-    }`, { email }, { cache: "no-store" })
+    }`,
+      { email },
+      { cache: 'no-store' },
+    )
   } catch (error) {
     err = error as Error
   }
@@ -40,18 +59,24 @@ async function findSpeakerByEmail(email: string): Promise<{ speaker: Speaker; er
   return { speaker, err }
 }
 
-export async function getOrCreateSpeaker(user: User, account: Account): Promise<{ speaker: Speaker; err: Error | null; }> {
+export async function getOrCreateSpeaker(
+  user: User,
+  account: Account,
+): Promise<{ speaker: Speaker; err: Error | null }> {
   if (!user.email || !user.name) {
-    const err = new Error("Missing user email or name")
+    const err = new Error('Missing user email or name')
     console.error(err)
     return { speaker: {} as Speaker, err }
   }
 
   // Find speaker by provider
-  const providerAccountId = providerAccount(account.provider, account.providerAccountId)
+  const providerAccountId = providerAccount(
+    account.provider,
+    account.providerAccountId,
+  )
   var { speaker, err } = await findSpeakerByProvider(providerAccountId)
   if (err) {
-    console.error("Error fetching speaker profile by account id", err)
+    console.error('Error fetching speaker profile by account id', err)
     return { speaker, err }
   }
 
@@ -62,7 +87,7 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
   // Find speaker by email
   var { speaker, err } = await findSpeakerByEmail(user.email)
   if (err) {
-    console.error("Error fetching speaker profile by email", err)
+    console.error('Error fetching speaker profile by email', err)
     return { speaker, err }
   }
 
@@ -70,7 +95,10 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
     speaker.providers = speaker.providers || []
     speaker.providers.push(providerAccountId)
     try {
-      await clientWrite.patch(speaker._id).set({ providers: speaker.providers }).commit()
+      await clientWrite
+        .patch(speaker._id)
+        .set({ providers: speaker.providers })
+        .commit()
     } catch (error) {
       err = error as Error
     }
@@ -82,11 +110,14 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
     _id: randomUUID(),
     email: user.email,
     name: user.name,
-    imageURL: user.image || "",
+    imageURL: user.image || '',
     providers: [providerAccountId],
   } as Speaker
   try {
-    speaker = await clientWrite.create({ _type: "speaker", ...speaker }) as Speaker
+    speaker = (await clientWrite.create({
+      _type: 'speaker',
+      ...speaker,
+    })) as Speaker
   } catch (error) {
     err = error as Error
   }
@@ -94,15 +125,21 @@ export async function getOrCreateSpeaker(user: User, account: Account): Promise<
   return { speaker, err }
 }
 
-export async function getSpeaker(speakerId: string): Promise<{ speaker: Speaker; err: Error | null; }> {
+export async function getSpeaker(
+  speakerId: string,
+): Promise<{ speaker: Speaker; err: Error | null }> {
   let speaker: Speaker = {} as Speaker
   let err = null
 
   try {
-    speaker = await clientRead.fetch(`*[ _type == "speaker" && _id == $speakerId][0]{
+    speaker = await clientRead.fetch(
+      `*[ _type == "speaker" && _id == $speakerId][0]{
       ...,
       "image": image.asset->url
-    }`, { speakerId }, { cache: "no-store" })
+    }`,
+      { speakerId },
+      { cache: 'no-store' },
+    )
   } catch (error) {
     err = error as Error
   }
@@ -115,7 +152,8 @@ export async function getPublicSpeaker(speakerSlug: string) {
   let err = null
 
   try {
-    data = await clientReadCached.fetch(`*[ _type == "speaker" && slug.current == $speakerSlug][0]{
+    data = await clientReadCached.fetch(
+      `*[ _type == "speaker" && slug.current == $speakerSlug][0]{
       name, title, bio, links, flags, "image": image.asset->url,
       "talks": *[_type == "talk" && references(^._id) && status == "confirmed"]{
         _id, title, description, tags, language, level, format,
@@ -125,12 +163,14 @@ export async function getPublicSpeaker(speakerSlug: string) {
           }
         }[0]
       }
-    }`, { speakerSlug })
+    }`,
+      { speakerSlug },
+    )
   } catch (error) {
     err = error as Error
   }
 
-  const talks = 'talks' in data ? data.talks as ProposalExisting[] : []
+  const talks = 'talks' in data ? (data.talks as ProposalExisting[]) : []
   const speaker = data as Speaker
 
   return { speaker, talks, err }
@@ -141,7 +181,8 @@ export async function getPublicSpeakers() {
   let err = null
 
   try {
-    speakers = await clientReadCached.fetch(`*[ _type == "speaker" && count(*[_type == "talk" && references(^._id) && status == "confirmed"]) > 0]{
+    speakers =
+      await clientReadCached.fetch(`*[ _type == "speaker" && count(*[_type == "talk" && references(^._id) && status == "confirmed"]) > 0]{
       _id, name, "slug": slug.current, title, bio, links, flags, "image": image.asset->url
     }`)
   } catch (error) {
@@ -151,7 +192,10 @@ export async function getPublicSpeakers() {
   return { speakers, err }
 }
 
-export async function updateSpeaker(spekaerId: string, speaker: SpeakerInput): Promise<{ speaker: Speaker; err: Error | null; }> {
+export async function updateSpeaker(
+  spekaerId: string,
+  speaker: SpeakerInput,
+): Promise<{ speaker: Speaker; err: Error | null }> {
   let err = null
   let updatedSpeaker: Speaker = {} as Speaker
 
@@ -164,12 +208,16 @@ export async function updateSpeaker(spekaerId: string, speaker: SpeakerInput): P
   return { speaker: updatedSpeaker, err }
 }
 
-export async function getFeatured(): Promise<{ speakers: Speaker[]; err: Error | null; }> {
+export async function getFeatured(): Promise<{
+  speakers: Speaker[]
+  err: Error | null
+}> {
   let speakers: Speaker[] = []
   let err = null
 
   try {
-    speakers = await clientReadCached.fetch(`*[ _type == "speaker" && is_featured == true ]{
+    speakers =
+      await clientReadCached.fetch(`*[ _type == "speaker" && is_featured == true ]{
       name, "slug": slug.current, title, links, "image": image.asset->url
     }`)
   } catch (error) {

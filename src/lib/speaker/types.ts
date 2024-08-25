@@ -1,4 +1,4 @@
-import { FormError } from "@/lib/proposal/types"
+import { FormError } from '@/lib/proposal/types'
 
 export enum Flags {
   localSpeaker = 'local',
@@ -29,9 +29,7 @@ interface SpeakerBase {
   flags?: Flags[]
 }
 
-export interface SpeakerInput extends SpeakerBase {
-
-}
+export interface SpeakerInput extends SpeakerBase {}
 
 export interface Speaker extends SpeakerBase {
   _id: string

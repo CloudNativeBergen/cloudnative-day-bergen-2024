@@ -1,5 +1,5 @@
-import { Speaker, SpeakerRef } from "@/lib/speaker/types"
-import { Schedule } from "@/lib/schedule"
+import { Speaker, SpeakerRef } from '@/lib/speaker/types'
+import { Schedule } from '@/lib/schedule'
 
 export enum Language {
   norwegian = 'norwegian',
@@ -19,11 +19,11 @@ export enum Format {
 }
 
 export enum Status {
-  draft = 'draft',         // draft by the speaker
+  draft = 'draft', // draft by the speaker
   submitted = 'submitted', // submitted by the speaker
-  accepted = 'accepted',   // accepted by the organizers
+  accepted = 'accepted', // accepted by the organizers
   confirmed = 'confirmed', // confirmed by the speaker
-  rejected = 'rejected',   // rejected by the organizers
+  rejected = 'rejected', // rejected by the organizers
   withdrawn = 'withdrawn', // withdrawn by the speaker
 }
 
@@ -36,7 +36,7 @@ export enum Action {
   accept = 'accept',
   confirm = 'confirm',
   reject = 'reject',
-  withdraw = 'withdraw'
+  withdraw = 'withdraw',
 }
 
 export interface ActionInput {
@@ -57,7 +57,7 @@ interface Proposal {
   schedule?: Schedule
 }
 
-export interface ProposalInput extends Proposal { }
+export interface ProposalInput extends Proposal {}
 
 export interface ProposalExisting extends Proposal {
   _id: string

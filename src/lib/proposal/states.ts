@@ -1,43 +1,47 @@
-import { Action, Status } from "@/lib/proposal/types";
+import { Action, Status } from '@/lib/proposal/types'
 
 // actionStateMachine is a finite state machine that determines the next status of a proposal based on the current status and the action to be taken.
-export function actionStateMachine(currentStatus: Status | undefined, action: Action, isOrganizer: boolean): { status: Status, isValidAction: boolean } {
-  let status = currentStatus || Status.draft;
+export function actionStateMachine(
+  currentStatus: Status | undefined,
+  action: Action,
+  isOrganizer: boolean,
+): { status: Status; isValidAction: boolean } {
+  let status = currentStatus || Status.draft
 
   switch (status) {
     case Status.draft:
       if (action === Action.submit) {
-        status = Status.submitted;
+        status = Status.submitted
       }
-      break;
+      break
     case Status.submitted:
       if (action === Action.unsubmit) {
-        status = Status.draft;
+        status = Status.draft
       } else if (isOrganizer && action === Action.accept) {
-        status = Status.accepted;
+        status = Status.accepted
       } else if (isOrganizer && action === Action.reject) {
-        status = Status.rejected;
+        status = Status.rejected
       }
-      break;
+      break
     case Status.accepted:
       if (action === Action.confirm) {
-        status = Status.confirmed;
+        status = Status.confirmed
       } else if (action === Action.withdraw) {
-        status = Status.withdrawn;
+        status = Status.withdrawn
       } else if (isOrganizer && action === Action.reject) {
-        status = Status.rejected;
+        status = Status.rejected
       }
-      break;
+      break
     case Status.rejected:
       if (isOrganizer && action === Action.accept) {
-        status = Status.accepted;
+        status = Status.accepted
       }
     case Status.confirmed:
       if (action === Action.withdraw) {
-        status = Status.withdrawn;
+        status = Status.withdrawn
       }
-      break;
+      break
   }
 
-  return { status, isValidAction: status !== currentStatus };
+  return { status, isValidAction: status !== currentStatus }
 }
