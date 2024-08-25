@@ -23,10 +23,8 @@ export default defineType({
       options: {
         source: 'name',
         maxLength: 96,
-        slugify: input => input
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .slice(0, 96)
+        slugify: (input) =>
+          input.toLowerCase().replace(/\s+/g, '-').slice(0, 96),
       },
     }),
     defineField({
@@ -34,8 +32,13 @@ export default defineType({
       title: 'Email',
       type: 'string',
       hidden: ({ currentUser }) => {
-        return !(currentUser != null && currentUser.roles.find(({ name }) => name === 'administrator' || name === 'editor'))
-      }
+        return !(
+          currentUser != null &&
+          currentUser.roles.find(
+            ({ name }) => name === 'administrator' || name === 'editor',
+          )
+        )
+      },
     }),
     defineField({
       name: 'providers',
@@ -43,8 +46,13 @@ export default defineType({
       type: 'array',
       of: [{ type: 'string' }],
       hidden: ({ currentUser }) => {
-        return !(currentUser != null && currentUser.roles.find(({ name }) => name === 'administrator' || name === 'editor'))
-      }
+        return !(
+          currentUser != null &&
+          currentUser.roles.find(
+            ({ name }) => name === 'administrator' || name === 'editor',
+          )
+        )
+      },
     }),
     defineField({
       name: 'imageURL',
@@ -98,9 +106,12 @@ export default defineType({
           { title: 'Is Local Speaker', value: Flags.localSpeaker },
           { title: 'Is First Time Speaker', value: Flags.firstTimeSpeaker },
           { title: 'Is Diverse Speaker', value: Flags.diverseSpeaker },
-          { title: 'Requires Travel Funding', value: Flags.requiresTravelFunding },
-        ]
-      }
+          {
+            title: 'Requires Travel Funding',
+            value: Flags.requiresTravelFunding,
+          },
+        ],
+      },
     }),
   ],
   preview: {

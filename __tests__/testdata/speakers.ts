@@ -1,4 +1,4 @@
-import { Flags, Speaker } from "@/lib/speaker/types";
+import { Flags, Speaker } from '@/lib/speaker/types'
 
 const speakers: Speaker[] = [
   {
@@ -6,14 +6,14 @@ const speakers: Speaker[] = [
     name: 'John Doe',
     title: 'Acme Inc.',
     email: 'john@acme.com',
-    flags: [Flags.localSpeaker, Flags.firstTimeSpeaker]
+    flags: [Flags.localSpeaker, Flags.firstTimeSpeaker],
   },
   {
     _id: 'c3a7f9e0-9e8d-4e4b-9e8f-2a4b6d8f9e8d',
     name: 'Alice Smith',
     title: 'XYZ Corp.',
     email: 'alice@xyz.com',
-    flags: []
+    flags: [],
   },
   {
     _id: '08913fe1-4e52-43b9-8b27-6d5febf95dbd',
@@ -21,11 +21,11 @@ const speakers: Speaker[] = [
     title: 'Acme Inc.',
     email: 'jane@acme.com',
     flags: [Flags.diverseSpeaker, Flags.requiresTravelFunding],
-    is_organizer: true
-  }
-] as Speaker[];
+    is_organizer: true,
+  },
+] as Speaker[]
 
-export default speakers;
-export const speaker1 = speakers[0];
-export const speaker2 = speakers[1];
-export const organizer = speakers[2];
+export default speakers
+export const speaker1 = speakers[0]
+export const speaker2 = speakers[1]
+export const organizer = speakers[2]

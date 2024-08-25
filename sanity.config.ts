@@ -27,7 +27,9 @@ export default defineConfig({
   document: {
     actions: (prev) =>
       prev.map((originalAction) =>
-        originalAction.action === 'publish' ? slugOnSave(originalAction) : originalAction,
+        originalAction.action === 'publish'
+          ? slugOnSave(originalAction)
+          : originalAction,
       ),
   },
 })

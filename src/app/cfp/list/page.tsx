@@ -8,12 +8,20 @@ import { useState, useEffect } from 'react'
 import { listProposals } from '@/lib/proposal/client'
 import { useSearchParams } from 'next/navigation'
 import { FormatStatus } from '@/lib/proposal/format'
-import { CheckCircleIcon, XMarkIcon, PlusCircleIcon, EnvelopeIcon, BookOpenIcon, PencilIcon, UserCircleIcon } from '@heroicons/react/20/solid'
+import {
+  CheckCircleIcon,
+  XMarkIcon,
+  PlusCircleIcon,
+  EnvelopeIcon,
+  BookOpenIcon,
+  PencilIcon,
+  UserCircleIcon,
+} from '@heroicons/react/20/solid'
 import { SpinnerIcon } from '@/components/SocialIcons'
 import { ProposalActionModal } from '@/components/ProposalActionModal'
 import config from '@/../next.config'
 
-const { publicRuntimeConfig: c } = config;
+const { publicRuntimeConfig: c } = config
 
 interface ButtonAction {
   label: Action
@@ -27,27 +35,36 @@ function classNames(...classes: string[]) {
 }
 
 function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 function ActionLink({ action }: { action: ButtonAction }) {
   return (
-    <a href={action.link} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 border border-transparent py-4 text-sm font-semibold text-gray-900">
+    <a
+      href={action.link}
+      className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 border border-transparent py-4 text-sm font-semibold text-gray-900"
+    >
       <action.icon className="h-5 w-5 text-gray-400" aria-hidden="true" />
       {capitalizeFirstLetter(action.label)}
     </a>
   )
 }
 
-function ActionButton({ action, isLoading }: { action: ButtonAction, isLoading: boolean }) {
+function ActionButton({
+  action,
+  isLoading,
+}: {
+  action: ButtonAction
+  isLoading: boolean
+}) {
   return (
     <button
       disabled={isLoading}
       onClick={action.onClick}
       className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 border border-transparent py-4 text-sm font-semibold text-gray-900"
     >
-      {(isLoading) ? (
-        <SpinnerIcon className="animate-spin h-5 w-5 text-grey-400" />
+      {isLoading ? (
+        <SpinnerIcon className="text-grey-400 h-5 w-5 animate-spin" />
       ) : (
         <action.icon className="h-5 w-5 text-gray-400" aria-hidden="true" />
       )}
@@ -56,13 +73,25 @@ function ActionButton({ action, isLoading }: { action: ButtonAction, isLoading: 
   )
 }
 
-function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], action: (proposal: ProposalExisting, action: Action) => void }) {
+function ProposalCards({
+  proposals,
+  action,
+}: {
+  proposals: ProposalExisting[]
+  action: (proposal: ProposalExisting, action: Action) => void
+}) {
   return (
-    <ul role="list" className="mt-6 mx-auto max-w-2xl lg:max-w-4xl grid grid-cols-1 gap-6 sm:grid-cols-2">
-      {proposals.map(proposal => {
-        const actions: ButtonAction[] = [];
+    <ul
+      role="list"
+      className="mx-auto mt-6 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:max-w-4xl"
+    >
+      {proposals.map((proposal) => {
+        const actions: ButtonAction[] = []
 
-        if (proposal.status === Status.draft || proposal.status === Status.submitted) {
+        if (
+          proposal.status === Status.draft ||
+          proposal.status === Status.submitted
+        ) {
           actions.push({
             label: Action.edit,
             icon: PencilIcon,
@@ -82,7 +111,7 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
             icon: EnvelopeIcon,
             onClick: async () => {
               action(proposal, Action.submit)
-            }
+            },
           })
         }
 
@@ -92,17 +121,20 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
             icon: XMarkIcon,
             onClick: () => {
               action(proposal, Action.unsubmit)
-            }
+            },
           })
         }
 
-        if (proposal.status === Status.confirmed || proposal.status === Status.accepted) {
+        if (
+          proposal.status === Status.confirmed ||
+          proposal.status === Status.accepted
+        ) {
           actions.push({
             label: Action.withdraw,
             icon: XMarkIcon,
             onClick: () => {
               action(proposal, Action.withdraw)
-            }
+            },
           })
         }
 
@@ -112,19 +144,26 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
             icon: CheckCircleIcon,
             onClick: () => {
               action(proposal, Action.confirm)
-            }
+            },
           })
         }
 
         return (
-          <li key={proposal._id} className={classNames(
-            proposal.status === Status.accepted ? 'border-green-500/50 border-2' : '',
-            'col-span-1 divide-y divide-gray-200 bg-white rounded-lg shadow'
-          )}>
+          <li
+            key={proposal._id}
+            className={classNames(
+              proposal.status === Status.accepted
+                ? 'border-2 border-green-500/50'
+                : '',
+              'col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow',
+            )}
+          >
             <div className="flex w-full items-center justify-between space-x-6 p-6">
               <div className="flex-1 truncate">
                 <div className="flex items-center space-x-3">
-                  <h3 className="truncate text-sm font-medium text-gray-900">{proposal.title}</h3>
+                  <h3 className="truncate text-sm font-medium text-gray-900">
+                    {proposal.title}
+                  </h3>
                   <FormatStatus status={proposal.status} />
                 </div>
                 <p className="mt-1 truncate text-sm text-gray-500">
@@ -136,54 +175,69 @@ function ProposalCards({ proposals, action }: { proposals: ProposalExisting[], a
                 </p>
               </div>
               {proposal.speaker && 'image' in proposal.speaker ? (
-                <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={proposal.speaker.image} alt="" />
+                <img
+                  className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300"
+                  src={proposal.speaker.image}
+                  alt=""
+                />
               ) : (
-                <UserCircleIcon className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" aria-hidden="true" />
+                <UserCircleIcon
+                  className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300"
+                  aria-hidden="true"
+                />
               )}
             </div>
-            {(actions.length > 0) && (
+            {actions.length > 0 && (
               <div>
                 <div className="-mt-px flex divide-x divide-gray-200">
-                  {(actions.map((action, i) => (
-                    <div key={`${proposal._id}-${action.label}`} className={classNames(
-                      i > 0 ? '-ml-px' : '',
-                      'relative inline-flex w-0 flex-1 flex'
-                    )}>
+                  {actions.map((action, i) => (
+                    <div
+                      key={`${proposal._id}-${action.label}`}
+                      className={classNames(
+                        i > 0 ? '-ml-px' : '',
+                        'relative flex inline-flex w-0 flex-1',
+                      )}
+                    >
                       {action.link ? (
                         <ActionLink action={action} />
                       ) : (
                         <ActionButton action={action} isLoading={false} />
                       )}
                     </div>
-                  )))}
+                  ))}
                 </div>
               </div>
             )}
           </li>
         )
       })}
-    </ul >
+    </ul>
   )
 }
 
 function Success() {
-  const [showMessage, setShowMessage] = useState(true);
+  const [showMessage, setShowMessage] = useState(true)
 
   const dismissMessage = () => {
-    window.history.replaceState({}, document.title, window.location.pathname);
-    setShowMessage(false);
-  };
+    window.history.replaceState({}, document.title, window.location.pathname)
+    setShowMessage(false)
+  }
 
   return (
     <>
       {showMessage && (
-        <div className="flex flex-col mx-auto max-w-2xl lg:max-w-4xl lg:px-12 rounded-md bg-green-50 mt-6 p-4">
+        <div className="mx-auto mt-6 flex max-w-2xl flex-col rounded-md bg-green-50 p-4 lg:max-w-4xl lg:px-12">
           <div className="flex">
             <div className="flex-shrink-0">
-              <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+              <CheckCircleIcon
+                className="h-5 w-5 text-green-400"
+                aria-hidden="true"
+              />
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-green-800">Proposal submitted successfully.</p>
+              <p className="text-sm font-medium text-green-800">
+                Proposal submitted successfully.
+              </p>
             </div>
             <div className="ml-auto pl-3">
               <div className="-mx-1.5 -my-1.5">
@@ -201,7 +255,7 @@ function Success() {
         </div>
       )}
     </>
-  );
+  )
 }
 
 export default function MyProposals() {
@@ -210,13 +264,15 @@ export default function MyProposals() {
   const confirm = searchParams.get('confirm') ?? ''
 
   const [actionOpen, setActionOpen] = useState<boolean>(false)
-  const [actionProposal, setActionProposal] = useState<ProposalExisting>({} as ProposalExisting)
+  const [actionProposal, setActionProposal] = useState<ProposalExisting>(
+    {} as ProposalExisting,
+  )
   const [actionAction, setActionAction] = useState<Action>(Action.submit)
 
-  const [proposals, setProposals] = useState<ProposalExisting[]>([]);
-  const [error, setError] = useState<string>('');
+  const [proposals, setProposals] = useState<ProposalExisting[]>([])
+  const [error, setError] = useState<string>('')
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true)
 
   function actionCloseHandler() {
     setActionOpen(false)
@@ -224,14 +280,21 @@ export default function MyProposals() {
     setTimeout(() => {
       setActionProposal({} as ProposalExisting)
       setActionAction(Action.submit)
-    }, 400);
+    }, 400)
   }
 
   // actionUpdateHandler updates the status of a proposal in the list
   // of proposals without making a request to the server.
   function actionUpdateHandler(id: string, status: Status) {
-    setProposals(proposals.map(p => { if (p._id === id) { p.status = status } return p }))
-    window.history.replaceState({}, document.title, window.location.pathname);
+    setProposals(
+      proposals.map((p) => {
+        if (p._id === id) {
+          p.status = status
+        }
+        return p
+      }),
+    )
+    window.history.replaceState({}, document.title, window.location.pathname)
   }
 
   async function actionHandler(proposal: ProposalExisting, action: Action) {
@@ -242,7 +305,7 @@ export default function MyProposals() {
 
   useEffect(() => {
     if (confirm) {
-      const proposal = proposals.find(p => p._id === confirm)
+      const proposal = proposals.find((p) => p._id === confirm)
       if (proposal && proposal.status === Status.accepted) {
         actionHandler(proposal, Action.confirm)
       }
@@ -252,18 +315,18 @@ export default function MyProposals() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { proposals, error } = await listProposals();
-        if (error) setError(error.message);
-        if (proposals) setProposals(proposals);
+        const { proposals, error } = await listProposals()
+        if (error) setError(error.message)
+        if (proposals) setProposals(proposals)
       } catch (error) {
-        setError('Error fetching proposals from server.');
-        console.error(error);
+        setError('Error fetching proposals from server.')
+        console.error(error)
       }
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   return (
     <Layout>
@@ -274,39 +337,53 @@ export default function MyProposals() {
             <h1 className="font-display text-5xl font-bold tracking-tighter text-blue-600 sm:text-7xl">
               Speaker Dashboard
               {c?.cfpOpen && (
-                <a href='/cfp/submit'>
-                  <PlusCircleIcon className="h-14 w-14 inline-block ml-8 text-blue-600 hover:text-blue-500" />
+                <a href="/cfp/submit">
+                  <PlusCircleIcon className="ml-8 inline-block h-14 w-14 text-blue-600 hover:text-blue-500" />
                 </a>
               )}
             </h1>
             <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
               <p>
-                Than you for your interest in submitting a presentation to our conference.
+                Than you for your interest in submitting a presentation to our
+                conference.
               </p>
             </div>
           </div>
-          {success && (
-            <Success />
-          )}
+          {success && <Success />}
           {loading ? (
-            <div className="flex justify-center mt-12 mb-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className="mb-12 mt-12 flex justify-center">
+              <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
             </div>
           ) : (
             <>
               {proposals.length === 0 ? (
-                <div className="flex flex-col items-center mx-auto p-6 mt-12 max-w-2xl lg:max-w-4xl lg:px-12 bg-white rounded-lg border-dashed border-2 border-blue-600">
-                  <p className="text-lg font-semibold text-gray-900">You have no proposals yet.</p>
+                <div className="mx-auto mt-12 flex max-w-2xl flex-col items-center rounded-lg border-2 border-dashed border-blue-600 bg-white p-6 lg:max-w-4xl lg:px-12">
+                  <p className="text-lg font-semibold text-gray-900">
+                    You have no proposals yet.
+                  </p>
                   {c?.cfpOpen && (
                     <>
-                      <p className="mt-2 text-sm text-gray-500">Submit a proposal to become a speaker.</p>
-                      <a href="/cfp/submit" className="mt-4 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Submit Proposal</a>
+                      <p className="mt-2 text-sm text-gray-500">
+                        Submit a proposal to become a speaker.
+                      </p>
+                      <a
+                        href="/cfp/submit"
+                        className="mt-4 rounded-md bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700"
+                      >
+                        Submit Proposal
+                      </a>
                     </>
                   )}
                 </div>
               ) : (
                 <>
-                  <ProposalActionModal open={actionOpen} action={actionAction} close={actionCloseHandler} proposal={actionProposal} onAction={actionUpdateHandler} />
+                  <ProposalActionModal
+                    open={actionOpen}
+                    action={actionAction}
+                    close={actionCloseHandler}
+                    proposal={actionProposal}
+                    onAction={actionUpdateHandler}
+                  />
                   <ProposalCards proposals={proposals} action={actionHandler} />
                 </>
               )}
@@ -314,7 +391,6 @@ export default function MyProposals() {
           )}
         </Container>
       </div>
-    </Layout >
+    </Layout>
   )
 }
-

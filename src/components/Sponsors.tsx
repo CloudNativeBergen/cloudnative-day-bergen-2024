@@ -27,7 +27,11 @@ const sponsors = [
   { name: 'Tietovery', logo: logoTietoevry, href: 'https://tietoevry.com' },
   { name: 'Stacc', logo: logoStacc, href: 'https://stacc.no' },
   { name: 'javaBin', logo: logoJavabin, href: 'https://java.no' },
-  { name: 'Redpill Linpro', logo: logoRedpill, href: 'https://www.redpill-linpro.com' },
+  {
+    name: 'Redpill Linpro',
+    logo: logoRedpill,
+    href: 'https://www.redpill-linpro.com',
+  },
   { name: 'ScaleAQ', logo: logoScaleaq, href: 'https://scaleaq.no' },
 ]
 
@@ -44,20 +48,25 @@ export function Sponsors() {
               key={`${sponsor.name}-${i}`}
               className="flex items-center justify-center"
             >
-              {sponsor.name === "TBD" && (
+              {sponsor.name === 'TBD' && (
                 <a
                   type="button"
                   href="/sponsor"
-                  className="relative block w-full rounded-lg sm:gap-y-16 border-2 border-dashed border-gray-300 p-10 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-10 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:gap-y-16"
                 >
                   <p className="mt-1 font-mono text-sm text-slate-500">
                     Become a sponsor
                   </p>
                 </a>
               )}
-              {sponsor.name !== "TBD" && (
-                <a href={sponsor.href} className='hover:opacity-80'>
-                  <Image src={sponsor.logo} alt={sponsor.name} className='h-20' unoptimized />
+              {sponsor.name !== 'TBD' && (
+                <a href={sponsor.href} className="hover:opacity-80">
+                  <Image
+                    src={sponsor.logo}
+                    alt={sponsor.name}
+                    className="h-20"
+                    unoptimized
+                  />
                 </a>
               )}
             </div>

@@ -86,22 +86,32 @@ function TrackSummary({ track }: { track: ScheduleTrack }) {
   )
 }
 
-function PlaceholderTimeSlot({ track, talk }: { track: ScheduleTrack, talk: ScheduleTalk }) {
+function PlaceholderTimeSlot({
+  track,
+  talk,
+}: {
+  track: ScheduleTrack
+  talk: ScheduleTalk
+}) {
   return (
     <a
       type="button"
       href="/cfp"
-      className="relative block w-full pb-4 py-3 rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 py-3 pb-4 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
     >
-      <p className="mt-1 font-mono text-sm text-slate-500">
-        Submit to speak
-      </p>
+      <p className="mt-1 font-mono text-sm text-slate-500">Submit to speak</p>
       <TimeSlotTime date={track.date} start={talk.start} end={talk.end} />
     </a>
   )
 }
 
-function TalkTimeSlot({ track, talk }: { track: ScheduleTrack, talk: ScheduleTalk }) {
+function TalkTimeSlot({
+  track,
+  talk,
+}: {
+  track: ScheduleTrack
+  talk: ScheduleTalk
+}) {
   return (
     <div className="relative block">
       {!talk.speaker ? (
@@ -113,9 +123,7 @@ function TalkTimeSlot({ track, talk }: { track: ScheduleTrack, talk: ScheduleTal
           <h4 className="text-lg font-semibold tracking-tight text-blue-900">
             {talk.speaker.name}
           </h4>
-          <p className="mt-1 tracking-tight text-blue-900">
-            {talk.title}
-          </p>
+          <p className="mt-1 tracking-tight text-blue-900">{talk.title}</p>
         </a>
       )}
       <TimeSlotTime date={track.date} start={talk.start} end={talk.end} />
@@ -123,21 +131,30 @@ function TalkTimeSlot({ track, talk }: { track: ScheduleTrack, talk: ScheduleTal
   )
 }
 
-function TimeSlotTime({ date, start, end }: { date: string, start: string, end: string }) {
+function TimeSlotTime({
+  date,
+  start,
+  end,
+}: {
+  date: string
+  start: string
+  end: string
+}) {
   return (
     <p className="mt-1 font-mono text-sm text-slate-500">
-      <time dateTime={`${date}T${start} CEST`}>
-        {start}
-      </time>{' '}
-      -{' '}
-      <time dateTime={`${date}T${end} CEST`}>
-        {end}
-      </time>{' '}
+      <time dateTime={`${date}T${start} CEST`}>{start}</time> -{' '}
+      <time dateTime={`${date}T${end} CEST`}>{end}</time>{' '}
     </p>
   )
 }
 
-function TimeSlots({ track, className }: { track: ScheduleTrack; className?: string }) {
+function TimeSlots({
+  track,
+  className,
+}: {
+  track: ScheduleTrack
+  className?: string
+}) {
   return (
     <ol
       role="list"
@@ -154,15 +171,14 @@ function TimeSlots({ track, className }: { track: ScheduleTrack; className?: str
           {talkIndex > 0 && (
             <div className="mx-auto mb-8 h-px w-48 bg-indigo-500/10" />
           )}
-          {talk.title === "TBD" ? (
+          {talk.title === 'TBD' ? (
             <PlaceholderTimeSlot track={track} talk={talk} />
           ) : (
             <TalkTimeSlot track={track} talk={talk} />
           )}
         </li>
-      ))
-      }
-    </ol >
+      ))}
+    </ol>
   )
 }
 
@@ -185,11 +201,12 @@ export function Schedule({ tracks }: { tracks: ScheduleTrack[] }) {
       <Container className="relative z-10">
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-4xl lg:pr-24">
           <h2 className="font-display text-4xl font-medium tracking-tighter text-blue-600 sm:text-5xl">
-            Our three track schedule is bin-packed with brilliant, creative and innovative
-            experts.
+            Our three track schedule is bin-packed with brilliant, creative and
+            innovative experts.
           </h2>
           <p className="mt-4 font-display text-2xl tracking-tight text-blue-900">
-            Immerse yourself in a world of cutting-edge cloud and Kubernetes technologies and choose the talks that interest you the most.
+            Immerse yourself in a world of cutting-edge cloud and Kubernetes
+            technologies and choose the talks that interest you the most.
           </p>
         </div>
       </Container>

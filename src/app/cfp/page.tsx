@@ -1,16 +1,24 @@
-import { LockClosedIcon, BellAlertIcon, CalendarDaysIcon } from '@heroicons/react/20/solid'
+import {
+  LockClosedIcon,
+  BellAlertIcon,
+  CalendarDaysIcon,
+} from '@heroicons/react/20/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import getConfig from 'next/config';
+import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig();
-const { cocLink, dates } = publicRuntimeConfig;
+const { publicRuntimeConfig } = getConfig()
+const { cocLink, dates } = publicRuntimeConfig
 
 function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
 }
 
 function classNames(...classes: string[]) {
@@ -18,9 +26,24 @@ function classNames(...classes: string[]) {
 }
 
 const datesToRemember = [
-  { name: 'CFP Close', date: formatDate(dates.cfpEnd), icon: LockClosedIcon, bgColor: 'bg-pink-600' },
-  { name: 'Speaker Notify', date: formatDate(dates.cfpNotify), icon: BellAlertIcon, bgColor: 'bg-purple-600' },
-  { name: 'Program Final', date: formatDate(dates.program), icon: CalendarDaysIcon, bgColor: 'bg-yellow-500' },
+  {
+    name: 'CFP Close',
+    date: formatDate(dates.cfpEnd),
+    icon: LockClosedIcon,
+    bgColor: 'bg-pink-600',
+  },
+  {
+    name: 'Speaker Notify',
+    date: formatDate(dates.cfpNotify),
+    icon: BellAlertIcon,
+    bgColor: 'bg-purple-600',
+  },
+  {
+    name: 'Program Final',
+    date: formatDate(dates.program),
+    icon: CalendarDaysIcon,
+    bgColor: 'bg-yellow-500',
+  },
 ]
 
 export default async function CFP() {
@@ -35,14 +58,22 @@ export default async function CFP() {
             </h1>
             <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
               <p>
-                Become our next speaker and share your knowledge with the community! We are especially interested in local speakers who can provide unique insights and perspectives.
+                Become our next speaker and share your knowledge with the
+                community! We are especially interested in local speakers who
+                can provide unique insights and perspectives.
               </p>
               <p>
-                CloudNative Day Bergen is the premier local conference for all things cloud and Kubernetes. Join us to learn about the latest trends, best practices, and cutting-edge technologies in the cloud-native ecosystem.
+                CloudNative Day Bergen is the premier local conference for all
+                things cloud and Kubernetes. Join us to learn about the latest
+                trends, best practices, and cutting-edge technologies in the
+                cloud-native ecosystem.
               </p>
             </div>
 
-            <Button href="/cfp/submit" className="mt-10 w-full bg-teal-600 hover:bg-teal-500">
+            <Button
+              href="/cfp/submit"
+              className="mt-10 w-full bg-teal-600 hover:bg-teal-500"
+            >
               Submit your proposal
             </Button>
 
@@ -65,15 +96,22 @@ export default async function CFP() {
             </h2>
             <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
               <p>
-                We are looking for talks that are relevant to the community and that provide valuable insights. We welcome speakers of all levels of experience, from first-time presenters to seasoned experts.
+                We are looking for talks that are relevant to the community and
+                that provide valuable insights. We welcome speakers of all
+                levels of experience, from first-time presenters to seasoned
+                experts.
               </p>
               <p>
-                CloudNative Day Bergen is a diverse and inclusive event, and we encourage submissions from speakers of all backgrounds and identities. We are committed to creating a safe and welcoming environment for everyone.
+                CloudNative Day Bergen is a diverse and inclusive event, and we
+                encourage submissions from speakers of all backgrounds and
+                identities. We are committed to creating a safe and welcoming
+                environment for everyone.
               </p>
               <p>
-                We are especially interested in talks that cover the following topics:
+                We are especially interested in talks that cover the following
+                topics:
               </p>
-              <ul className="list-disc pl-8 mt-4">
+              <ul className="mt-4 list-disc pl-8">
                 <li>Cloud-native technologies</li>
                 <li>Observability</li>
                 <li>Security</li>
@@ -81,31 +119,38 @@ export default async function CFP() {
                 <li>Best practices and case studies</li>
               </ul>
               <p>
-                The deadline for submissions is {formatDate(dates.cfpEnd)}, but <strong>we are reviewing proposals on a rolling basis</strong>, so we encourage you to submit early to increase your chances of being selected.
-                We will review all remaining proposals and notify selected speakers by {formatDate(dates.cfpNotify)}.
+                The deadline for submissions is {formatDate(dates.cfpEnd)}, but{' '}
+                <strong>we are reviewing proposals on a rolling basis</strong>,
+                so we encourage you to submit early to increase your chances of
+                being selected. We will review all remaining proposals and
+                notify selected speakers by {formatDate(dates.cfpNotify)}.
               </p>
             </div>
 
-            <h3 className="mt-5 mb-5 font-display text-3xl font-medium tracking-tighter text-blue-600 sm:text-3xl">
+            <h3 className="mb-5 mt-5 font-display text-3xl font-medium tracking-tighter text-blue-600 sm:text-3xl">
               Dates to Remember
             </h3>
 
-            <ul role="list" className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+            <ul
+              role="list"
+              className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+            >
               {datesToRemember.map((date) => (
-                <li key={date.name} className="col-span-1 flex rounded-md shadow-sm">
+                <li
+                  key={date.name}
+                  className="col-span-1 flex rounded-md shadow-sm"
+                >
                   <div
                     className={classNames(
                       date.bgColor,
-                      'flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white'
+                      'flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white',
                     )}
                   >
                     <date.icon className="h-5 w-5" aria-hidden="true" />
                   </div>
                   <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
-                    <div className="flex-1 truncate px-4 py-2 text-m">
-                      <p className="font-medium text-gray-900">
-                        {date.name}
-                      </p>
+                    <div className="text-m flex-1 truncate px-4 py-2">
+                      <p className="font-medium text-gray-900">{date.name}</p>
                       <p className="text-gray-500">{date.date}</p>
                     </div>
                   </div>
@@ -119,12 +164,24 @@ export default async function CFP() {
 
             <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
               <p>
-                CloudNative Day Bergen is committed to creating a diverse and inclusive event that welcomes speakers and attendees of all backgrounds and identities. We believe that diversity is a strength and that everyone has something valuable to contribute.
+                CloudNative Day Bergen is committed to creating a diverse and
+                inclusive event that welcomes speakers and attendees of all
+                backgrounds and identities. We believe that diversity is a
+                strength and that everyone has something valuable to contribute.
               </p>
               <p>
-                We are enforcing a strict code of conduct to ensure that CloudNative Day Bergen is a safe and welcoming environment for everyone. We do not tolerate harassment or discrimination of any kind, and we will take appropriate action against anyone who violates our <a href={cocLink} className='text-indigo-500 hover:text-indigo-700 underline'>
+                We are enforcing a strict code of conduct to ensure that
+                CloudNative Day Bergen is a safe and welcoming environment for
+                everyone. We do not tolerate harassment or discrimination of any
+                kind, and we will take appropriate action against anyone who
+                violates our{' '}
+                <a
+                  href={cocLink}
+                  className="text-indigo-500 underline hover:text-indigo-700"
+                >
                   code of conduct
-                </a>.
+                </a>
+                .
               </p>
             </div>
           </div>

@@ -34,8 +34,5 @@ export default {
       },
     },
   },
-  plugins: [
-    headlessuiPlugin,
-    formsPlugin,
-  ],
+  plugins: [headlessuiPlugin, formsPlugin],
 } satisfies Config

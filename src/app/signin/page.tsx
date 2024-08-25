@@ -1,13 +1,17 @@
-import { LockClosedIcon, BellAlertIcon, CalendarDaysIcon } from '@heroicons/react/20/solid'
+import {
+  LockClosedIcon,
+  BellAlertIcon,
+  CalendarDaysIcon,
+} from '@heroicons/react/20/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { signIn, auth, providerMap } from "@/lib/auth"
-import getConfig from 'next/config';
+import { signIn, auth, providerMap } from '@/lib/auth'
+import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig();
-const { cocLink, dates } = publicRuntimeConfig;
+const { publicRuntimeConfig } = getConfig()
+const { cocLink, dates } = publicRuntimeConfig
 
 export default async function CFP() {
   return (
@@ -25,7 +29,7 @@ export default async function CFP() {
                 <form
                   key={provider.id}
                   action={async () => {
-                    "use server"
+                    'use server'
                     await signIn(provider.id)
                   }}
                 >

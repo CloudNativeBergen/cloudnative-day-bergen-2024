@@ -4,16 +4,22 @@ import {
   ProposalActionResponse,
   ProposalListResponse,
   ProposalResponse,
-} from '@/lib/proposal/types';
+} from '@/lib/proposal/types'
 
 export async function listProposals(): Promise<ProposalListResponse> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal`, { cache: 'no-store', next: { revalidate: 0 } })
-  return await res.json() as ProposalListResponse
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal`, {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+  })
+  return (await res.json()) as ProposalListResponse
 }
 
 export async function listAllProposals(): Promise<ProposalListResponse> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal/all`, { cache: 'no-store', next: { revalidate: 0 } })
-  return await res.json() as ProposalListResponse
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal/all`, {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+  })
+  return (await res.json()) as ProposalListResponse
 }
 
 export async function getProposal(id?: string): Promise<ProposalResponse> {
@@ -23,10 +29,13 @@ export async function getProposal(id?: string): Promise<ProposalResponse> {
   }
 
   const res = await fetch(url, { cache: 'no-store', next: { revalidate: 0 } })
-  return await res.json() as ProposalResponse
+  return (await res.json()) as ProposalResponse
 }
 
-export async function postProposal(proposal: ProposalInput, id?: string): Promise<ProposalResponse> {
+export async function postProposal(
+  proposal: ProposalInput,
+  id?: string,
+): Promise<ProposalResponse> {
   if (id === 'new') id = undefined
 
   let url = `${process.env.NEXT_PUBLIC_URL}/api/proposal`
@@ -44,21 +53,29 @@ export async function postProposal(proposal: ProposalInput, id?: string): Promis
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(proposal),
-  });
+  })
 
-  return await res.json() as ProposalResponse
+  return (await res.json()) as ProposalResponse
 }
 
-export async function postProposalAction(id: string, action: Action, notify: boolean, comment: string): Promise<ProposalActionResponse> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/proposal/${id}/action`, {
-    next: { revalidate: 0 },
-    cache: 'no-store',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+export async function postProposalAction(
+  id: string,
+  action: Action,
+  notify: boolean,
+  comment: string,
+): Promise<ProposalActionResponse> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/proposal/${id}/action`,
+    {
+      next: { revalidate: 0 },
+      cache: 'no-store',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action, notify, comment }),
     },
-    body: JSON.stringify({ action, notify, comment }),
-  });
+  )
 
-  return await res.json() as ProposalActionResponse
+  return (await res.json()) as ProposalActionResponse
 }

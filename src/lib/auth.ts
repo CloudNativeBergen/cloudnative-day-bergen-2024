@@ -1,13 +1,13 @@
-import NextAuth from "next-auth"
-import GitHub from "next-auth/providers/github"
-import LinkedIn from "next-auth/providers/linkedin"
-import type { NextAuthConfig, Session, User } from "next-auth"
-import { NextRequest } from "next/server";
-import { AppRouteHandlerFn } from "next/dist/server/future/route-modules/app-route/module.js";
-import { getOrCreateSpeaker } from "@/lib/speaker/sanity";
+import NextAuth from 'next-auth'
+import GitHub from 'next-auth/providers/github'
+import LinkedIn from 'next-auth/providers/linkedin'
+import type { NextAuthConfig, Session, User } from 'next-auth'
+import { NextRequest } from 'next/server'
+import { AppRouteHandlerFn } from 'next/dist/server/future/route-modules/app-route/module.js'
+import { getOrCreateSpeaker } from '@/lib/speaker/sanity'
 
 export interface NextAuthRequest extends NextRequest {
-  auth: Session | null;
+  auth: Session | null
 }
 
 export const config = {
@@ -31,7 +31,7 @@ export const config = {
   secret: process.env.AUTH_SECRET,
 
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
 
   callbacks: {
@@ -61,29 +61,33 @@ export const config = {
     // profile is the user's profile object from the authentication provider
     async jwt({ token, account, trigger }) {
       if (!trigger && !(token.account && token.speaker)) {
-        console.error("Invalid auth token", token)
+        console.error('Invalid auth token', token)
         return {}
       }
 
-      if (trigger === "signIn") {
+      if (trigger === 'signIn') {
         if (!token || !token.email || !token.name) {
-          console.error("Invalid auth token", token)
+          console.error('Invalid auth token', token)
           return {}
         }
 
         if (!account || !account.provider || !account.providerAccountId) {
-          console.error("Invalid auth account", account);
+          console.error('Invalid auth account', account)
           return {}
         }
 
-        const user: User = { email: token.email, name: token.name, image: token.picture }
+        const user: User = {
+          email: token.email,
+          name: token.name,
+          image: token.picture,
+        }
         const { speaker, err } = await getOrCreateSpeaker(user, account)
         if (err) {
-          console.error("Error fetching or creating speaker profile", err)
+          console.error('Error fetching or creating speaker profile', err)
           return {}
         }
 
-        if (speaker.image && typeof speaker.image === "string") {
+        if (speaker.image && typeof speaker.image === 'string') {
           token.picture = `${speaker.image}?w=96&h=96&fit=crop`
         }
 
@@ -95,14 +99,18 @@ export const config = {
     },
     redirect({ url, baseUrl }) {
       return url.startsWith(baseUrl) ? url : baseUrl
-    }
+    },
   },
 } satisfies NextAuthConfig
 
 export const providerMap = config.providers.map((provider: any) => {
-  if (typeof provider === "function") {
+  if (typeof provider === 'function') {
     const providerData = provider()
-    return { id: providerData.id, name: providerData.name, type: providerData.type }
+    return {
+      id: providerData.id,
+      name: providerData.name,
+      type: providerData.type,
+    }
   } else {
     return { id: provider.id, name: provider.name, type: provider.type }
   }
@@ -118,14 +126,16 @@ export const auth = _auth as typeof _auth &
     ...args: [
       (
         req: NextAuthRequest,
-        context: { params: Record<string, string | string[] | undefined> }
-      ) => HandlerResponse
+        context: { params: Record<string, string | string[] | undefined> },
+      ) => HandlerResponse,
     ]
   ) => (
     req: Parameters<AppRouteHandlerFn>[0],
-    context: Parameters<AppRouteHandlerFn>[1]
-  ) => HandlerResponse);
+    context: Parameters<AppRouteHandlerFn>[1],
+  ) => HandlerResponse)
 
 export function isAtuh(req: NextAuthRequest): boolean {
-  return (req.auth && req.auth.user && req.auth.speaker && req.auth.speaker._id) ? true : false
+  return req.auth && req.auth.user && req.auth.speaker && req.auth.speaker._id
+    ? true
+    : false
 }

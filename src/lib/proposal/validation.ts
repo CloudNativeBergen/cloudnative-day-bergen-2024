@@ -1,4 +1,10 @@
-import { Format, Language, Level, FormValidationError, ProposalInput } from "@/lib/proposal/types"
+import {
+  Format,
+  Language,
+  Level,
+  FormValidationError,
+  ProposalInput,
+} from '@/lib/proposal/types'
 
 // This function converts a JSON object to a Proposal object. This is useful when we receive a Proposal object from the API and we want to convert it to a Proposal object that we can use in our application.
 // This function omits fields that should not be set by the user, such as the ID of the Proposal and the status of the Proposal.
@@ -15,7 +21,9 @@ export function convertJsonToProposal(json: any): ProposalInput {
   } as ProposalInput
 }
 
-export function validateProposal(proposal: ProposalInput): FormValidationError[] {
+export function validateProposal(
+  proposal: ProposalInput,
+): FormValidationError[] {
   const validationErrors = []
 
   if (!proposal.title) {
@@ -23,29 +31,53 @@ export function validateProposal(proposal: ProposalInput): FormValidationError[]
   }
 
   if (!proposal.description) {
-    validationErrors.push({ message: 'Abstract can not be empty', field: 'description' })
+    validationErrors.push({
+      message: 'Abstract can not be empty',
+      field: 'description',
+    })
   }
 
   if (!proposal.format) {
-    validationErrors.push({ message: 'Format must be specified', field: 'format' })
+    validationErrors.push({
+      message: 'Format must be specified',
+      field: 'format',
+    })
   } else if (!Object.values(Format).includes(proposal.format)) {
-    validationErrors.push({ message: `Invalid format "${proposal.format}"`, field: 'format' })
+    validationErrors.push({
+      message: `Invalid format "${proposal.format}"`,
+      field: 'format',
+    })
   }
 
   if (!proposal.language) {
-    validationErrors.push({ message: 'Language must be specified', field: 'language' })
+    validationErrors.push({
+      message: 'Language must be specified',
+      field: 'language',
+    })
   } else if (!Object.values(Language).includes(proposal.language)) {
-    validationErrors.push({ message: `Invalid language "${proposal.language}"`, field: 'language' })
+    validationErrors.push({
+      message: `Invalid language "${proposal.language}"`,
+      field: 'language',
+    })
   }
 
   if (!proposal.level) {
-    validationErrors.push({ message: 'Level must be specified', field: 'level' })
+    validationErrors.push({
+      message: 'Level must be specified',
+      field: 'level',
+    })
   } else if (!Object.values(Level).includes(proposal.level)) {
-    validationErrors.push({ message: `Invalid level ${proposal.level}`, field: 'level' })
+    validationErrors.push({
+      message: `Invalid level ${proposal.level}`,
+      field: 'level',
+    })
   }
 
   if (!proposal.tos) {
-    validationErrors.push({ message: 'Terms of Service must be accepted', field: 'tos' })
+    validationErrors.push({
+      message: 'Terms of Service must be accepted',
+      field: 'tos',
+    })
   }
 
   return validationErrors
