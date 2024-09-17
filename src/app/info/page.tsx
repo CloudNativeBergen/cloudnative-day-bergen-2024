@@ -109,6 +109,29 @@ export default function Info() {
   return (
     <Layout>
       <div className="bg-white">
+        <div className="py-12">
+          <div className="mx-auto max-w-4xl px-4 lg:px-6">
+            <div className="text-left">
+              <h1 className="text-3xl font-bold leading-9 tracking-tight text-gray-900 sm:text-4xl">
+                Practical Information
+              </h1>
+              <p className="mt-4 text-lg leading-7 text-gray-600">
+                Here, you'll find all the essential details you need to make the most of your conference experience. From venue information to schedules and accessibility, we've got you covered. If you have any further questions, feel free to reach out to us. We're here to help!
+              </p>
+              <div className="mt-8">
+                <ul className="mt-4 flex space-x-4">
+                  {faqs.map((section) => (
+                    <li key={section.anchor}>
+                      <a href={`#${section.anchor}`} className="text-lg leading-7 text-blue-600 hover:underline">
+                        {section.heading}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
         {faqs.map((section) => (
           <div key={section.anchor} id={section.anchor}>
             <div className="mx-auto max-w-7xl px-6 py-24 sm:pt-32 lg:px-8 lg:py-40">
@@ -140,6 +163,6 @@ export default function Info() {
           </div>
         ))}
       </div>
-    </Layout>
+    </Layout >
   )
 }
