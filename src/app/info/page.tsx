@@ -116,7 +116,7 @@ export default function Info() {
                 Practical Information
               </h1>
               <p className="mt-4 text-lg leading-7 text-gray-600">
-                Here, you'll find all the essential details you need to make the most of your conference experience. From venue information to schedules and accessibility, we've got you covered. If you have any further questions, feel free to reach out to us. We're here to help!
+                Here, you&apos;ll find all the essential details you need to make the most of your conference experience. From venue information to schedules and accessibility, we&apos;ve got you covered. If you have any further questions, feel free to reach out to us. We&apos;re here to help!
               </p>
               <div className="mt-8">
                 <ul className="mt-4 flex space-x-4">
