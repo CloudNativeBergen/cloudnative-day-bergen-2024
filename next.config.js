@@ -4,7 +4,10 @@ const nextConfig = {
   publicRuntimeConfig: {
     event: {
       name: 'CloudNative Day Bergen 2024',
-      location: 'Bergen, Norway',
+      location: 'Kvarteret, Bergen, Norway',
+    },
+    contact: {
+      email: 'hans@cloudnativebergen.dev'
     },
     registrationLink:
       'https://app.checkin.no/event/73442/cloudnative-day-bergen-2024',
