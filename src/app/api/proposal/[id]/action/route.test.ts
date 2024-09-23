@@ -229,7 +229,74 @@ describe('POST /api/proposal/[id]/action', () => {
               comment: 'this is the comment',
             },
             event: {
-              location: 'Bergen, Norway',
+              location: 'Kvarteret, Bergen, Norway',
+              date: '30 October 2024',
+              name: 'CloudNative Day Bergen 2024',
+            },
+          },
+        })
+      },
+    })
+  })
+
+  it('sends an email notification when the action is reject', async () => {
+    const sendMock = jest
+      .spyOn(sgMail, 'send')
+      .mockImplementation((emailMsg): any => {
+        expect(emailMsg).toBeDefined()
+        return Promise.resolve([
+          {
+            statusCode: 202,
+            body: 'Accepted',
+            headers: {},
+          } as unknown as ClientResponse,
+          {},
+        ])
+      })
+
+    // Sanity is caching stuff, so let's mock the fetch to return the proposal
+    clientReadUncached.fetch = jest.fn<() => Promise<any>>().mockResolvedValue({
+      ...submittedProposal,
+      _type: 'talk',
+      _id: submittedProposal._id!,
+    })
+
+    await testApiHandler({
+      appHandler,
+      params: { id: submittedProposal._id! },
+      requestPatcher(request) {
+        request.headers.set('x-test-auth-user', organizer._id!)
+      },
+      async test({ fetch }) {
+        const res = await fetch({
+          method: 'POST',
+          body: `{"action": "${Action.reject}", "notify": true, "comment": "this is the comment"}`,
+        })
+        expect(res.status).toBe(200)
+        expect(await res.json()).toEqual({
+          proposalStatus: Status.rejected,
+          status: 200,
+        })
+
+        const doc = await clientWrite.getDocument(submittedProposal._id!)
+        expect(doc).not.toBeNull()
+        expect(doc!.status).toBe(Status.rejected)
+
+        expect(sendMock).toHaveBeenCalledWith({
+          to: speaker.email,
+          from: process.env.SENDGRID_FROM_EMAIL,
+          templateId: process.env.SENDGRID_TEMPALTE_ID_CFP_REJECT,
+          dynamicTemplateData: {
+            speaker: {
+              name: speaker.name,
+            },
+            proposal: {
+              title: submittedProposal.title,
+              confirmUrl: `${process.env.NEXT_PUBLIC_URL}/cfp/list?confirm=${submittedProposal._id}`,
+              comment: 'this is the comment',
+            },
+            event: {
+              location: 'Kvarteret, Bergen, Norway',
               date: '30 October 2024',
               name: 'CloudNative Day Bergen 2024',
             },

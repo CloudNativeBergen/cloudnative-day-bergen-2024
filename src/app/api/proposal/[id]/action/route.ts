@@ -2,14 +2,13 @@ import {
   Action,
   ActionInput,
   ProposalActionResponse,
-  Status,
 } from '@/lib/proposal/types'
 import { NextAuthRequest, auth } from '@/lib/auth'
 import { proposalResponseError } from '@/lib/proposal/server'
 import { NextResponse } from 'next/server'
 import { getProposal, updateProposalStatus } from '@/lib/proposal/sanity'
 import { actionStateMachine } from '@/lib/proposal/states'
-import { sendAcceptNotification } from '@/lib/proposal/notification'
+import { sendAcceptRejectNotification } from '@/lib/proposal/notification'
 import { Speaker } from '@/lib/speaker/types'
 
 export const dynamic = 'force-dynamic'
@@ -79,8 +78,9 @@ export const POST = auth(
       })
     }
 
-    if (notify && action === Action.accept) {
-      const [res, _] = await sendAcceptNotification({
+    if (notify && (action === Action.accept || action === Action.reject)) {
+      const [res, _] = await sendAcceptRejectNotification({
+        action,
         speaker: proposal.speaker as Speaker,
         proposal: proposal,
         comment: comment || '',
