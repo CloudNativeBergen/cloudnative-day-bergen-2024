@@ -1,6 +1,7 @@
 import Image from 'next/image'
 
 import { Container } from '@/components/Container'
+import logoGoogle from '@/images/logos/google.svg'
 import logoAws from '@/images/logos/aws.svg'
 import logoTv2 from '@/images/logos/tv2.svg'
 import logoDnb from '@/images/logos/dnb.svg'
@@ -18,6 +19,7 @@ import logoEnabler from '@/images/logos/enabler.svg'
 
 const sponsors = [
   { name: 'AWS', logo: logoAws, href: 'https://aws.amazon.com' },
+  { name: 'Google', logo: logoGoogle, href: 'https://cloud.google.com/' },
   { name: 'TV 2', logo: logoTv2, href: 'https://tv2.no' },
   { name: 'DNB', logo: logoDnb, href: 'https://dnb.no' },
   { name: 'Fortytwo', logo: logoFortytwo, href: 'https://fortytwo.io' },
