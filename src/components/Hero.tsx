@@ -51,7 +51,7 @@ export function Hero() {
                 Get your ticket
               </Button>
             )}
-            {c?.cfpOpen && (
+            {c?.cfpOpen ? (
               <Button
                 href="/cfp"
                 className={classNames(
@@ -60,6 +60,16 @@ export function Hero() {
                 )}
               >
                 Submit to Speak
+              </Button>
+            ) : (
+              < Button
+                href={"/info"}
+                className={classNames(
+                  'mt-10 w-full bg-teal-600 hover:bg-teal-500',
+                  c?.registrationLink ? 'md:ml-2 md:w-1/2' : '',
+                )}
+              >
+                Practical Info
               </Button>
             )}
           </div>
@@ -99,7 +109,7 @@ export function Hero() {
             </a>
           </div>
         </div>
-      </Container>
-    </div>
+      </Container >
+    </div >
   )
 }
