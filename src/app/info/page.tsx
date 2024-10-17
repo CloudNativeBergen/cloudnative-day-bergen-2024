@@ -13,7 +13,7 @@ const faqs = [
     questions: [
       {
         question: 'What is the date of the conference?',
-        answer: `The conference will be held on ${formatDate(dates.conference)}.`,
+        answer: `The conference will be held on ${formatDate(dates.conference)}. The talks are scheduled to start at 09:00 and to end at 17:00. The doors will be open from 08:00`,
       },
       {
         question: 'Where is the conference located?',
