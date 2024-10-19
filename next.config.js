@@ -7,7 +7,7 @@ const nextConfig = {
       location: 'Kvarteret, Bergen, Norway',
     },
     contact: {
-      email: 'hans@cloudnativebergen.dev'
+      email: 'hans@cloudnativebergen.dev',
     },
     registrationLink:
       'https://app.checkin.no/event/73442/cloudnative-day-bergen-2024',

@@ -6,7 +6,6 @@ import { Schedule as ScheduleType } from '@/lib/schedule'
 const { publicRuntimeConfig } = getConfig()
 const { cocLink, dates, contact } = publicRuntimeConfig
 
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -16,11 +15,13 @@ export const revalidate = 3600
 async function getData() {
   return await clientRead.fetch<ScheduleType[]>(
     `*[_type == "schedule"]{date, time_start, time_end, track->{number, title, description}, talk->{title, speaker->{name, "slug": slug.current, title, "image": image.asset->url}}} | order(track.number asc, time_start asc)`,
-    {}, {
-    next: {
-      revalidate: revalidate,
-    }
-  })
+    {},
+    {
+      next: {
+        revalidate: revalidate,
+      },
+    },
+  )
 }
 
 type Track = {
@@ -38,31 +39,31 @@ type Slot = {
 }
 
 function timeDiff(start: string, end: string) {
-  const [startHours, startMinutes] = start.split(':').map(Number);
-  const [endHours, endMinutes] = end.split(':').map(Number);
+  const [startHours, startMinutes] = start.split(':').map(Number)
+  const [endHours, endMinutes] = end.split(':').map(Number)
 
-  const startTime = new Date();
-  startTime.setHours(startHours, startMinutes, 0, 0);
+  const startTime = new Date()
+  startTime.setHours(startHours, startMinutes, 0, 0)
 
-  const endTime = new Date();
-  endTime.setHours(endHours, endMinutes, 0, 0);
+  const endTime = new Date()
+  endTime.setHours(endHours, endMinutes, 0, 0)
 
-  const timeDifference = endTime.getTime() - startTime.getTime();
+  const timeDifference = endTime.getTime() - startTime.getTime()
   return timeDifference
 }
 
 function scheduleToSlots(items: ScheduleType[]) {
   let slots: Slot[] = []
 
-  let previousItem;
+  let previousItem
   let currentSlotIndex = 0
 
   for (const item of items) {
     if (!item.talk) {
-      continue;
+      continue
     }
 
-    item.track.number--;
+    item.track.number--
 
     if (previousItem) {
       if (item.track.number !== previousItem.track.number) {
@@ -72,14 +73,14 @@ function scheduleToSlots(items: ScheduleType[]) {
       } else if (item.time_start !== previousItem.time_end) {
         const timeDifference = timeDiff(previousItem.time_end, item.time_start)
         if (timeDifference > 10 * 60 * 1000) {
-          currentSlotIndex++;
+          currentSlotIndex++
         }
       }
     }
 
     if (!slots[currentSlotIndex]) {
       slots[currentSlotIndex] = {
-        tracks: []
+        tracks: [],
       }
 
       if (!item.talk?.speaker) {
@@ -94,7 +95,7 @@ function scheduleToSlots(items: ScheduleType[]) {
         number: item.track.number,
         title: item.track.title,
         description: item.track.description || '',
-        talks: []
+        talks: [],
       }
     }
 
@@ -127,42 +128,74 @@ export default async function Info() {
 
           {/* Schedule Layout */}
           <div className="container mx-auto mt-10">
-
-            {slots.map((slot, slotIndex) => (
+            {slots.map((slot, slotIndex) =>
               slot.title ? (
-                <div key={slotIndex} className="bg-white shadow rounded-lg p-4 mb-4">
-                  <h2 className="text-lg font-bold">{slot.title} {slot.start_time} - {slot.end_time}</h2>
+                <div
+                  key={slotIndex}
+                  className="mb-4 rounded-lg bg-white p-4 shadow"
+                >
+                  <h2 className="text-lg font-bold">
+                    {slot.title} {slot.start_time} - {slot.end_time}
+                  </h2>
                 </div>
               ) : (
-                <div key={slotIndex} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+                <div
+                  key={slotIndex}
+                  className="mb-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+                >
                   {slot.tracks.map((track, trackIndex) => (
-                    <div key={trackIndex} className="bg-white shadow-lg rounded-lg p-4">
-                      <h3 className={classNames(
-                        'text-xl font-semibold',
-                        track.title === 'Platform Engineering' ? 'text-green-600' : '',
-                        track.title === 'Cloud Native Technology' ? 'text-red-600' : '',
-                        track.title === 'Observability' ? 'text-blue-600' : '',
-                      )}>{track.title}</h3>
+                    <div
+                      key={trackIndex}
+                      className="rounded-lg bg-white p-4 shadow-lg"
+                    >
+                      <h3
+                        className={classNames(
+                          'text-xl font-semibold',
+                          track.title === 'Platform Engineering'
+                            ? 'text-green-600'
+                            : '',
+                          track.title === 'Cloud Native Technology'
+                            ? 'text-red-600'
+                            : '',
+                          track.title === 'Observability'
+                            ? 'text-blue-600'
+                            : '',
+                        )}
+                      >
+                        {track.title}
+                      </h3>
                       {track.talks.map((talk, talkIndex) => (
                         <div key={talkIndex} className="mt-4">
                           <p>{talk.time_start}</p>
                           <p>
-                            <a href={`/speaker/${talk.talk!.speaker?.slug}`} className="hover:underline">
-                              <span className="font-semibold"> {talk.talk!.title} </span>
-                              ({timeDiff(talk.time_start, talk.time_end) / 1000 / 60} minutes)
+                            <a
+                              href={`/speaker/${talk.talk!.speaker?.slug}`}
+                              className="hover:underline"
+                            >
+                              <span className="font-semibold">
+                                {' '}
+                                {talk.talk!.title}{' '}
+                              </span>
+                              (
+                              {timeDiff(talk.time_start, talk.time_end) /
+                                1000 /
+                                60}{' '}
+                              minutes)
                             </a>
                           </p>
-                          <p className="text-gray-500">by {talk.talk!.speaker?.name}</p>
+                          <p className="text-gray-500">
+                            by {talk.talk!.speaker?.name}
+                          </p>
                         </div>
                       ))}
                     </div>
                   ))}
                 </div>
-              )
-            ))}
+              ),
+            )}
           </div>
         </div>
       </div>
-    </Layout >
+    </Layout>
   )
 }
