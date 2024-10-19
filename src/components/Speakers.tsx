@@ -9,6 +9,8 @@ import { ScheduleTrack } from '@/lib/schedule'
 import { Container } from '@/components/Container'
 import { DiamondIcon } from '@/components/DiamondIcon'
 
+const selectedTabKey = 'selectedSpeakerTab'
+
 function ImageClipPaths({
   id,
   ...props
@@ -51,6 +53,8 @@ function SubmitToSpeakLi() {
 export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
   let id = useId()
   let [tabOrientation, setTabOrientation] = useState('horizontal')
+  let [selectedTabIndex, setSelectedTabIndex] = useState(0)
+
   let hasSpeakers = tracks.some((track) => track.speakers.length > 0)
 
   useEffect(() => {
@@ -67,6 +71,23 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
       lgMediaQuery.removeEventListener('change', onMediaQueryChange)
     }
   }, [])
+
+  useEffect(() => {
+    const previousSelectedTabIndex = sessionStorage.getItem(selectedTabKey)
+    const previousSelectedTabIndexNumber = Number.parseInt(
+      previousSelectedTabIndex ?? '0',
+      10,
+    )
+
+    if (!Number.isNaN(previousSelectedTabIndexNumber)) {
+      setSelectedTabIndex(previousSelectedTabIndexNumber)
+    }
+  }, [])
+
+  const handleChangeTab = (newTabIndex: number) => {
+    sessionStorage.setItem(selectedTabKey, newTabIndex.toString())
+    setSelectedTabIndex(newTabIndex)
+  }
 
   return (
     <section
@@ -106,6 +127,8 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
             as="div"
             className="mt-14 grid grid-cols-1 items-start gap-x-8 gap-y-8 sm:mt-16 sm:gap-y-16 lg:mt-24 lg:grid-cols-4"
             vertical={tabOrientation === 'vertical'}
+            selectedIndex={selectedTabIndex}
+            onChange={handleChangeTab}
           >
             <div className="relative -mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:block sm:overflow-visible sm:pb-0">
               <div className="absolute bottom-0 left-0.5 top-2 hidden w-px bg-slate-200 lg:block" />
