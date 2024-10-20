@@ -17,7 +17,7 @@ const faqs = [
       },
       {
         question: 'Where is the conference located?',
-        answer: 'The conference will take place at the Academic Quater (Kvarteret) in Bergen, Norway. The address is Olav Kyrres gate 49. You can find more information about Kvarteret on their website at <u><a href="https://kvarteret.no">kvarteret.no</a></u>.',
+        answer: 'The conference will take place at the Academic Quarter (Kvarteret) in Bergen, Norway. The address is Olav Kyrres gate 49. You can find more information about Kvarteret on their website at <u><a href="https://kvarteret.no">kvarteret.no</a></u>.',
       },
       {
         question: 'How do I get to the venue?',
@@ -60,7 +60,7 @@ const faqs = [
       },
       {
         question: 'Will there be a speaker dinner?',
-        answer: 'Yes! We will host a complementary speaker dinner for all the speakers and organziers on the evening before the conference at 5 PM. The dinner will be held at a restaurant on the highest mountain in Bergen, Ulriken, with a stunning view of the city.\n We will organize a joint transportation to the lower cable car station for everyone intrested, or if you prefer, to hike up togehter with some of the organizers 🥾 \nYou can find more information about Ulriken on their website at <u><a href="https://ulriken643.no/en/">ulriken643.no</a></u>.',
+        answer: 'Yes! We will host a complimentary speaker dinner for all the speakers and organziers on the evening before the conference at 5 PM. The dinner will be held at a restaurant on the highest mountain in Bergen, Ulriken, with a stunning view of the city.\n We will organize a joint transportation to the lower cable car station for everyone interested, or if you prefer, to hike up together with some of the organizers 🥾 \nYou can find more information about Ulriken on their website at <u><a href="https://ulriken643.no/en/">ulriken643.no</a></u>.',
       },
       {
         question: 'Can I make changes to my talk?',
@@ -71,8 +71,8 @@ const faqs = [
         answer: 'Yes, we recommend you to bring your own laptop. We will provide a projector and a screen for your presentation. If you have any special needs, please let us know in advance.',
       },
       {
-        question: 'What do you reccomend me to do during my stay in Bergen?',
-        answer: 'We reccomend you to explore the city of Bergen and the surrounding nature. Bergen is known for its beautiful nature, mountains, fjords, and the UNESCO World Heritage Site Bryggen. You can find more information about Bergen on the official tourism website at <u><a href="https://en.visitbergen.com">visitbergen.com</a></u>.'
+        question: 'What do you recommend me to do during my stay in Bergen?',
+        answer: 'We recommend you to explore the city of Bergen and the surrounding nature. Bergen is known for its beautiful nature, mountains, fjords, and the UNESCO World Heritage Site Bryggen. You can find more information about Bergen on the official tourism website at <u><a href="https://en.visitbergen.com">visitbergen.com</a></u>.'
       },
     ],
   },
