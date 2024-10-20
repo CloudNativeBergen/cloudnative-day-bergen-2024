@@ -76,6 +76,13 @@ function scheduleToSlots(items: ScheduleType[]) {
         const timeDifference = timeDiff(previousItem.time_end, item.time_start)
         if (timeDifference > 10 * 60 * 1000) {
           currentSlotIndex++
+          slots[currentSlotIndex] = {
+            title: 'Break',
+            start_time: previousItem.time_end,
+            end_time: item.time_start,
+            tracks: [],
+          }
+          currentSlotIndex++
         }
       }
     }
