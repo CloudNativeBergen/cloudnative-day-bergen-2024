@@ -11,11 +11,13 @@ export const revalidate = 3600
 async function getData() {
   return await clientRead.fetch<ScheduleType[]>(
     `*[_type == "schedule"]{date, time_start, time_end, track->{number, title, description}, talk->{title, speaker->{name, "slug": slug.current, title, "image": image.asset->url}}} | order(track.number asc, time_start asc)`,
-    {}, {
-    next: {
-      revalidate: revalidate,
-    }
-  })
+    {},
+    {
+      next: {
+        revalidate: revalidate,
+      },
+    },
+  )
 }
 
 export default async function Home() {

@@ -9,8 +9,14 @@ const { publicRuntimeConfig: c } = config
 
 assert(process.env.SENDGRID_API_KEY, 'SENDGRID_API_KEY is not set')
 assert(process.env.SENDGRID_FROM_EMAIL, 'SENDGRID_FROM_EMAIL is not set')
-assert(process.env.SENDGRID_TEMPALTE_ID_CFP_ACCEPT, 'SENDGRID_TEMPALTE_ID_CFP_ACCEPT is not set')
-assert(process.env.SENDGRID_TEMPALTE_ID_CFP_REJECT, 'SENDGRID_TEMPALTE_ID_CFP_REJECT is not set')
+assert(
+  process.env.SENDGRID_TEMPALTE_ID_CFP_ACCEPT,
+  'SENDGRID_TEMPALTE_ID_CFP_ACCEPT is not set',
+)
+assert(
+  process.env.SENDGRID_TEMPALTE_ID_CFP_REJECT,
+  'SENDGRID_TEMPALTE_ID_CFP_REJECT is not set',
+)
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
 
