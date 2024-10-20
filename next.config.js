@@ -38,6 +38,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/agenda',
+        destination: '/program',
+        permanent: true,
+      },
+    ]
+  }
 }
 
 module.exports = nextConfig
