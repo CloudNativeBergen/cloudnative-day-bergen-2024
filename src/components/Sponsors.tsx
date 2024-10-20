@@ -27,7 +27,7 @@ const sponsors = [
   { name: 'Knowit', logo: logoKnowit, href: 'https://knowit.no' },
   { name: 'SopraSteria', logo: logoSopra, href: 'https://soprasteria.no' },
   { name: 'Eviny', logo: logoEviny, href: 'https://eviny.no' },
-  { name: 'Tietovery', logo: logoTietoevry, href: 'https://tietoevry.com' },
+  { name: 'Tietoevry', logo: logoTietoevry, href: 'https://tietoevry.com' },
   { name: 'Stacc', logo: logoStacc, href: 'https://stacc.no' },
   { name: 'javaBin', logo: logoJavabin, href: 'https://java.no' },
   { name: 'Enabler', logo: logoEnabler, href: 'https://enabler.no' },
