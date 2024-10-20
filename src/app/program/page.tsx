@@ -2,6 +2,8 @@ import { Layout } from '@/components/Layout'
 import getConfig from 'next/config'
 import { clientReadUncached as clientRead } from '@/lib/sanity/client'
 import { Schedule as ScheduleType } from '@/lib/schedule'
+import { BackgroundImage } from '@/components/BackgroundImage'
+import { Container } from '@/components/Container'
 
 const { publicRuntimeConfig } = getConfig()
 const { cocLink, dates, contact } = publicRuntimeConfig
@@ -113,8 +115,9 @@ export default async function Info() {
 
   return (
     <Layout>
-      <div className="bg-white">
-        <div className="py-12">
+      <div className="relative py-20 sm:pb-24 sm:pt-36">
+        <BackgroundImage className="-bottom-14 -top-36" />
+        <Container className="relative">
           <div className="container mx-auto">
             <div className="text-left">
               <h1 className="text-3xl font-bold leading-9 tracking-tight text-gray-900 sm:text-4xl">
@@ -194,7 +197,7 @@ export default async function Info() {
               ),
             )}
           </div>
-        </div>
+        </Container>
       </div>
     </Layout>
   )
