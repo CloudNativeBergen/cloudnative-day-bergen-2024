@@ -39,35 +39,32 @@ export function Hero() {
               there&apos;s something for everyone at CloudNative Day Bergen.
             </p>
           </div>
-          <div className="flex flex-col justify-between md:flex-row">
+          <div className="flex flex-col justify-between md:flex-row mt-10">
             {c?.registrationLink && (
               <Button
                 href={c.registrationLink}
-                className={classNames(
-                  'mt-10 w-full',
-                  c?.cfpOpen ? 'md:mr-2 md:w-1/2' : '',
-                )}
+                className="mt-2 w-full md:w-1/2"
               >
-                Get your ticket
+                Tickets
               </Button>
             )}
+            <Button
+              href="/program"
+              className="mt-2 w-full bg-purple-600 hover:bg-purple-500 md:ml-2 md:mr-2 md:w-1/2"
+            >
+              Program
+            </Button>
             {c?.cfpOpen ? (
               <Button
                 href="/cfp"
-                className={classNames(
-                  'mt-10 w-full bg-teal-600 hover:bg-teal-500',
-                  c?.registrationLink ? 'md:ml-2 md:w-1/2' : '',
-                )}
+                className="mt-2 w-full bg-teal-600 hover:bg-teal-500 md:w-1/2"
               >
                 Submit to Speak
               </Button>
             ) : (
               <Button
                 href={'/info'}
-                className={classNames(
-                  'mt-10 w-full bg-teal-600 hover:bg-teal-500',
-                  c?.registrationLink ? 'md:ml-2 md:w-1/2' : '',
-                )}
+                className="mt-2 w-full bg-teal-600 hover:bg-teal-500 md:w-1/2"
               >
                 Practical Info
               </Button>
@@ -109,7 +106,7 @@ export function Hero() {
             </a>
           </div>
         </div>
-      </Container>
-    </div>
+      </Container >
+    </div >
   )
 }
