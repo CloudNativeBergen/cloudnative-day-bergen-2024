@@ -176,15 +176,22 @@ export async function getPublicSpeaker(speakerSlug: string) {
   return { speaker, talks, err }
 }
 
-export async function getPublicSpeakers() {
+export async function getPublicSpeakers(revalidate: number = 3600) {
   let speakers: Speaker[] = []
   let err = null
 
   try {
     speakers =
       await clientReadCached.fetch(`*[ _type == "speaker" && count(*[_type == "talk" && references(^._id) && status == "confirmed"]) > 0]{
-      _id, name, "slug": slug.current, title, bio, links, flags, "image": image.asset->url
-    }`)
+          _id, name, "slug": slug.current, title, bio, links, flags, "image": image.asset->url
+        }`,
+        {},
+        {
+          next: {
+            revalidate: revalidate,
+          },
+        },
+      )
   } catch (error) {
     err = error as Error
   }
@@ -217,9 +224,9 @@ export async function getFeatured(): Promise<{
 
   try {
     speakers =
-      await clientReadCached.fetch(`*[ _type == "speaker" && is_featured == true ]{
-      name, "slug": slug.current, title, links, "image": image.asset->url
-    }`)
+      await clientReadCached.fetch(`* [_type == "speaker" && is_featured == true]{
+        name, "slug": slug.current, title, links, "image": image.asset -> url
+      }`)
   } catch (error) {
     err = error as Error
   }

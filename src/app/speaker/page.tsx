@@ -4,8 +4,10 @@ import { Layout } from '@/components/Layout'
 import Image from 'next/image'
 import { getPublicSpeakers } from '@/lib/speaker/sanity'
 
+export const revalidate = 3600
+
 export default async function Speakers() {
-  const { speakers, err } = await getPublicSpeakers()
+  const { speakers, err } = await getPublicSpeakers(revalidate)
 
   return (
     <Layout>
