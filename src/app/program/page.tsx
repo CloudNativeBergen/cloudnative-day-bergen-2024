@@ -161,7 +161,7 @@ export default async function Info() {
                       <h3
                         className={classNames(
                           'text-xl font-semibold',
-                          track.title === 'Platform Engineering (Teglverket))'
+                          track.title === 'Platform Engineering (Teglverket)'
                             ? 'text-green-600'
                             : '',
                           track.title === 'Cloud Native Technology (Tivoli)'
