@@ -22,12 +22,12 @@ export function Hero() {
       <Container className="relative">
         <div className="mx-auto max-w-2xl lg:max-w-4xl lg:px-12">
           <h1 className="font-display text-5xl font-bold tracking-tighter text-blue-600 sm:text-7xl">
-            <span className="sr-only">CloudNative Day Bergen - </span>A day with
+            <span className="sr-only">Cloud Native Day Bergen - </span>A day with
             Cloud & Kubernetes in Bergen.
           </h1>
           <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
             <p>
-              CloudNative Day Bergen is the nerdiest tech conference in Bergen.
+              Cloud Native Day Bergen is the nerdiest tech conference in Bergen.
               Join us to learn about the latest trends, best practices, and
               experience reports from local and international cloud-native
               experts.
@@ -36,7 +36,7 @@ export function Hero() {
               Our speakers will share their insights and experiences, covering
               topics such as containerization, orchestration, microservices, and
               more. Whether you&apos;re a beginner or an 10x&apos;er,
-              there&apos;s something for everyone at CloudNative Day Bergen.
+              there&apos;s something for everyone at Cloud Native Day Bergen.
             </p>
           </div>
           <div className="flex flex-col justify-between md:flex-row mt-10">

@@ -131,7 +131,7 @@ export default async function Info() {
                 Conference Program
               </h1>
               <p className="mt-4 text-lg leading-7 text-gray-600">
-                Here you can find the program for CloudNative Day Bergen.
+                Here you can find the program for Cloud Native Day Bergen.
               </p>
             </div>
           </div>

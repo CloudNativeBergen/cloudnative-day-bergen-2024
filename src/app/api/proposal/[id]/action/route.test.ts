@@ -231,7 +231,7 @@ describe('POST /api/proposal/[id]/action', () => {
             event: {
               location: 'Kvarteret, Bergen, Norway',
               date: '30 October 2024',
-              name: 'CloudNative Day Bergen 2024',
+              name: 'Cloud Native Day Bergen 2024',
             },
           },
         })
@@ -298,7 +298,7 @@ describe('POST /api/proposal/[id]/action', () => {
             event: {
               location: 'Kvarteret, Bergen, Norway',
               date: '30 October 2024',
-              name: 'CloudNative Day Bergen 2024',
+              name: 'Cloud Native Day Bergen 2024',
             },
           },
         })

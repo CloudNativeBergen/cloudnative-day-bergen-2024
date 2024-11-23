@@ -22,7 +22,7 @@ export function Footer() {
           </a>
         </div>
         <p className="mt-6 text-base text-slate-500 md:mt-0">
-          Copyright &copy; {new Date().getFullYear()} CloudNative Bergen. All
+          Copyright &copy; {new Date().getFullYear()} Cloud Native Bergen. All
           rights reserved.
         </p>
       </Container>

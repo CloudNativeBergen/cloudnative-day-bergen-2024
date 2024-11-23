@@ -106,7 +106,7 @@ export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
           </h2>
           <p className="mt-4 font-display text-2xl tracking-tight text-blue-900">
             Learn from yaml-experts and cloud-native nerds from Bergen and
-            around the world at CloudNative Day Bergen.
+            around the world at Cloud Native Day Bergen.
           </p>
           {!hasSpeakers && (
             <ul

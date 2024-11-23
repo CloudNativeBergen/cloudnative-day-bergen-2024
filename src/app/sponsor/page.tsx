@@ -73,7 +73,7 @@ export default function Example() {
             </h1>
             <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-blue-900">
               <p>
-                Sponsor of CloudNative Day Bergen will get your name in front of
+                Sponsor of Cloud Native Day Bergen will get your name in front of
                 the local cloud-native community. We offer a range of
                 sponsorship packages to suit your needs and budget.
               </p>

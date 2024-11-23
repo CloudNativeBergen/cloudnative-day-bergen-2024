@@ -1,6 +1,6 @@
 # Cloud Native Bergen
 
-Official website for Cloud Native Bergen and CloudNative Day Bergen 2024.
+Official website for Cloud Native Bergen and Cloud Native Day Bergen.
 
 ## Getting started
 

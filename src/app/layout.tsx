@@ -23,12 +23,12 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - CloudNative Day Bergen',
+    template: '%s - Cloud Native Day Bergen',
     default:
-      'CloudNative Day Bergen - A community-driven Kubernetes and Cloud conference',
+      'Cloud Native Day Bergen - A community-driven Kubernetes and Cloud conference',
   },
   description:
-    'At CloudNative Day Bergen, we bring together the community to share knowledge and experience on Kubernetes, Cloud Native, and related technologies.',
+    'At Cloud Native Day Bergen, we bring together the community to share knowledge and experience on Kubernetes, Cloud Native, and related technologies.',
 }
 
 export default async function RootLayout({

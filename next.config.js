@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: false, // disabled due to https://github.com/vercel/next.js/issues/35822
   publicRuntimeConfig: {
     event: {
-      name: 'CloudNative Day Bergen 2024',
+      name: 'Cloud Native Day Bergen 2024',
       location: 'Kvarteret, Bergen, Norway',
     },
     contact: {
