@@ -1,5 +1,3 @@
-import { define } from 'nock'
-import { title } from 'process'
 import { defineField, defineType } from 'sanity'
 
 export default defineType({
@@ -10,6 +8,11 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Title',
+      type: 'string',
+    }),
+    defineField({
+      name: 'organizer',
+      title: 'Organiser',
       type: 'string',
     }),
     defineField({
@@ -36,6 +39,11 @@ export default defineType({
       name: 'tagline',
       title: 'Tagline',
       type: 'string',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
     }),
     defineField({
       name: 'start_date',
@@ -78,9 +86,20 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'registration_enabled',
+      title: 'Registration Enabled',
+      type: 'boolean',
+    }),
+    defineField({
       name: 'contact_email',
       title: 'Contact Email',
       type: 'string',
+    }),
+    defineField({
+      name: 'social_links',
+      title: 'Socials Links',
+      type: 'array',
+      of: [{ type: 'string' }],
     }),
     defineField({
       name: 'organizers',
@@ -101,7 +120,7 @@ export default defineType({
       of: [{ type: 'string' }],
       options: {
         list: [
-          { title: '' }
+          { title: 'Test Feature', value: 'test_feature' },
         ],
       },
     }),

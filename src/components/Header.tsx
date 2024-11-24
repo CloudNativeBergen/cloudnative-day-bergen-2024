@@ -6,12 +6,11 @@ import { DiamondIcon } from '@/components/DiamondIcon'
 import { Logo } from '@/components/Logo'
 import { useSession } from 'next-auth/react'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
-import config from '@/../next.config'
 import Link from 'next/link'
+import { Conference } from '@/lib/conference/types'
+import { formatDate } from '@/lib/time'
 
-const { publicRuntimeConfig: c } = config
-
-export function Header() {
+export function Header({ c }: { c: Conference }) {
   const { data: session } = useSession()
 
   return (
@@ -25,14 +24,14 @@ export function Header() {
         <div className="order-first -mx-4 flex flex-auto basis-full overflow-x-auto whitespace-nowrap border-b border-blue-600/10 py-4 font-mono text-sm text-blue-600 sm:-mx-6 lg:order-none lg:mx-0 lg:basis-auto lg:border-0 lg:py-0">
           <div className="mx-auto flex items-center gap-4 px-4">
             <p>
-              <time dateTime="2024-10-30">30. October 2024</time>
+              <time dateTime={c.start_date}>{formatDate(c.start_date)}</time>
             </p>
             <DiamondIcon className="h-1.5 w-1.5 overflow-visible fill-current stroke-current" />
-            <p>Bergen, Norway</p>
+            <p>{c.city}, {c.country}</p>
           </div>
         </div>
         <div className="hidden whitespace-nowrap sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
-          <Button href={c?.registrationLink ?? '#'}>Get your ticket</Button>
+          <Button href={c.registration_link ?? '#'}>Get your ticket</Button>
         </div>
         <div className="ml-10 mt-10 sm:flex lg:ml-4 lg:mt-0">
           <a href="/cfp/list">
