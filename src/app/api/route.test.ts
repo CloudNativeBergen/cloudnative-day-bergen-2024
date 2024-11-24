@@ -7,7 +7,7 @@ import { describe } from 'node:test'
 import { testApiHandler } from 'next-test-api-route-handler'
 import speakers from '../../../__tests__/testdata/speakers'
 
-let speaker = speakers[0]!
+const speaker = speakers[0]!
 
 describe('GET /api', () => {
   it('should return 200 for authenticated user', async () => {

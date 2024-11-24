@@ -79,7 +79,7 @@ export const POST = auth(
     }
 
     if (notify && (action === Action.accept || action === Action.reject)) {
-      const [res, _] = await sendAcceptRejectNotification({
+      await sendAcceptRejectNotification({
         action,
         speaker: proposal.speaker as Speaker,
         proposal: proposal,
@@ -95,4 +95,5 @@ export const POST = auth(
       { status: 200 },
     )
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) as any

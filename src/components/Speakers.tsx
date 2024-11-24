@@ -51,14 +51,14 @@ function SubmitToSpeakLi() {
   )
 }
 export function Speakers({ tracks }: { tracks: ScheduleTrack[] }) {
-  let id = useId()
-  let [tabOrientation, setTabOrientation] = useState('horizontal')
-  let [selectedTabIndex, setSelectedTabIndex] = useState(0)
+  const id = useId()
+  const [tabOrientation, setTabOrientation] = useState('horizontal')
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
-  let hasSpeakers = tracks.some((track) => track.speakers.length > 0)
+  const hasSpeakers = tracks.some((track) => track.speakers.length > 0)
 
   useEffect(() => {
-    let lgMediaQuery = window.matchMedia('(min-width: 1024px)')
+    const lgMediaQuery = window.matchMedia('(min-width: 1024px)')
 
     function onMediaQueryChange({ matches }: { matches: boolean }) {
       setTabOrientation(matches ? 'vertical' : 'horizontal')

@@ -1,10 +1,5 @@
 import { NextAuthRequest, auth } from '@/lib/auth'
-import {
-  proposalListResponse,
-  proposalListResponseError,
-  proposalResponse,
-  proposalResponseError,
-} from '@/lib/proposal/server'
+import { proposalListResponse, proposalListResponseError } from '@/lib/proposal/server'
 import { getProposals } from '@/lib/proposal/sanity'
 
 export const dynamic = 'force-dynamic'
@@ -35,4 +30,5 @@ export const GET = auth(async (req: NextAuthRequest) => {
   }
 
   return proposalListResponse(proposals)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any

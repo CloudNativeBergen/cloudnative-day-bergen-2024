@@ -13,6 +13,7 @@ export function proposalResponseError({
   type = 'server',
   status = 500,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
   message: string
   validationErrors?: FormValidationError[]
@@ -48,6 +49,7 @@ export function proposalResponse(proposal: ProposalExisting) {
 }
 
 export function proposalListResponseError(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any,
   message: string,
   type = 'server',

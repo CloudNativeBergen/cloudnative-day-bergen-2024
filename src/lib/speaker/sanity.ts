@@ -74,6 +74,7 @@ export async function getOrCreateSpeaker(
     account.provider,
     account.providerAccountId,
   )
+  // eslint-disable-next-line no-var
   var { speaker, err } = await findSpeakerByProvider(providerAccountId)
   if (err) {
     console.error('Error fetching speaker profile by account id', err)
@@ -85,6 +86,7 @@ export async function getOrCreateSpeaker(
   }
 
   // Find speaker by email
+  // eslint-disable-next-line no-var
   var { speaker, err } = await findSpeakerByEmail(user.email)
   if (err) {
     console.error('Error fetching speaker profile by email', err)

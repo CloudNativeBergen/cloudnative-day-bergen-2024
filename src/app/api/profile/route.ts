@@ -31,6 +31,7 @@ export const GET = auth(async (req: NextAuthRequest) => {
   }
 
   return speakerResponse(speaker)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any
 
 export const PUT = auth(async (req: NextAuthRequest) => {
@@ -75,4 +76,5 @@ export const PUT = auth(async (req: NextAuthRequest) => {
   }
 
   return speakerResponse(updatedSpeaker)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any

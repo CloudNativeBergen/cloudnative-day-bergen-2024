@@ -43,8 +43,8 @@ export default function Submit() {
   const searchParams = useSearchParams()
   const id = searchParams.get('id') ?? undefined
 
-  let [isLoading, setIsLoading] = useState(true)
-  let [proposal, setProposal] = useState<ProposalInput>({
+  const [isLoading, setIsLoading] = useState(true)
+  const [proposal, setProposal] = useState<ProposalInput>({
     title: '',
     language: Language.norwegian,
     description: '',
@@ -53,10 +53,10 @@ export default function Submit() {
     outline: '',
     tos: false,
   })
-  let [speaker, setSpeaker] = useState<SpeakerInput>({ name: '' })
-  let [email, setEmail] = useState('' as string)
-  let [emails, setEmails] = useState<ProfileEmail[]>([])
-  let [loadingError, setLoadingError] = useState({} as FormError)
+  const [speaker, setSpeaker] = useState<SpeakerInput>({ name: '' })
+  const [email, setEmail] = useState('' as string)
+  const [emails, setEmails] = useState<ProfileEmail[]>([])
+  const [loadingError, setLoadingError] = useState({} as FormError)
 
   const fetchProposal = async (id: string) => {
     const [proposal, emails] = await Promise.all([getProposal(id), getEmails()])
@@ -184,8 +184,10 @@ function Form({
   emails,
 }: {
   proposal: ProposalInput
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setProposal: any
   speaker: SpeakerInput
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSpeaker: any
   id?: string
   email: string
@@ -305,6 +307,7 @@ function ProposalForm({
   setProposal,
 }: {
   proposal: ProposalInput
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setProposal: any
 }) {
   const [title, setTitle] = useState(proposal?.title ?? '')
@@ -426,6 +429,7 @@ function SpeakerProfileForm({
   emails,
 }: {
   speaker: SpeakerInput
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSpeaker: any
   email: string
   emails: ProfileEmail[]
@@ -459,6 +463,7 @@ function SpeakerProfileForm({
     )
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function addSpeakerLink(i: number) {
     setSpeakerLinks([...speakerLinks, ''])
   }

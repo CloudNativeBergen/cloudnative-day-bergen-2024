@@ -36,6 +36,7 @@ export const GET = auth(async (req: NextAuthRequest) => {
   }
 
   return proposalListResponse(proposals)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any
 
 export const POST = auth(async (req: NextAuthRequest) => {
@@ -78,4 +79,5 @@ export const POST = auth(async (req: NextAuthRequest) => {
   }
 
   return proposalResponse(created)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any

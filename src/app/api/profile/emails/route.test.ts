@@ -15,7 +15,7 @@ import nock from 'nock'
 import speakers from '../../../../../__tests__/testdata/speakers'
 import { testApiHandler } from 'next-test-api-route-handler'
 
-let speaker = speakers[0]!
+const speaker = speakers[0]!
 
 beforeAll(async () => {
   try {
@@ -113,6 +113,7 @@ describe('GET /api/profile/emails', () => {
 
         const body = await res.json()
         expect(body.emails).toHaveLength(2)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         expect(body.emails.every((email: any) => email.verified)).toBe(true)
       },
     })
@@ -150,7 +151,7 @@ describe('GET /api/profile/emails', () => {
     nock('https://api.github.com').get('/user/emails').reply(500)
 
     // Suppress console.error output for this test since we expect an error to be logged
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    jest.spyOn(console, 'error').mockImplementation(() => { })
 
     await testApiHandler({
       appHandler,

@@ -7,7 +7,6 @@ import {
   ProfileImageResponse,
 } from '@/lib/profile/types'
 import { FormValidationError } from '@/lib/proposal/types'
-import { profile } from 'console'
 
 export function defaultEmails(session: Session) {
   return [
@@ -29,6 +28,7 @@ export function profileEmailResponseError({
   status = 500,
 }: {
   emails: ProfileEmail[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
   message: string
   validationErrors?: FormValidationError[]
@@ -62,6 +62,7 @@ export function profileImageResponseError({
   status = 500,
 }: {
   image?: ProfileImage
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
   message: string
   type?: string

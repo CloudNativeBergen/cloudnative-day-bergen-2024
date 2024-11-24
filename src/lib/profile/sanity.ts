@@ -6,7 +6,7 @@ export async function updateProfileEmail(
   speakerId: string,
 ): Promise<{ error: Error | null }> {
   try {
-    const patch = await clientWrite.patch(speakerId).set({ email }).commit()
+    await clientWrite.patch(speakerId).set({ email }).commit()
 
     return { error: null }
   } catch (error) {
@@ -22,7 +22,7 @@ export async function uploadProfileImage(
     const asset = await clientWrite.assets.upload('image', image, {
       filename: image.name,
     })
-    const patch = await clientWrite
+    await clientWrite
       .patch(speakerId)
       .set({
         image: {

@@ -14,6 +14,7 @@ export function Input({
   name: string
   label: string
   value?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setValue?: any
   type?: string
 }) {
@@ -53,8 +54,11 @@ export function LinkInput({
   index: number
   name: string
   value?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   update?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   add?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   remove?: any
 }) {
   return (
@@ -115,6 +119,7 @@ export function Textarea({
   label: string
   rows?: number
   value?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setValue?: any
 }) {
   return (
@@ -150,6 +155,7 @@ export function Dropdown({
   label: string
   options: Map<string, string>
   value?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setValue?: any
 }) {
   return (
@@ -190,6 +196,7 @@ export function Checkbox({
   name: string
   label: string
   value?: boolean
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setValue?: any
   children?: React.ReactNode
 }) {

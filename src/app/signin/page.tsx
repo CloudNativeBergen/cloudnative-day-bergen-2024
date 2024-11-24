@@ -1,19 +1,9 @@
-import {
-  LockClosedIcon,
-  BellAlertIcon,
-  CalendarDaysIcon,
-} from '@heroicons/react/20/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
-import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
-import { signIn, auth, providerMap } from '@/lib/auth'
-import getConfig from 'next/config'
+import { signIn, providerMap } from '@/lib/auth'
 
-const { publicRuntimeConfig } = getConfig()
-const { cocLink, dates } = publicRuntimeConfig
-
-export default async function CFP() {
+export default async function Signin() {
   return (
     <Layout>
       <div className="relative py-20 sm:pb-24 sm:pt-36">

@@ -66,9 +66,14 @@ function Dropdown({
           <div className="py-1">
             <MenuItem disabled>
               {({ focus }) => (
-                <span className="group flex items-center px-4 py-2 text-sm text-gray-300">
+                <span
+                  className={classNames(
+                    focus ? 'bg-gray-100 text-gray-900' : 'text-gray-300',
+                    'group flex items-center px-4 py-2 text-sm',
+                  )}
+                >
                   <PencilSquareIcon
-                    className="mr-3 h-5 w-5 text-gray-300"
+                    className="mr-3 h-5 w-5 text-gray-300 group-hover:text-gray-500"
                     aria-hidden="true"
                   />
                   Edit
@@ -138,9 +143,14 @@ function Dropdown({
           <div className="py-1">
             <MenuItem disabled>
               {({ focus }) => (
-                <span className="group flex items-center px-4 py-2 text-sm text-gray-300">
+                <span
+                  className={classNames(
+                    focus ? 'bg-gray-100 text-gray-900' : 'text-gray-300',
+                    'group flex items-center px-4 py-2 text-sm',
+                  )}
+                >
                   <TrashIcon
-                    className="mr-3 h-5 w-5 text-gray-300"
+                    className="mr-3 h-5 w-5 text-gray-300 group-hover:text-gray-500"
                     aria-hidden="true"
                   />
                   Delete
@@ -354,6 +364,7 @@ export default function AllProposals() {
   const [actionAction, setActionAction] = useState<Action>(Action.accept)
 
   const [proposals, setProposals] = useState<ProposalExisting[]>([])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string>('')
 
   const [loading, setLoading] = useState<boolean>(true)

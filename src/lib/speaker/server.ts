@@ -9,6 +9,7 @@ export function speakerResponseError({
   type = 'server',
   status = 500,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
   message: string
   validationErrors?: FormValidationError[]

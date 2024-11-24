@@ -4,7 +4,6 @@ import {
   profileImageResponse,
   profileImageResponseError,
 } from '@/lib/profile/server'
-import { clientWrite } from '@/lib/sanity/client'
 import { uploadProfileImage } from '@/lib/profile/sanity'
 
 export const GET = auth(async (req: NextAuthRequest) => {
@@ -25,6 +24,7 @@ export const GET = auth(async (req: NextAuthRequest) => {
   const picture: ProfileImage = { image: req.auth.user.picture || '' }
 
   return profileImageResponse(picture)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any
 
 export const POST = auth(async (req: NextAuthRequest) => {
@@ -72,4 +72,5 @@ export const POST = auth(async (req: NextAuthRequest) => {
   }
 
   return profileImageResponse(image)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any

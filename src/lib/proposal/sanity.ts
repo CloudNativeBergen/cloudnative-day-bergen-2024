@@ -68,6 +68,7 @@ export async function getProposals(
 export async function updateProposal(
   proposalId: string,
   proposal: ProposalInput,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   speakerId: string,
 ): Promise<{ proposal: ProposalExisting; err: Error | null }> {
   let err = null

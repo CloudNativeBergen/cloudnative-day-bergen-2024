@@ -1,6 +1,7 @@
 import { FormValidationError } from '@/lib/proposal/types'
 import { SpeakerInput } from '@/lib/speaker/types'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function convertJsonToSpeaker(json: any): SpeakerInput {
   return {
     name: json.name as string,

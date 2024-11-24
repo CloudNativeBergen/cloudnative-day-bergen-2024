@@ -9,10 +9,10 @@ import { Container } from '@/components/Container'
 import { ScheduleTrack, ScheduleTalk } from '@/lib/schedule'
 
 function ScheduleTabbed({ tracks }: { tracks: ScheduleTrack[] }) {
-  let [tabOrientation, setTabOrientation] = useState('horizontal')
+  const [tabOrientation, setTabOrientation] = useState('horizontal')
 
   useEffect(() => {
-    let smMediaQuery = window.matchMedia('(min-width: 640px)')
+    const smMediaQuery = window.matchMedia('(min-width: 640px)')
 
     function onMediaQueryChange({ matches }: { matches: boolean }) {
       setTabOrientation(matches ? 'vertical' : 'horizontal')

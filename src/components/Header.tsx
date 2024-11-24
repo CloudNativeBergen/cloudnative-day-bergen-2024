@@ -4,7 +4,6 @@ import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { DiamondIcon } from '@/components/DiamondIcon'
 import { Logo } from '@/components/Logo'
-import { GitHubIcon, LinkedInIcon } from '@/components/SocialIcons'
 import { useSession } from 'next-auth/react'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
 import config from '@/../next.config'
@@ -13,7 +12,7 @@ import Link from 'next/link'
 const { publicRuntimeConfig: c } = config
 
 export function Header() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
   return (
     <header className="relative z-50 flex-none lg:pt-11">

@@ -103,6 +103,7 @@ export const config = {
   },
 } satisfies NextAuthConfig
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const providerMap = config.providers.map((provider: any) => {
   if (typeof provider === 'function') {
     const providerData = provider()

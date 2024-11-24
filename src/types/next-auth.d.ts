@@ -1,5 +1,5 @@
 import { Speaker } from '@/lib/proposal/types'
-import NextAuth, { Account } from 'next-auth'
+import { Account } from 'next-auth'
 
 declare module 'next-auth' {
   interface Session {

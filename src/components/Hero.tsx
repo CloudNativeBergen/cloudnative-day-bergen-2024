@@ -11,10 +11,6 @@ import config from '@/../next.config'
 
 const { publicRuntimeConfig: c } = config
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export function Hero() {
   return (
     <div className="relative py-20 sm:pb-24 sm:pt-36">

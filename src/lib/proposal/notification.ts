@@ -45,7 +45,7 @@ export async function sendAcceptRejectNotification({
   speaker: Speaker
   proposal: ProposalExisting
   comment: string
-}): Promise<[sgMail.ClientResponse, {}]> {
+}): Promise<[sgMail.ClientResponse, object]> {
   const templateId = getTemplate(action)
 
   if (!templateId) {

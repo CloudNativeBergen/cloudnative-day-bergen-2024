@@ -5,7 +5,8 @@ export function iconForLink(link: string, className = 'h-10 w-10') {
 
   try {
     hostname = new URL(link).hostname
-  } catch (error) {}
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) { }
 
   switch (hostname) {
     case 'twitter.com':

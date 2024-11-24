@@ -25,6 +25,7 @@ const { publicRuntimeConfig: c } = config
 
 interface ButtonAction {
   label: Action
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon: any
   link?: string
   onClick?: () => void
@@ -270,6 +271,7 @@ export default function MyProposals() {
   const [actionAction, setActionAction] = useState<Action>(Action.submit)
 
   const [proposals, setProposals] = useState<ProposalExisting[]>([])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string>('')
 
   const [loading, setLoading] = useState<boolean>(true)

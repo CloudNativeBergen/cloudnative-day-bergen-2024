@@ -50,6 +50,7 @@ export const GET = auth(
       })
     }
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) as any
 
 export const PUT = auth(
@@ -123,4 +124,5 @@ export const PUT = auth(
 
     return proposalResponse(updatedProposal)
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) as any

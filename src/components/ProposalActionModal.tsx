@@ -11,7 +11,6 @@ import {
 import {
   ProposalExisting,
   Action,
-  ProposalActionResponse,
   Status,
 } from '@/lib/proposal/types'
 import {

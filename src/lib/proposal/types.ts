@@ -57,7 +57,8 @@ interface Proposal {
   schedule?: Schedule
 }
 
-export interface ProposalInput extends Proposal {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ProposalInput extends Proposal { }
 
 export interface ProposalExisting extends Proposal {
   _id: string

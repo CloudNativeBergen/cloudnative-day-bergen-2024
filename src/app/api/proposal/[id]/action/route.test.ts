@@ -1,6 +1,7 @@
 /**
  * @jest-environment node
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { jest, it, describe, expect, beforeAll, afterEach } from '@jest/globals'
 import { testApiHandler } from 'next-test-api-route-handler'
 import * as appHandler from './route'
@@ -17,6 +18,7 @@ import {
 import { Action, Status } from '@/lib/proposal/types'
 import sgMail from '@sendgrid/mail'
 import { ClientResponse } from '@sendgrid/mail'
+
 
 beforeAll(async () => {
   try {

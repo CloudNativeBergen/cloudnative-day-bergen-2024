@@ -25,6 +25,7 @@ export const GET = auth(async (req: NextAuthRequest) => {
 
   switch (req.auth.account?.provider) {
     case 'github':
+      // eslint-disable-next-line prefer-const
       let { error, emails } = await verifiedEmails(req.auth.account)
 
       if (emails.length === 0) {
@@ -49,6 +50,7 @@ export const GET = auth(async (req: NextAuthRequest) => {
       )
       return profileEmailResponse(defaultEmails(req.auth))
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as any
 
 export const PUT = auth(async (req: NextAuthRequest) => {
