@@ -2,13 +2,7 @@ import { CheckIcon } from '@heroicons/react/20/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
-import { Layout } from '@/components/Layout'
-import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
-const { cocLink, dates } = publicRuntimeConfig
-
-// sponsor packages
 const packages = [
   {
     name: 'Pod',
@@ -63,7 +57,7 @@ function classNames(...classes: string[]) {
 
 export default function Example() {
   return (
-    <Layout>
+    <>
       <div className="relative py-20 sm:pb-24 sm:pt-36">
         <BackgroundImage className="-bottom-14 -top-36" />
         <Container className="relative">
@@ -167,6 +161,6 @@ export default function Example() {
           </div>
         </Container>
       </div>
-    </Layout>
+    </>
   )
 }

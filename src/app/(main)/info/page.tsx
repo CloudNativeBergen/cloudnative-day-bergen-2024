@@ -1,4 +1,3 @@
-import { Layout } from '@/components/Layout'
 import getConfig from 'next/config'
 import { formatDate } from '@/lib/time'
 
@@ -121,7 +120,7 @@ function classNames(...classes: string[]) {
 
 export default function Info() {
   return (
-    <Layout>
+    <>
       <div className="bg-white">
         <div className="py-12">
           <div className="mx-auto max-w-4xl px-4 lg:px-6">
@@ -190,6 +189,6 @@ export default function Info() {
           </div>
         ))}
       </div>
-    </Layout>
+    </>
   )
 }

@@ -1,6 +1,5 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
-import { Layout } from '@/components/Layout'
 import Image from 'next/image'
 import { getPublicSpeakers } from '@/lib/speaker/sanity'
 
@@ -8,9 +7,12 @@ export const revalidate = 3600
 
 export default async function Speakers() {
   const { speakers, err } = await getPublicSpeakers(revalidate)
+  if (err) {
+    console.error(err)
+  }
 
   return (
-    <Layout>
+    <>
       <div className="relative py-20 sm:pb-24 sm:pt-36">
         <BackgroundImage className="-bottom-14 -top-36" />
         <Container className="relative">
@@ -52,6 +54,6 @@ export default async function Speakers() {
           </div>
         </Container>
       </div>
-    </Layout>
+    </>
   )
 }

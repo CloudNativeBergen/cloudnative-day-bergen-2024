@@ -1,12 +1,7 @@
-import { Layout } from '@/components/Layout'
-import getConfig from 'next/config'
 import { clientReadUncached as clientRead } from '@/lib/sanity/client'
 import { Schedule as ScheduleType } from '@/lib/schedule'
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
-
-const { publicRuntimeConfig } = getConfig()
-const { cocLink, dates, contact } = publicRuntimeConfig
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -55,7 +50,7 @@ function timeDiff(start: string, end: string) {
 }
 
 function scheduleToSlots(items: ScheduleType[]) {
-  let slots: Slot[] = []
+  const slots: Slot[] = []
 
   let previousItem
   let currentSlotIndex = 0
@@ -121,7 +116,7 @@ export default async function Info() {
   const slots = scheduleToSlots(schedule)
 
   return (
-    <Layout>
+    <>
       <div className="relative py-20 sm:pb-24 sm:pt-36">
         <BackgroundImage className="-bottom-14 -top-36" />
         <Container className="relative">
@@ -206,6 +201,6 @@ export default async function Info() {
           </div>
         </Container>
       </div>
-    </Layout>
+    </>
   )
 }
