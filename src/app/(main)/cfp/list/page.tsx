@@ -2,7 +2,6 @@
 
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
-import { Layout } from '@/components/Layout'
 import { ProposalExisting, Status, Action } from '@/lib/proposal/types'
 import { useState, useEffect } from 'react'
 import { listProposals } from '@/lib/proposal/client'

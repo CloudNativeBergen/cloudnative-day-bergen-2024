@@ -1,6 +1,5 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
-import { Layout } from '@/components/Layout'
 import { formats, languages, levels } from '@/lib/proposal/types'
 import { flags, Flags } from '@/lib/speaker/types'
 import Image from 'next/image'

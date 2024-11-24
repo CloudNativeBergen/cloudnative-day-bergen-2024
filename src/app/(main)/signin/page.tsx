@@ -1,11 +1,10 @@
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
-import { Layout } from '@/components/Layout'
 import { signIn, providerMap } from '@/lib/auth'
 
 export default async function Signin() {
   return (
-    <Layout>
+    <>
       <div className="relative py-20 sm:pb-24 sm:pt-36">
         <BackgroundImage className="-bottom-14 -top-36" />
         <Container className="relative">
@@ -32,6 +31,6 @@ export default async function Signin() {
           </div>
         </Container>
       </div>
-    </Layout>
+    </>
   )
 }

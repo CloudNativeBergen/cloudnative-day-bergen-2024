@@ -3,7 +3,6 @@
 import { UserCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import { BackgroundImage } from '@/components/BackgroundImage'
 import { Container } from '@/components/Container'
-import { Layout } from '@/components/Layout'
 import {
   Format,
   Language,

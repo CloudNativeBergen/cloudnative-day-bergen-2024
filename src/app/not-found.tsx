@@ -2,10 +2,17 @@ import { BackgroundImage } from '@/components/BackgroundImage'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Layout } from '@/components/Layout'
+import { headers } from 'next/headers';
+import { getConferenceForDomain } from '@/lib/conference/sanity';
 
-export default function NotFound() {
+export default async function NotFound() {
+  const headersList = headers();
+  const domain = headersList.get('host') || '';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { conference, error } = await getConferenceForDomain(domain);
+
   return (
-    <Layout showFooter={false}>
+    <Layout conference={conference} showFooter={false}>
       <div className="relative flex h-full items-center py-20 sm:py-36">
         <BackgroundImage className="-top-36 bottom-0" />
         <Container className="relative flex w-full flex-col items-center">
