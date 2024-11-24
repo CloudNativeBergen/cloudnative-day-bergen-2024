@@ -9,21 +9,25 @@ export default defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'organizer',
       title: 'Organiser',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'city',
       title: 'City',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'country',
       title: 'Country',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'venue_name',
@@ -94,6 +98,7 @@ export default defineType({
       name: 'contact_email',
       title: 'Contact Email',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'social_links',
