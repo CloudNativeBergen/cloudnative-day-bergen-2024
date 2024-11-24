@@ -115,7 +115,7 @@ export default function Submit() {
   }, [id])
 
   return (
-    <Layout>
+    <>
       <div className="relative py-20 sm:pb-24 sm:pt-36">
         <BackgroundImage className="-bottom-14 -top-36" />
         <Container className="relative">
@@ -170,7 +170,7 @@ export default function Submit() {
           </div>
         </Container>
       </div>
-    </Layout>
+    </>
   )
 }
 

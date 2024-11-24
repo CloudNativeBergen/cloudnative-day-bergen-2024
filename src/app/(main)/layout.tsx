@@ -1,9 +1,15 @@
 import { Layout } from '@/components/Layout'
+import { headers } from 'next/headers';
+import { getConferenceForDomain } from '@/lib/conference/sanity';
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <Layout>{children}</Layout>
+  const headersList = headers();
+  const domain = headersList.get('host') || '';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { conference, error } = await getConferenceForDomain(domain);
+  return <Layout conference={conference}>{children}</Layout>
 }

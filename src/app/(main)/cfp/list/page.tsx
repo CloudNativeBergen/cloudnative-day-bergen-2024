@@ -331,7 +331,7 @@ export default function MyProposals() {
   }, [])
 
   return (
-    <Layout>
+    <>
       <div className="relative py-20 sm:pb-24 sm:pt-36">
         <BackgroundImage className="-bottom-14 -top-36" />
         <Container className="relative">
@@ -393,6 +393,6 @@ export default function MyProposals() {
           )}
         </Container>
       </div>
-    </Layout>
+    </>
   )
 }

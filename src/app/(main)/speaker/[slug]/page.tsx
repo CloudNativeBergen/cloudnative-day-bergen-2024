@@ -38,7 +38,7 @@ export default async function Profile({ params }: Props) {
 
   if (err || !speaker || !talks || talks.length === 0) {
     return (
-      <Layout showFooter={false}>
+      <>
         <div className="relative flex h-full items-center py-20 sm:py-36">
           <BackgroundImage className="-top-36 bottom-0" />
           <Container className="relative flex w-full flex-col items-center">
@@ -56,7 +56,7 @@ export default async function Profile({ params }: Props) {
             </Button>
           </Container>
         </div>
-      </Layout>
+      </>
     )
   }
 

@@ -411,7 +411,7 @@ export default function AllProposals() {
   }, [])
 
   return (
-    <Layout>
+    <>
       <ProposalActionModal
         open={actionOpen}
         close={modalCloseHandler}
@@ -455,6 +455,6 @@ export default function AllProposals() {
           )}
         </Container>
       </div>
-    </Layout>
+    </>
   )
 }

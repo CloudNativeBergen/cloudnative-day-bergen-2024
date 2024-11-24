@@ -1,20 +1,16 @@
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { headers } from 'next/headers';
-import { getConferenceForDomain } from '@/lib/conference/sanity';
+import { Conference } from '@/lib/conference/types';
 
 export async function Layout({
   children,
+  conference,
   showFooter = true,
 }: {
   children: React.ReactNode
+  conference: Conference
   showFooter?: boolean
 }) {
-  const headersList = headers();
-  const domain = headersList.get('host') || '';
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { conference, error } = await getConferenceForDomain(domain);
-
   return (
     <>
       <Header c={conference} />
